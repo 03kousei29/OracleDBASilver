@@ -1,0 +1,4168 @@
+{
+  "chapters": [
+    {
+      "chapter": 10,
+      "title": "SQL基礎・データ型・日時・NULL",
+      "description": "SQL基礎・データ型・日時・NULL"
+    },
+    {
+      "chapter": 11,
+      "title": "検索条件・ORDER BY・置換変数",
+      "description": "検索条件・ORDER BY・置換変数"
+    },
+    {
+      "chapter": 12,
+      "title": "単一行ファンクション（文字・数値・日時）",
+      "description": "文字・数値・日時を扱う単一行ファンクション"
+    },
+    {
+      "chapter": 13,
+      "title": "型変換・NULL関連ファンクション",
+      "description": "ファンクションのネスト、明示的・暗黙的な型変換、NULL関連ファンクション"
+    },
+    {
+      "chapter": 14,
+      "title": "集計ファンクション・GROUP BY・HAVING",
+      "description": "集計ファンクション、GROUP BY、HAVING、集計処理の実行順序"
+    },
+    {
+      "chapter": 15,
+      "title": "表の結合",
+      "description": "内部結合、外部結合、自己結合、クロス結合、非等価結合"
+    },
+    {
+      "chapter": 16,
+      "title": "副問い合わせ",
+      "description": "スカラー副問い合わせ、複数行副問い合わせ、ANY・ALL、複数列副問い合わせ"
+    },
+    {
+      "chapter": 17,
+      "title": "集合演算",
+      "description": "UNION ALL、UNION、INTERSECT、MINUS、複合問い合わせ"
+    },
+    {
+      "chapter": 18,
+      "title": "DML・TRUNCATE・トランザクション",
+      "description": "INSERT、UPDATE、DELETE、TRUNCATE、COMMIT、ROLLBACK、セーブポイント、読み取り一貫性"
+    }
+  ],
+  "questions": [
+    {
+      "chapter": 10,
+      "question": "次のSELECT句で、引用符なしでは指定できない列別名を2つ選べ。\n\nSELECT salary AS <列別名>\nFROM employees;",
+      "choices": {
+        "A": "salary_total",
+        "B": "Employee Name",
+        "C": "TYPE",
+        "D": "emp_2026"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "Employee Name、TYPE",
+      "explanation": "正解：B、C\n\nA：誤り。英字とアンダースコアで構成されており、通常の列別名として指定できます。\nB：正しい。スペースを含むため、\"Employee Name\" のように二重引用符が必要です。\nC：正しい。Oracleの予約語を列別名として使用する場合は、\"TYPE\" のように二重引用符で囲みます。\nD：誤り。英字・数字・アンダースコアからなる通常の名前なので、引用符は必須ではありません。",
+      "topic": "列別名と二重引用符",
+      "difficulty": "hard",
+      "id": "ch10q001",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "次のSQLを実行したとき、列別名を指定する位置として正しいものはどれか。\n\nSELECT ename AS employee_name\nFROM emp\nORDER BY employee_name;",
+      "choices": {
+        "A": "SELECT句では列別名を指定できるが、ORDER BYでは列別名を使用できない",
+        "B": "SELECT句とWHERE句の両方で列別名を使用できる",
+        "C": "SELECT句で指定した列別名をORDER BYで使用できる",
+        "D": "列別名はFROM句でしか指定できない"
+      },
+      "correctChoice": "C",
+      "correctText": "SELECT句で指定した列別名をORDER BYで使用できる",
+      "explanation": "正解：C\n\nC：正しい。列別名はORDER BYで列を指す名前として使用できます。\nA：誤り。ORDER BYでは列別名を使用できます。\nB：誤り。WHERE句では列別名を列を指す名前として使用できません。\nD：誤り。列別名はSELECT句で指定します。\n\nポイント：列別名を列を指す名前として使用できるのは、知識上特にORDER BYが例外として押さえるポイントです。",
+      "topic": "列別名の使用範囲",
+      "difficulty": "hard",
+      "id": "ch10q002"
+    },
+    {
+      "chapter": 10,
+      "question": "列 `amount` は NUMBER(7,2) で定義されている。格納可能な値を2つ選べ。",
+      "choices": {
+        "A": "12345.67",
+        "B": "123456.7",
+        "C": "99999.99",
+        "D": "1234567"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "12345.67、99999.99",
+      "explanation": "正解：A、C\n\nA：正しい。全体7桁、小数点以下2桁で、整数部5桁に収まります。\nB：誤り。全体の有効桁数が7桁を超えるため、NUMBER(7,2)の定義に収まりません。\nC：正しい。整数部5桁＋小数部2桁で、定義上の最大桁数に収まります。\nD：誤り。整数部だけで7桁あり、小数部2桁を確保するNUMBER(7,2)の整数部5桁という条件を超えます。",
+      "topic": "NUMBERの精度とスケール",
+      "difficulty": "hard",
+      "id": "ch10q003",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "次の列定義を考える。\n\ncode CHAR(6)\nname VARCHAR2(6)\nphoto BLOB\nmemo CLOB\n\nこの定義について正しい記述を2つ選べ。",
+      "choices": {
+        "A": "codeに'ABC'を格納すると不足分は末尾の空白で補われる",
+        "B": "nameに'ABC'を格納すると必ず6バイトになるよう空白で補われる",
+        "C": "photoは画像や音声などのバイナリデータの格納に使用できる",
+        "D": "memoはバイナリデータ専用で、文字列には使用できない"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "codeに'ABC'を格納すると不足分は末尾の空白で補われる、photoは画像や音声などのバイナリデータの格納に使用できる",
+      "explanation": "正解：A、C\n\nA：正しい。CHARは固定長なので、指定長に満たない分は末尾の空白で補われます。\nB：誤り。VARCHAR2は可変長であり、CHARのような末尾空白の自動補完を前提としません。\nC：正しい。BLOBは大きなバイナリデータを扱う型です。\nD：誤り。CLOBは大きな文字列を扱う型であり、バイナリ専用ではありません。",
+      "topic": "CHAR・VARCHAR2・LOB",
+      "difficulty": "hard",
+      "id": "ch10q004",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "新しく作成したEMP2表について、列名・NULL可否・データ型を確認したい。さらに、同じコマンドをビューに対しても使いたい。適切な操作はどれか。",
+      "choices": {
+        "A": "DESCRIBE EMP2 を使用し、ビューに対してもDESCRIBEを使用できる",
+        "B": "SELECT * FROM EMP2 を使用すれば、NULL可否と列の精度も必ず確認できる",
+        "C": "DESCRIBEは表にしか使用できず、ビューには使用できない",
+        "D": "SHOW TABLE EMP2 を使用する"
+      },
+      "correctChoice": "A",
+      "correctText": "DESCRIBE EMP2 を使用し、ビューに対してもDESCRIBEを使用できる",
+      "explanation": "正解：A\n\nA：正しい。DESCRIBE（DESC）は列名、NULL可否、データ型などを確認でき、表以外のビュー等にも使用できます。\nB：誤り。SELECTは格納データを取得する文で、表定義情報を確認するためのDESCRIBEの代替ではありません。\nC：誤り。DESCRIBEは表だけでなく、ビュー、シノニム、プロシージャ、ファンクション、パッケージにも使用できます。\nD：誤り。ここで求める表構造確認のコマンドはDESCRIBEです。",
+      "topic": "DESCRIBE",
+      "difficulty": "hard",
+      "id": "ch10q005"
+    },
+    {
+      "chapter": 10,
+      "question": "SQL*PlusでDESCRIBE EMPを実行した場合に確認できる情報はどれか。",
+      "choices": {
+        "A": "各行の現在のデータ値",
+        "B": "列名、NULLを格納できるかどうか、データ型など",
+        "C": "表に対する全ユーザーの権限",
+        "D": "SELECT文の実行計画"
+      },
+      "correctChoice": "B",
+      "correctText": "列名、NULLを格納できるかどうか、データ型など",
+      "explanation": "正解：B\n\nB：正しい。DESCRIBEでは列名、NULL?、データ型と文字列サイズまたは数値の精度を確認できます。\nA：誤り。DESCRIBEは表構造を確認するコマンドです。\nC：誤り。権限情報を表示するコマンドではありません。\nD：誤り。実行計画を表示するコマンドではありません。\n\n補足：DESCRIBEはDESCと省略でき、表だけでなくビュー、シノニム、プロシージャ、ファンクション、パッケージにも使用できます。",
+      "topic": "DESCRIBEコマンド",
+      "difficulty": "medium-hard",
+      "id": "ch10q006"
+    },
+    {
+      "chapter": 10,
+      "question": "EMP表には20行ある。次の2つのSQLを実行した。\n\n(1) SELECT 365 * 5 FROM DUAL;\n(2) SELECT 365 * 5 FROM EMP;\n\n結果行数の組み合わせとして正しいものはどれか。",
+      "choices": {
+        "A": "(1) 1行、(2) 1行",
+        "B": "(1) 1行、(2) 20行",
+        "C": "(1) 20行、(2) 1行",
+        "D": "どちらも20行"
+      },
+      "correctChoice": "B",
+      "correctText": "(1) 1行、(2) 20行",
+      "explanation": "正解：B\n\nA：誤り。通常の表をFROMに指定すると、その表の行数分だけ式の結果が返ります。\nB：正しい。DUALは1行だけを持つため(1)は1行、EMPは20行なので(2)は20行返ります。\nC：誤り。DUALとEMPの行数の関係が逆です。\nD：誤り。DUALからの問合せは1行です。",
+      "topic": "DUALと結果行数",
+      "difficulty": "hard",
+      "id": "ch10q007"
+    },
+    {
+      "chapter": 10,
+      "question": "EMP表に10行のデータが存在するとする。次のSQLの実行結果として正しい説明はどれか。\n\nSELECT 365*5 FROM EMP;",
+      "choices": {
+        "A": "1825が1行だけ表示される",
+        "B": "1825がEMPの行数分、10行表示される",
+        "C": "EMPにDUMMY列がないため必ずエラーになる",
+        "D": "365*5は数値リテラルではないため実行できない"
+      },
+      "correctChoice": "B",
+      "correctText": "1825がEMPの行数分、10行表示される",
+      "explanation": "正解：B\n\nB：正しい。通常の表をFROMに指定すると、その表の行数分だけ問い合わせ結果が生成されます。したがって10行なら1825も10行表示されます。\nA：誤り。1行だけになるのは1行のDUAL表をFROMに指定した場合です。\nC：誤り。式の評価にDUMMY列は必須ではありません。\nD：誤り。365は数値リテラルであり、365*5はその演算式です。",
+      "topic": "DUALと通常表の行数",
+      "difficulty": "hard",
+      "id": "ch10q008"
+    },
+    {
+      "chapter": 10,
+      "question": "姓 `O'neal` を検索する条件として、正しく文字リテラルを表しているものを2つ選べ。",
+      "choices": {
+        "A": "WHERE name = 'O''neal'",
+        "B": "WHERE name = q'[O'neal]'",
+        "C": "WHERE name = 'O'neal'",
+        "D": "WHERE name = q'[O'neal)'"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "WHERE name = 'O''neal'、WHERE name = q'[O'neal]'",
+      "explanation": "正解：A、B\n\nA：正しい。文字リテラル内部のシングルクォートは2つ続けて表記できます。\nB：正しい。代替引用メカニズムで角括弧を対にすれば、内部のシングルクォートをそのまま記述できます。\nC：誤り。途中のシングルクォートで文字リテラルが終了してしまいます。\nD：誤り。括弧系の区切り記号を使う場合は、開きと閉じを対応させる必要があります。",
+      "topic": "文字リテラルと代替引用",
+      "difficulty": "hard",
+      "id": "ch10q009",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "代替引用メカニズムで文字列 `A'B` を表す式として正しいものを2つ選べ。",
+      "choices": {
+        "A": "q'|A'B|'",
+        "B": "q'[A'B]'",
+        "C": "q'[A'B)'",
+        "D": "q'|A'B]'"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "q'|A'B|'、q'[A'B]'",
+      "explanation": "正解：A、B\n\nA：正しい。通常の1文字を区切りとして使う場合、開始側と終了側で同じ文字を使用できます。\nB：正しい。角括弧のような括弧系文字は対応する開き・閉じのペアで使用できます。\nC：誤り。角括弧で開始して丸括弧で終了しており、対応するペアになっていません。\nD：誤り。開始区切りと終了区切りが一致していません。",
+      "topic": "代替引用メカニズム",
+      "difficulty": "hard",
+      "id": "ch10q010",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "現在のセッションでは NLS_DATE_FORMAT が `YYYY/MM/DD HH24:MI:SS` である。文字列 `2026/09/27 14:30:00` をDATE型として扱う方法について正しいものを2つ選べ。",
+      "choices": {
+        "A": "TO_DATE('2026/09/27 14:30:00')",
+        "B": "TO_DATE('2026/09/27 14:30:00','YYYY/MM/DD HH24:MI:SS')",
+        "C": "TO_DATE('27-09-26','YYYY/MM/DD HH24:MI:SS')",
+        "D": "DATE '2026-09-27 14:30:00'"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "TO_DATE('2026/09/27 14:30:00')、TO_DATE('2026/09/27 14:30:00','YYYY/MM/DD HH24:MI:SS')",
+      "explanation": "正解：A、B\n\nA：正しい。書式モデルを省略したTO_DATEはNLS_DATE_FORMATに設定された書式を使用するため、この文字列と一致します。\nB：正しい。文字列と一致する書式モデルを明示しているため変換できます。\nC：誤り。指定文字列と書式モデルが一致していません。\nD：誤り。DATEリテラルはYYYY-MM-DD形式で日付を指定し、ここで示した形で時刻まで指定するものではありません。",
+      "topic": "TO_DATEとNLS_DATE_FORMAT",
+      "difficulty": "hard",
+      "id": "ch10q011",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "文字列 `2026/09/27 14:30:00` をDATE型へ明示変換したい。正しい式はどれか。",
+      "choices": {
+        "A": "TO_DATE('2026/09/27 14:30:00','DD-MM-YY')",
+        "B": "TO_DATE('2026/09/27 14:30:00','YYYY/MM/DD HH24:MI:SS')",
+        "C": "TO_CHAR('2026/09/27 14:30:00','YYYY/MM/DD HH24:MI:SS')",
+        "D": "DATE '2026/09/27 14:30:00'"
+      },
+      "correctChoice": "B",
+      "correctText": "TO_DATE('2026/09/27 14:30:00','YYYY/MM/DD HH24:MI:SS')",
+      "explanation": "正解：B\n\nA：誤り。文字列と指定書式が一致していません。\nB：正しい。文字列と書式モデルが一致しており、TO_DATEで明示変換できます。\nC：誤り。TO_CHARは日時や数値を文字列へ変換する側です。\nD：誤り。ここで示すDATEリテラルの形式ではありません。",
+      "topic": "TO_DATE",
+      "difficulty": "hard",
+      "id": "ch10q012"
+    },
+    {
+      "chapter": 10,
+      "question": "日時を文字列として表示する要件と書式要素の組み合わせとして正しいものを2つ選べ。",
+      "choices": {
+        "A": "24時間制の時 → HH24",
+        "B": "秒の小数部 → FF",
+        "C": "タイムゾーン地域 → MI",
+        "D": "曜日名 → MM"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "24時間制の時 → HH24、秒の小数部 → FF",
+      "explanation": "正解：A、B\n\nA：正しい。HH24は24時間制の「時」を表します。\nB：正しい。FFは秒の小数部を表します。\nC：誤り。MIは分です。タイムゾーン地域はTZRです。\nD：誤り。MMは月です。曜日名はDAYです。",
+      "topic": "日時書式モデル",
+      "difficulty": "hard",
+      "id": "ch10q013",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "NLS_DATE_FORMAT を変更した場合に影響を受けるものを2つ選べ。",
+      "choices": {
+        "A": "DATE型をデフォルト形式で表示するときの形式",
+        "B": "書式モデルを省略して文字列をDATE型へ変換するときの形式",
+        "C": "DATE型の内部保存形式そのもの",
+        "D": "TIMESTAMP型の小数秒の有無"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "DATE型をデフォルト形式で表示するときの形式、書式モデルを省略して文字列をDATE型へ変換するときの形式",
+      "explanation": "正解：A、B\n\nA：正しい。DATE型を表示するときのデフォルトの表示形式に使われます。\nB：正しい。書式を明示しない文字列→DATE変換でも参照されます。\nC：誤り。NLS_DATE_FORMATは表示・変換の書式であり、DATE型の保存形式を変更するものではありません。\nD：誤り。TIMESTAMP型が小数秒を持つという型の性質はNLS_DATE_FORMATで変わりません。",
+      "topic": "NLS_DATE_FORMATの役割",
+      "difficulty": "hard",
+      "id": "ch10q014",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "日本の地域設定でNLS_DATE_FORMATがデフォルトの `RR-MM-DD` のままである。DATE値に時刻 `15:20:30` が含まれている場合の説明として正しいものはどれか。",
+      "choices": {
+        "A": "SELECT結果では日付だけが表示されるが、時刻を含めて表示したければNLS_DATE_FORMATに時刻要素を含める",
+        "B": "時刻要素が書式にないためDATE値から時刻情報が削除される",
+        "C": "DATE型はそもそも時刻を保持できない",
+        "D": "NLS_DATE_FORMATはTIMESTAMPにしか影響しない"
+      },
+      "correctChoice": "A",
+      "correctText": "SELECT結果では日付だけが表示されるが、時刻を含めて表示したければNLS_DATE_FORMATに時刻要素を含める",
+      "explanation": "正解：A\n\nA：正しい。デフォルト書式に時刻要素がないため表示には現れませんが、DATE型は時刻を保持でき、表示書式を変更できます。\nB：誤り。表示されないことと、値として保持されないことは別です。\nC：誤り。DATE型は年月日時分秒を扱います。\nD：誤り。NLS_DATE_FORMATはDATE型の表示・変換書式に関係します。",
+      "topic": "NLS_DATE_FORMATと時刻表示",
+      "difficulty": "hard",
+      "id": "ch10q015"
+    },
+    {
+      "chapter": 10,
+      "question": "現在のセッションだけNLS_DATE_FORMATを `YY-MM-DD` に変更したい。適切なコマンドはどれか。",
+      "choices": {
+        "A": "ALTER SESSION SET NLS_DATE_FORMAT='YY-MM-DD'",
+        "B": "ALTER DATABASE SET NLS_DATE_FORMAT='YY-MM-DD'",
+        "C": "SET NLS_DATE_FORMAT='YY-MM-DD'",
+        "D": "ALTER SESSION CHANGE NLS_DATE_FORMAT='YY-MM-DD'"
+      },
+      "correctChoice": "A",
+      "correctText": "ALTER SESSION SET NLS_DATE_FORMAT='YY-MM-DD'",
+      "explanation": "正解：A\n\nA：正しい。セッション単位の変更にはALTER SESSION SETを使用します。\nB：誤り。ここで求めるセッション単位の変更構文ではありません。\nC：誤り。NLS_DATE_FORMATの変更はこのSET構文ではありません。\nD：誤り。CHANGEではなくSETを使用します。",
+      "topic": "NLS_DATE_FORMATの変更",
+      "difficulty": "hard",
+      "id": "ch10q016"
+    },
+    {
+      "chapter": 10,
+      "question": "日時列の要件として「年月日時分秒に加え、小数秒も保持したい」。使用する型と文字列からの変換ファンクションの組み合わせとして正しいものはどれか。",
+      "choices": {
+        "A": "DATE と TO_DATE",
+        "B": "TIMESTAMP と TO_TIMESTAMP",
+        "C": "TIMESTAMP と TO_DATEのみ",
+        "D": "CLOB と TO_TIMESTAMP"
+      },
+      "correctChoice": "B",
+      "correctText": "TIMESTAMP と TO_TIMESTAMP",
+      "explanation": "正解：B\n\nA：誤り。DATEは年月日時分秒を扱いますが、小数秒まで扱う要件にはTIMESTAMPが適します。\nB：正しい。TIMESTAMPは小数秒を扱え、文字列からの変換にはTO_TIMESTAMPを使用できます。\nC：誤り。TIMESTAMPへの文字列変換にはTO_TIMESTAMPが用意されています。\nD：誤り。CLOBは大きな文字列を扱う型で、日時型ではありません。",
+      "topic": "TIMESTAMP",
+      "difficulty": "hard",
+      "id": "ch10q017"
+    },
+    {
+      "chapter": 10,
+      "question": "Oracleで次の2つの式・値を扱う場合について、正しいものを2つ選べ。\n\n(1) 空文字 ''\n(2) NULL || 'ABC'",
+      "choices": {
+        "A": "空文字はNULLとして扱われる",
+        "B": "(2) の結果は 'ABC' になる",
+        "C": "空文字とNULLは常に別の値として保持される",
+        "D": "(2) の結果は必ずNULLになる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "空文字はNULLとして扱われる、(2) の結果は 'ABC' になる",
+      "explanation": "正解：A、B\n\nA：正しい。Oracleでは空文字はNULLとして扱われます。\nB：正しい。NULLと文字列を連結した場合、示されている扱いでは文字列側が結果になります。\nC：誤り。空文字はNULLとして扱われるため、この説明は一致しません。\nD：誤り。数値演算のNULL伝播と文字列連結の扱いを混同しています。",
+      "topic": "空文字・NULL・連結",
+      "difficulty": "hard",
+      "id": "ch10q018",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "COMM列にNULLが含まれている。NULLの扱いについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "10 + NULL の結果はNULLになる",
+        "B": "NULLの行を検索するには COMM IS NULL を使用する",
+        "C": "COMM != 'ABC' でNULL行も取得できる",
+        "D": "NULLと0は異なるものとして扱う"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "D"
+      ],
+      "correctText": "10 + NULL の結果はNULLになる、NULLの行を検索するには COMM IS NULL を使用する、NULLと0は異なるものとして扱う",
+      "explanation": "正解：A、B、D\n\nA：正しい。NULLを含む数値演算は結果もNULLになります。\nB：正しい。NULLの判定にはIS NULLを使用します。\nC：誤り。NULLは通常の等価・不等価比較では一致行として取得されません。\nD：正しい。NULLは不明値を表し、0とは区別します。",
+      "topic": "NULLの演算と検索",
+      "difficulty": "hard",
+      "id": "ch10q019",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "次の式の結果はどれか。\n\nNULL || 'abc'",
+      "choices": {
+        "A": "NULL",
+        "B": "'abc'",
+        "C": "0",
+        "D": "実行時エラー"
+      },
+      "correctChoice": "B",
+      "correctText": "'abc'",
+      "explanation": "正解：B\n\nA：誤り。数値演算ではNULLが結果に伝播しますが、文字列連結の扱いは異なります。\nB：正しい。NULLと文字列を連結した場合、文字列側が結果になります。\nC：誤り。NULLが0へ変換されるわけではありません。\nD：誤り。この式は文字列abcを返します。",
+      "topic": "NULLと文字列連結",
+      "difficulty": "hard",
+      "id": "ch10q020"
+    },
+    {
+      "chapter": 10,
+      "question": "COMM列について「NULLの行だけ」と「NULLではない行だけ」をそれぞれ検索する条件の組み合わせとして正しいものはどれか。",
+      "choices": {
+        "A": "IS NULL / IS NOT NULL",
+        "B": "= NULL / != NULL",
+        "C": "= NULL / IS NOT NULL",
+        "D": "IS NULL / != NULL"
+      },
+      "correctChoice": "A",
+      "correctText": "IS NULL / IS NOT NULL",
+      "explanation": "正解：A\n\nA：正しい。NULL判定にはIS NULL、非NULL判定にはIS NOT NULLを使用します。\nB：誤り。NULLを=や!=で比較して検索することはできません。\nC：誤り。前半の= NULLが不適切です。\nD：誤り。後半の!= NULLが不適切です。",
+      "topic": "IS NULL・IS NOT NULL",
+      "difficulty": "hard",
+      "id": "ch10q021"
+    },
+    {
+      "chapter": 10,
+      "question": "次のSELECT文について、DISTINCTの効果として正しいものはどれか。\n\nSELECT DISTINCT job, deptno\nFROM emp;",
+      "choices": {
+        "A": "jobが重複している行だけを除外する",
+        "B": "deptnoが重複している行だけを除外する",
+        "C": "jobとdeptnoの組み合わせが完全に一致する重複を除外する",
+        "D": "jobまたはdeptnoのどちらか一方でも重複していれば除外する"
+      },
+      "correctChoice": "C",
+      "correctText": "jobとdeptnoの組み合わせが完全に一致する重複を除外する",
+      "explanation": "正解：C\n\nC：正しい。複数列を指定したDISTINCTでは、指定した列の組み合わせがすべて一致する重複を除外します。\nA：誤り。jobだけで重複判定するわけではありません。\nB：誤り。deptnoだけで重複判定するわけではありません。\nD：誤り。どちらか一方だけが一致している場合は、それだけでは重複とはみなしません。\n\nポイント：DISTINCTはSELECTの直後に指定します。",
+      "topic": "DISTINCTと複数列",
+      "difficulty": "hard",
+      "id": "ch10q022"
+    },
+    {
+      "chapter": 10,
+      "question": "次のSQLを実行する。\n\nINSERT INTO orders VALUES (DATE '2021-01-02');\n\nDATEリテラルについて正しいものはどれか。",
+      "choices": {
+        "A": "この形式でDATE型の日付を指定でき、時刻は00:00:00になる",
+        "B": "DATE '2021-01-02 10:11:12' の形で時刻まで指定する",
+        "C": "NLS_DATE_FORMATの書式に従って解釈される",
+        "D": "TIMESTAMP型専用のリテラルである"
+      },
+      "correctChoice": "A",
+      "correctText": "この形式でDATE型の日付を指定でき、時刻は00:00:00になる",
+      "explanation": "正解：A\n\nA：正しい。DATEリテラルはYYYY-MM-DD形式で日付を指定し、この形式では時刻は00:00:00です。\nB：誤り。このDATEリテラルの形式では時刻を指定しません。\nC：誤り。NLS_DATE_FORMATに依存する文字列暗黙変換とは別の指定方法です。\nD：誤り。DATE型の値を指定する方法です。",
+      "topic": "DATEリテラル",
+      "difficulty": "hard",
+      "id": "ch10q023"
+    },
+    {
+      "chapter": 10,
+      "question": "SQL*PlusでNULLの表示方法を変更したい。NULL値を<<NULL>>と表示する設定として正しいものはどれか。",
+      "choices": {
+        "A": "SET NULL '<<NULL>>'",
+        "B": "SET NLS_NULL '<<NULL>>'",
+        "C": "ALTER SESSION SET NULL '<<NULL>>'",
+        "D": "SET DISPLAY NULL '<<NULL>>'"
+      },
+      "correctChoice": "A",
+      "correctText": "SET NULL '<<NULL>>'",
+      "explanation": "正解：A\n\nA：正しい。SQL*PlusのSET NULLコマンドで、NULL値を表示するときの文字列を設定できます。\nB：誤り。ここで使用するのはSET NULLです。\nC：誤り。ALTER SESSIONで変更するNLS系設定とは別のSQL*Plus表示設定です。\nD：誤り。NULL表示の設定にはSET NULLを使用します。",
+      "topic": "SQL*PlusのSET NULL",
+      "difficulty": "medium-hard",
+      "id": "ch10q024"
+    },
+    {
+      "chapter": 10,
+      "question": "EMP表から「SALが5000以上の行だけ」を対象にし、そのうちENAME列だけを表示した。関係演算の説明として正しいものはどれか。",
+      "choices": {
+        "A": "SALによる行の絞り込みが選択、ENAMEだけを出力することが射影",
+        "B": "SALによる行の絞り込みが射影、ENAMEだけを出力することが選択",
+        "C": "どちらも選択",
+        "D": "どちらも射影"
+      },
+      "correctChoice": "A",
+      "correctText": "SALによる行の絞り込みが選択、ENAMEだけを出力することが射影",
+      "explanation": "正解：A\n\nA：正しい。行を条件で絞る操作が選択、出力列を選ぶ操作が射影です。\nB：誤り。選択と射影の対応が逆です。\nC：誤り。列を選ぶ操作は射影です。\nD：誤り。行を条件で絞る操作は選択です。",
+      "topic": "選択と射影",
+      "difficulty": "hard",
+      "id": "ch10q025"
+    },
+    {
+      "chapter": 10,
+      "question": "次の列別名のうち、二重引用符が必要なものを3つ選べ。",
+      "choices": {
+        "A": "Employee Name",
+        "B": "1ST_COL",
+        "C": "TYPE",
+        "D": "EMP_TOTAL"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "Employee Name、1ST_COL、TYPE",
+      "explanation": "正解：A、B、C\n\nA：正しい。スペースを含むため二重引用符が必要です。\nB：正しい。先頭が数字のため二重引用符が必要です。\nC：正しい。予約語を列別名として使う場合は二重引用符が必要です。\nD：誤り。通常の識別子として使える名前で、引用符は必須ではありません。",
+      "topic": "列別名の命名",
+      "difficulty": "hard",
+      "id": "ch10q026",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "列定義について正しいものを3つ選べ。",
+      "choices": {
+        "A": "CHAR(n) の n は1～2000バイト",
+        "B": "VARCHAR2(n) の n は最大4000バイト",
+        "C": "NUMBER(n) の n は1～38",
+        "D": "CHAR(n) の n は最大128テラバイト"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "CHAR(n) の n は1～2000バイト、VARCHAR2(n) の n は最大4000バイト、NUMBER(n) の n は1～38",
+      "explanation": "正解：A、B、C\n\nA：正しい。CHARの指定サイズは1～2000バイトです。\nB：正しい。VARCHAR2の最大サイズとして4000バイトが示されています。\nC：正しい。NUMBERの精度nは1～38です。\nD：誤り。128テラバイトという規模はLOBの説明であり、CHARの上限ではありません。",
+      "topic": "データ型のサイズ",
+      "difficulty": "hard",
+      "id": "ch10q027",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "NUMBER型の定義について正しいものを2つ選べ。",
+      "choices": {
+        "A": "NUMBER(7,2)では整数部は最大5桁になる",
+        "B": "NUMBER(7,2)の7は小数点以下の桁数を表す",
+        "C": "NUMBER(n)ではn桁の整数を扱う",
+        "D": "NUMBER型は小数だけを扱い、整数は扱えない"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "NUMBER(7,2)では整数部は最大5桁になる、NUMBER(n)ではn桁の整数を扱う",
+      "explanation": "正解：A、C\n\nA：正しい。全体の有効桁数が7、小数点以下が2なので、整数部は7-2=5桁です。\nB：誤り。7は全体の最大有効桁数、2が小数点以下の最大桁数です。\nC：正しい。NUMBER(n)はn桁の整数という定義です。\nD：誤り。NUMBERは整数と小数の両方を扱います。",
+      "topic": "NUMBER",
+      "difficulty": "hard",
+      "id": "ch10q028",
+      "multiple": true
+    },
+    {
+      "chapter": 10,
+      "question": "次の式で3つの文字列を1つに連結したい。\n\nENAME、' / '、JOB\n\n正しい式はどれか。",
+      "choices": {
+        "A": "ENAME || ' / ' || JOB",
+        "B": "ENAME + ' / ' + JOB",
+        "C": "CONCAT ENAME ' / ' JOB",
+        "D": "ENAME || (' / ', JOB)"
+      },
+      "correctChoice": "A",
+      "correctText": "ENAME || ' / ' || JOB",
+      "explanation": "正解：A\n\nA：正しい。連結演算子||を複数回使用して3つ以上の文字列を連結できます。\nB：誤り。+はここで示した文字列連結演算子ではありません。\nC：誤り。この構文は示されていません。\nD：誤り。連結演算子の構文になっていません。",
+      "topic": "文字列連結",
+      "difficulty": "hard",
+      "id": "ch10q029"
+    },
+    {
+      "chapter": 10,
+      "question": "次のTO_DATE式のうち、文字列と書式モデルが一致せず失敗するものはどれか。",
+      "choices": {
+        "A": "TO_DATE('2021/01/02 10:11:12','YYYY/MM/DD HH24:MI:SS')",
+        "B": "TO_DATE('21-01-02','YYYY/MM/DD HH24:MI:SS')",
+        "C": "TO_DATE('2021/01/02 10:11:12') ※NLS_DATE_FORMATが同じ書式の場合",
+        "D": "TO_DATE('2021/01/02','YYYY/MM/DD')"
+      },
+      "correctChoice": "B",
+      "correctText": "TO_DATE('21-01-02','YYYY/MM/DD HH24:MI:SS')",
+      "explanation": "正解：B\n\nA：誤り。文字列と書式モデルが対応しています。\nB：正しい。文字列の区切り・桁構成が指定書式と一致しません。\nC：誤り。NLS_DATE_FORMATが同じ書式という前提なら変換できます。\nD：誤り。文字列と明示した書式モデルが一致しています。",
+      "topic": "TO_DATEの書式一致",
+      "difficulty": "hard",
+      "id": "ch10q030"
+    },
+    {
+      "chapter": 10,
+      "question": "SQL*Plusで現在のNLS_DATE_FORMAT設定を確認したい。適切なコマンドはどれか。",
+      "choices": {
+        "A": "SHOW PARAMETER NLS_DATE_FORMAT",
+        "B": "DESCRIBE NLS_DATE_FORMAT",
+        "C": "SHOW NLS_DATE_FORMAT",
+        "D": "SELECT PARAMETER NLS_DATE_FORMAT"
+      },
+      "correctChoice": "A",
+      "correctText": "SHOW PARAMETER NLS_DATE_FORMAT",
+      "explanation": "正解：A\n\nA：正しい。SHOW PARAMETER NLS_DATE_FORMATで設定を確認できます。\nB：誤り。DESCRIBEは表などの構造確認に使います。\nC：誤り。PARAMETERを含む構文を使用します。\nD：誤り。この形のSELECT文ではありません。",
+      "topic": "NLS_DATE_FORMATの確認",
+      "difficulty": "hard",
+      "id": "ch10q031"
+    },
+    {
+      "chapter": 10,
+      "question": "月名や曜日名を含む日時表示を英語環境で扱うときの言語設定について正しいものはどれか。",
+      "choices": {
+        "A": "英語環境の言語値としてAMERICANが使用される",
+        "B": "英語環境では必ずENGLISHという値になる",
+        "C": "NLS_DATE_LANGUAGEは月名や曜日名と無関係である",
+        "D": "英語環境ではNLS_LANGUAGEをJAPANESEにする必要がある"
+      },
+      "correctChoice": "A",
+      "correctText": "英語環境の言語値としてAMERICANが使用される",
+      "explanation": "正解：A\n\nA：正しい。英語環境の値としてAMERICANが示されています。\nB：誤り。英語環境での値はENGLISHではなくAMERICANです。\nC：誤り。NLS_DATE_LANGUAGEは日時の月名・曜日名の言語に関係します。\nD：誤り。英語環境の説明と一致しません。",
+      "topic": "NLS_LANGUAGE・NLS_DATE_LANGUAGE",
+      "difficulty": "hard",
+      "id": "ch10q032"
+    },
+    {
+      "chapter": 10,
+      "question": "NLS_DATE_FORMATを明示設定していない環境について正しい記述を2つ選べ。",
+      "choices": {
+        "A": "デフォルト値はNLS_TERRITORYの地域設定により決まる",
+        "B": "日本の例としてRR-MM-DDが示されている",
+        "C": "地域設定に関係なく常にDD-MON-RRになる",
+        "D": "日本の例では必ず時刻要素まで含まれる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "デフォルト値はNLS_TERRITORYの地域設定により決まる、日本の例としてRR-MM-DDが示されている",
+      "explanation": "正解：A、B\n\nA：正しい。NLS_DATE_FORMATのデフォルトは地域設定により決定されます。\nB：正しい。日本の例としてRR-MM-DDが示されています。\nC：誤り。地域により異なるため固定ではありません。\nD：誤り。示されている日本のデフォルト例には時刻要素が含まれていません。",
+      "topic": "NLS_TERRITORYとNLS_DATE_FORMAT",
+      "difficulty": "hard",
+      "id": "ch10q033",
+      "multiple": true
+    },
+    {
+      "id": "ch11q001",
+      "chapter": 11,
+      "question": "次のWHERE句について、条件式と論理演算子の評価順序を考えたとき、最も後に評価されるものはどれか。\n\nWHERE job LIKE 'SA%'\n  AND salary BETWEEN 10000 AND 20000\n  OR deptno = 10",
+      "choices": {
+        "A": "job LIKE 'SA%'",
+        "B": "salary BETWEEN 10000 AND 20000",
+        "C": "AND",
+        "D": "OR"
+      },
+      "correctChoice": "D",
+      "correctText": "OR",
+      "explanation": "正解：D\n\nD：正しい。条件式は=系やIS NULL・LIKE・BETWEENなどが先に評価され、続いてNOT、AND、ORの順で評価されるため、最も後に評価されるのはORです。\nA：誤り。LIKEによる条件式はANDやORより先に評価されます。\nB：誤り。BETWEENによる条件式もANDやORより先に評価されます。\nC：誤り。ANDはORより先に評価されます。\n\nポイント：個々の条件式と、NOT・AND・ORによる論理演算の優先順位を分けて考えます。",
+      "topic": "条件式の評価順序",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q002",
+      "chapter": 11,
+      "question": "次の条件指定のうち、NOTを使った条件指定として正しいものを3つ選べ。",
+      "choices": {
+        "A": "job NOT LIKE 'SA%'",
+        "B": "deptno NOT IN (10,20)",
+        "C": "salary NOT BETWEEN 10000 AND 20000",
+        "D": "employee_name NOT NULL"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "job NOT LIKE 'SA%'、deptno NOT IN (10,20)、salary NOT BETWEEN 10000 AND 20000",
+      "explanation": "正解：A、B、C\n\nA：正しい。NOT LIKEの形でLIKE条件を否定します。\nB：正しい。NOT INの形でIN条件を否定します。\nC：正しい。NOT BETWEENの形でBETWEEN条件を否定します。\nD：誤り。NULLの判定にはIS NULL / IS NOT NULLを使用します。\n\nポイント：NOT LIKE・NOT IN・NOT BETWEENと、IS NOT NULLは形を混同しないことが重要です。",
+      "topic": "NOT条件",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q003",
+      "chapter": 11,
+      "question": "次のSQLを実行すると、WHERE句の条件式として列別名を利用している点が問題になる。修正方法として、正しいものはどれか。\n\nSELECT employee_name AS ename\nFROM employees\nWHERE ename = 'TARO';",
+      "choices": {
+        "A": "WHERE employee_name = 'TARO' とする",
+        "B": "WHERE 'ename' = 'TARO' とする",
+        "C": "WHERE AS ename = 'TARO' とする",
+        "D": "WHERE employee_name AS ename = 'TARO' とする"
+      },
+      "correctChoice": "A",
+      "correctText": "WHERE employee_name = 'TARO' とする",
+      "explanation": "正解：A\n\nA：正しい。WHERE句の条件式では列別名を指定できないため、元の列名employee_nameを条件式に使用します。\nB：誤り。'ename'は文字リテラルとして扱われ、列別名を条件式で参照することにはなりません。\nC：誤り。ASをこの位置に置く形ではありません。\nD：誤り。条件式内でASによって列別名を指定する形ではありません。\n\nポイント：列別名はORDER BYでは指定できますが、WHERE句の条件式では指定できません。",
+      "topic": "列別名とWHERE句",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q004",
+      "chapter": 11,
+      "question": "検索対象の値が次のとおりである。\n\nKaa\ncaa\naa\nKAAA\n\n条件 `LIKE '_aa'` に一致する値を2つ選べ。",
+      "choices": {
+        "A": "Kaa",
+        "B": "caa",
+        "C": "aa",
+        "D": "KAAA"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "Kaa、caa",
+      "explanation": "正解：A、B\n\nA：正しい。_ は任意の1文字を表すため、3文字のKaaは一致します。\nB：正しい。caaは2～3文字目がaaなので一致します。\nC：誤り。先頭の任意1文字に相当する文字がないため一致しません。\nD：誤り。文字数と末尾の文字列が条件に一致しません。",
+      "topic": "LIKEとワイルドカード",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q005",
+      "chapter": 11,
+      "question": "次の条件を評価する場合、最も外側で最後に評価されるものはどれか。\n\nWHERE salary > 10000\n  AND job LIKE 'SA%'\n  OR deptno = 10",
+      "choices": {
+        "A": "salary > 10000",
+        "B": "job LIKE 'SA%'",
+        "C": "AND",
+        "D": "OR"
+      },
+      "correctChoice": "D",
+      "correctText": "OR",
+      "explanation": "正解：D\n\nA・B：いずれも個々の条件式なので、ANDやORより先に評価されます。\nC：誤り。ANDはORより先に評価されます。\nD：正しい。条件式 → NOT → AND → ORの順で評価されるため、最後に評価されるのはORです。\n\nポイント：ANDとORを混在させる場合、ANDが先、ORが後です。",
+      "topic": "ANDとORの評価順序",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q006",
+      "chapter": 11,
+      "question": "次のWHERE句のうち、`AND` と `OR` の評価順序によって、括弧を付けた場合と結果が変わり得るものを2つ選べ。",
+      "choices": {
+        "A": "WHERE salary > 10000 AND deptno = 10 OR job = 'CLERK'",
+        "B": "WHERE salary > 10000 OR deptno = 10 AND job = 'CLERK'",
+        "C": "WHERE salary > 10000 AND deptno = 10",
+        "D": "WHERE salary > 10000 OR deptno = 10"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "WHERE salary > 10000 AND deptno = 10 OR job = 'CLERK'、WHERE salary > 10000 OR deptno = 10 AND job = 'CLERK'",
+      "explanation": "正解：A、B\n\nA：正しい。ANDとORが混在するため、ANDが先に評価されます。括弧を付けて意図を明確にする場合、結果のまとまりを変えられます。\nB：正しい。同様にANDとORが混在しています。\nC：誤り。ANDだけなので、ANDとORの優先順位による違いは生じません。\nD：誤り。ORだけなので、ANDとORの優先順位による違いは生じません。\n\nポイント：ANDとORが混在する条件では、評価順序を意識します。",
+      "topic": "AND・ORと括弧",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q007",
+      "chapter": 11,
+      "question": "次のSQLを実行する。\n\nSELECT employee_name, salary\nFROM employees\nORDER BY salary DESC, employee_name ASC;\n\n同じsalaryの行が複数ある場合の並び方として正しいものはどれか。",
+      "choices": {
+        "A": "salaryが大きい順で並び、同額ならemployee_nameの昇順",
+        "B": "employee_nameを先に昇順に並べ、その後salaryを降順",
+        "C": "salaryが小さい順で並び、同額ならemployee_nameの降順",
+        "D": "ORDER BYに複数列は指定できない"
+      },
+      "correctChoice": "A",
+      "correctText": "salaryが大きい順で並び、同額ならemployee_nameの昇順",
+      "explanation": "正解：A\n\nA：正しい。第1ソートキーがsalary DESC、第2ソートキーがemployee_name ASCです。\nB：誤り。左側に記述されたsalaryが第1ソートキーです。\nC：誤り。ASC/DESCの指定が逆です。\nD：誤り。ORDER BYには複数のソートキーをカンマ区切りで指定できます。",
+      "topic": "複数列のORDER BY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q008",
+      "chapter": 11,
+      "question": "次のORDER BY指定のうち、正しいものをすべて選べ。",
+      "choices": {
+        "A": "ORDER BY salary DESC",
+        "B": "ORDER BY employee_name",
+        "C": "ORDER BY 2",
+        "D": "ORDER BY employee_name_alias"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "correctText": "ORDER BY salary DESC、ORDER BY employee_name、ORDER BY 2、ORDER BY employee_name_alias",
+      "explanation": "正解：A、B、C、D\n\nA：正しい。列名で指定できます。\nB：正しい。列名で指定できます。\nC：正しい。SELECT句の列の位置番号を指定できます。\nD：正しい。SELECT句で指定した列別名もORDER BYで指定できます。\n\nポイント：ORDER BYには列名・列別名・列の位置番号を指定でき、SELECTで取得していない列でもソートできます。",
+      "topic": "ORDER BYの指定方法",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q009",
+      "chapter": 11,
+      "question": "SELECT句にsalaryを記述していない次のSQLについて、ORDER BYの指定として正しいものはどれか。\n\nSELECT employee_name\nFROM employees\nORDER BY salary DESC;",
+      "choices": {
+        "A": "SELECT句にない列なのでORDER BYでは指定できない",
+        "B": "列別名を付けない限り指定できない",
+        "C": "SELECT句に指定していない列でもORDER BYに指定できる",
+        "D": "DESCをASCに変更すれば指定できる"
+      },
+      "correctChoice": "C",
+      "correctText": "SELECT句に指定していない列でもORDER BYに指定できる",
+      "explanation": "正解：C\n\nC：正しい。SELECTで取得していない列もORDER BYでソートに使用できます。\nA：誤り。SELECT句にない列でもORDER BYに指定できます。\nB：誤り。列別名は必須ではありません。\nD：誤り。ASC/DESCは並び方向の指定であり、SELECT句にない列を指定できるかどうかとは別です。",
+      "topic": "ORDER BYとSELECT対象外列",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q010",
+      "chapter": 11,
+      "question": "次のORDER BYについて、NULLの位置を明示的に指定する記述として正しいものを2つ選べ。",
+      "choices": {
+        "A": "ORDER BY salary DESC NULLS FIRST",
+        "B": "ORDER BY salary ASC NULLS LAST",
+        "C": "ORDER BY salary DESC FIRST NULLS",
+        "D": "ORDER BY salary ASC LAST NULLS"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ORDER BY salary DESC NULLS FIRST、ORDER BY salary ASC NULLS LAST",
+      "explanation": "正解：A、B\n\nA：正しい。DESCで並べながらNULLを先頭に指定できます。\nB：正しい。ASCで並べながらNULLを末尾に指定できます。\nC：誤り。NULLS FIRSTの語順ではありません。\nD：誤り。NULLS LASTの語順ではありません。\n\nポイント：NULLの位置はNULLS FIRSTまたはNULLS LASTで明示します。",
+      "topic": "ORDER BYとNULL",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q011",
+      "chapter": 11,
+      "question": "次のORDER BYについて、明示的に指定しなかった場合の並び順として正しいものを2つ選べ。\n\nORDER BY employee_name, hire_date",
+      "choices": {
+        "A": "employee_nameは昇順になる",
+        "B": "hire_dateも昇順になる",
+        "C": "employee_nameは自動的に降順になる",
+        "D": "2列目にはASC/DESCを省略できない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "employee_nameは昇順になる、hire_dateも昇順になる",
+      "explanation": "正解：A、B\n\nA：正しい。ASC/DESCを省略すると昇順として扱われます。\nB：正しい。各ソートキーで指定を省略した場合は昇順です。\nC：誤り。省略時は降順ではありません。\nD：誤り。2列目でもASC/DESCは省略できます。",
+      "topic": "ORDER BYの既定順序",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q012",
+      "chapter": 11,
+      "question": "次の2回のSELECTを実行したところ、偶然同じ順序で行が返された。\n\nSELECT employee_name FROM employees;\nSELECT employee_name FROM employees;\n\nこの結果について適切な判断はどれか。",
+      "choices": {
+        "A": "ORDER BYがないため、同じ順序が今後も保証されるとは考えない",
+        "B": "一度同じ順序なら、以後も必ず同じ順序になる",
+        "C": "SELECT句の列順が行の並び順を決定する",
+        "D": "ORDER BYは列別名を使う場合だけ必要である"
+      },
+      "correctChoice": "A",
+      "correctText": "ORDER BYがないため、同じ順序が今後も保証されるとは考えない",
+      "explanation": "正解：A\n\nA：正しい。ORDER BYを指定していない問い合わせでは、結果行の順序を保証する前提にできません。\nB：誤り。たまたま同じ順序で返ったことは順序保証を意味しません。\nC：誤り。SELECT句は出力列を決めますが、行順を保証しません。\nD：誤り。ORDER BYは必要な並び順を指定するために使います。",
+      "topic": "ORDER BYなしの結果順",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q013",
+      "chapter": 11,
+      "question": "次の記述のうち、ORDER BYについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "列名を指定できる",
+        "B": "列別名を指定できる",
+        "C": "列の位置番号を指定できる",
+        "D": "SELECT句に指定していない列を指定できない"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "列名を指定できる、列別名を指定できる、列の位置番号を指定できる",
+      "explanation": "正解：A、B、C\n\nA：正しい。ORDER BYには列名を指定できます。\nB：正しい。列別名も指定できます。\nC：正しい。列の位置番号も指定できます。\nD：誤り。SELECT句に指定していない列でもORDER BYでソートできます。",
+      "topic": "ORDER BYの指定対象",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q014",
+      "chapter": 11,
+      "question": "次のSQLを実行する。\n\nSELECT employee_name, commission_pct\nFROM employees\nORDER BY commission_pct ASC;\n\nNULLを含む行の扱いとして正しいものはどれか。",
+      "choices": {
+        "A": "NULLは末尾に配置される",
+        "B": "NULLは先頭に配置される",
+        "C": "NULL行は結果から除外される",
+        "D": "ASCではNULLを含む列を並べ替えられない"
+      },
+      "correctChoice": "A",
+      "correctText": "NULLは末尾に配置される",
+      "explanation": "正解：A\n\nA：正しい。ASCの既定ではNULLは末尾です。\nB：誤り。先頭にしたい場合はNULLS FIRSTを明示します。\nC：誤り。ORDER BYは行を除外する処理ではありません。\nD：誤り。NULLを含む列でも並べ替えできます。",
+      "topic": "ASCとNULL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q015",
+      "chapter": 11,
+      "question": "NULLを含む `commission_pct` を大きい順に並べたい。ただしNULLは最後に表示したい。適切なORDER BY句はどれか。",
+      "choices": {
+        "A": "ORDER BY commission_pct DESC",
+        "B": "ORDER BY commission_pct DESC NULLS LAST",
+        "C": "ORDER BY commission_pct ASC NULLS LAST",
+        "D": "ORDER BY commission_pct NULLS FIRST"
+      },
+      "correctChoice": "B",
+      "correctText": "ORDER BY commission_pct DESC NULLS LAST",
+      "explanation": "正解：B\n\nA：誤り。DESCの既定ではNULLは先頭になるため、要件を満たしません。\nB：正しい。値を降順にしつつ、NULLを明示的に末尾へ配置します。\nC：誤り。NULL位置は満たしますが、値の並びが昇順です。\nD：誤り。ASCが既定となり、さらにNULLが先頭になります。",
+      "topic": "DESCとNULLS LAST",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q016",
+      "chapter": 11,
+      "question": "SQL*Plusで、表名と検索値を実行時に利用者から入力させたい。次のSQLで置換変数として利用できる位置について正しいものはどれか。\n\nSELECT *\nFROM &table_name\nWHERE job = &job;",
+      "choices": {
+        "A": "表名にも検索値にも置換変数を使用できる",
+        "B": "置換変数はWHERE句にしか使用できない",
+        "C": "置換変数は表名にしか使用できない",
+        "D": "置換変数はSELECT句以外では使用できない"
+      },
+      "correctChoice": "A",
+      "correctText": "表名にも検索値にも置換変数を使用できる",
+      "explanation": "正解：A\n\nA：正しい。置換変数はテーブル名、文字リテラル、列名など、SQLテキストのさまざまな位置に置けます。\nB：誤り。WHERE句だけに限定されません。\nC：誤り。表名だけに限定されません。\nD：誤り。SELECT句以外にも使用できます。",
+      "topic": "置換変数の使用位置",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q017",
+      "chapter": 11,
+      "question": "次のSQLをSQL*Plusで実行する。\n\nSELECT employee_name\nFROM employees\nWHERE job = &job;\n\nJOB列が文字列で、値 `SA_REP` を検索したい。プロンプトへの入力として適切なものはどれか。",
+      "choices": {
+        "A": "'SA_REP'",
+        "B": "SA_REP",
+        "C": "\"SA_REP\"",
+        "D": "&SA_REP"
+      },
+      "correctChoice": "A",
+      "correctText": "'SA_REP'",
+      "explanation": "正解：A\n\nA：正しい。SQL中に引用符が書かれていないため、置換後に文字リテラルになるようシングルクォート込みで入力します。\nB：誤り。置換後は `WHERE job = SA_REP` となり、文字リテラルとして扱う形になりません。\nC：誤り。文字リテラルにはシングルクォートを使用します。\nD：誤り。入力値にさらに置換変数記号を付ける必要はありません。",
+      "topic": "置換変数と文字リテラル",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q018",
+      "chapter": 11,
+      "question": "次のSQLには同じ名前の置換変数が2回ある。\n\nSELECT *\nFROM employees\nWHERE job = &v\n   OR department_name = &v;\n\n`&v`だけを使用した場合の対話入力について正しいものはどれか。",
+      "choices": {
+        "A": "同じ名前でも出現するたびに値の指定を求められる",
+        "B": "最初の入力値が自動的にDEFINEされ、2回目は必ず再利用される",
+        "C": "同じ変数名を2回書くとSQL構文エラーになる",
+        "D": "2回目の&vはNULLに置換される"
+      },
+      "correctChoice": "A",
+      "correctText": "同じ名前でも出現するたびに値の指定を求められる",
+      "explanation": "正解：A\n\nA：正しい。単一の&を使用した置換変数は、同じ名前を繰り返してもその都度入力を求められる扱いです。\nB：誤り。値を保持して再利用したい場合は&&やDEFINEを使用します。\nC：誤り。同じ名前を複数回使うこと自体は可能です。\nD：誤り。自動的にNULLへ置換されるわけではありません。",
+      "topic": "&置換変数",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q019",
+      "chapter": 11,
+      "question": "次のSQLを初めて実行する。\n\nSELECT *\nFROM employees\nWHERE department_id = &&dept\n   OR manager_id = &dept;\n\nこのときの入力回数について正しいものはどれか。",
+      "choices": {
+        "A": "deptの値は最初に1回入力すれば、後半の&deptでも保持された値を利用できる",
+        "B": "&&deptと&deptは別名なので必ず2回入力する",
+        "C": "&&deptは値を保持しないため毎回入力する",
+        "D": "&&deptを使うとDEFINE済みの値を解除する"
+      },
+      "correctChoice": "A",
+      "correctText": "deptの値は最初に1回入力すれば、後半の&deptでも保持された値を利用できる",
+      "explanation": "正解：A\n\nA：正しい。&&で入力した値は同名の置換変数として保持されるため、後続の&deptでも再入力を求められません。\nB：誤り。変数名deptは同じで、&&により値が保持されます。\nC：誤り。&&は同じ値を繰り返し利用したい場面で使います。\nD：誤り。値を設定・保持する側の動作であり、解除ではありません。",
+      "topic": "&&置換変数",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q020",
+      "chapter": 11,
+      "question": "SQL*Plusで次の操作を行った。\n\nDEFINE dept = 20\n\nその後、`SELECT * FROM employees WHERE department_id = &dept;` を実行した。適切な説明はどれか。",
+      "choices": {
+        "A": "&deptにはあらかじめ設定した20が使用される",
+        "B": "DEFINEで設定していても必ず再入力を求められる",
+        "C": "DEFINEでは変数名に&を含めて定義しなければならない",
+        "D": "DEFINEした値は直後の1文で必ず消える"
+      },
+      "correctChoice": "A",
+      "correctText": "&deptにはあらかじめ設定した20が使用される",
+      "explanation": "正解：A\n\nA：正しい。DEFINEで事前設定した値は&deptの置換に利用できます。\nB：誤り。定義済みのため、同じ値を再入力する必要はありません。\nC：誤り。DEFINE時の変数名には&を付けません。\nD：誤り。SQL*Plusの終了または解除するまで保持される扱いです。",
+      "topic": "DEFINE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q021",
+      "chapter": 11,
+      "question": "DEFINEコマンドで設定した置換変数の値について、正しいものを2つ選べ。",
+      "choices": {
+        "A": "SQL*Plusの終了まで保持される",
+        "B": "コマンドで設定を解除するまで保持できる",
+        "C": "SQL文を1回実行すると必ず消える",
+        "D": "データベースの再起動まで必ず保持される"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "SQL*Plusの終了まで保持される、コマンドで設定を解除するまで保持できる",
+      "explanation": "正解：A、B\n\nA：正しい。SQL*Plus終了まで保持されます。\nB：正しい。SQL*Plus終了またはコマンドで設定を解除するまで保持されます。\nC：誤り。1回のSQL実行で必ず消えるわけではありません。\nD：誤り。データベース再起動まで、という保持期間ではありません。",
+      "topic": "DEFINEの保持期間",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch11q022",
+      "chapter": 11,
+      "question": "置換変数を使ったSQLを実行すると、置換前のSQLと置換後のSQLが表示される。入力プロンプトは残したまま、この旧/新の表示だけを抑止したい。使用するコマンドはどれか。",
+      "choices": {
+        "A": "SET VERIFY OFF",
+        "B": "SET DEFINE OFF",
+        "C": "SET NULL OFF",
+        "D": "ALTER SESSION SET VERIFY=OFF"
+      },
+      "correctChoice": "A",
+      "correctText": "SET VERIFY OFF",
+      "explanation": "正解：A\n\nA：正しい。SET VERIFY OFFで置換前後の表示を停止します。\nB：誤り。ここで求めているのは置換機能自体を止めることではなく、旧/新表示の抑止です。\nC：誤り。NULL表示の設定とは別です。\nD：誤り。VERIFYはSQL*Plus側の設定で、ALTER SESSIONの形ではありません。",
+      "topic": "SET VERIFY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q023",
+      "chapter": 11,
+      "question": "次のSQLを実行する。\n\nSELECT employee_name\nFROM employees\nWHERE UPPER(job) = &job;\n\njob列の値が `sa_rep` でも `SA_REP` でも検索対象にしたく、置換後の比較値を `SA_REP` にしたい。入力として適切なものはどれか。",
+      "choices": {
+        "A": "'SA_REP'",
+        "B": "SA_REP",
+        "C": "'sa_rep'",
+        "D": "UPPER(SA_REP)"
+      },
+      "correctChoice": "A",
+      "correctText": "'SA_REP'",
+      "explanation": "正解：A\n\nA：正しい。UPPER(job)の結果は大文字になるため、大文字の文字リテラルとして置換されるよう引用符込みで入力します。\nB：誤り。引用符がないため文字リテラルとして成立しません。\nC：誤り。比較値側は大文字へ変換していないため、`sa_rep`のままでは一致しません。\nD：誤り。この入力では文字リテラルを適切に生成できません。",
+      "topic": "UPPERと置換変数",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch11q024",
+      "chapter": 11,
+      "question": "次の4つの記述について、`&` と `&&` の使い分け、DEFINE、VERIFYの説明として正しいものを3つ選べ。",
+      "choices": {
+        "A": "同じ名前の&abcを繰り返すと、毎回値の指定が求められる",
+        "B": "同じ値を繰り返し使いたい場合は&&abcを使用できる",
+        "C": "DEFINE abc = 1001 のように、&を付けずに変数名を指定して事前設定できる",
+        "D": "置換前後の表示を停止するにはSET VERIFY ONを使用する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "同じ名前の&abcを繰り返すと、毎回値の指定が求められる、同じ値を繰り返し使いたい場合は&&abcを使用できる、DEFINE abc = 1001 のように、&を付けずに変数名を指定して事前設定できる",
+      "explanation": "正解：A、B、C\n\nA：正しい。同じ名前の&置換変数を使うと、使用するたびに値の指定が求められます。\nB：正しい。&&は同じ値を繰り返し使いたい場合に使用します。\nC：正しい。DEFINEでは&なしの置換変数名を指定して、あらかじめ値を設定できます。\nD：誤り。表示を停止するのはSET VERIFY OFFです。\n\nポイント：&/&&の挙動、DEFINEによる事前設定、SET VERIFY OFFによる表示制御を一連の操作として整理すると混同しにくくなります。",
+      "topic": "置換変数の総合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q001",
+      "chapter": 12,
+      "question": "EMPLOYEES表の各行について、employee_nameから先頭3文字を取り出して表示したい。最も適切な式はどれか。",
+      "choices": {
+        "A": "SUBSTR(employee_name, 1, 3)",
+        "B": "INSTR(employee_name, 1, 3)",
+        "C": "LENGTH(employee_name, 1, 3)",
+        "D": "TRIM(employee_name, 1, 3)"
+      },
+      "correctChoice": "A",
+      "correctText": "SUBSTR(employee_name, 1, 3)",
+      "explanation": "正解：A\n\nA：正しい。SUBSTR(str, n, length)はn文字目からlength文字を抜き出します。\nB：誤り。INSTRは文字列の出現位置を返すファンクションです。\nC：誤り。LENGTHは文字数を返します。\nD：誤り。TRIMは先頭・末尾の連続した指定文字を削除します。",
+      "topic": "SUBSTR",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q002",
+      "chapter": 12,
+      "question": "次の式の結果の組み合わせとして正しいものはどれか。\n\nSUBSTR('ORACLE', 3)\nSUBSTR('ORACLE', -2, 2)",
+      "choices": {
+        "A": "'ACLE' と 'LE'",
+        "B": "'ACLE' と 'CL'",
+        "C": "'RACLE' と 'LE'",
+        "D": "'ACLE' と 'E'"
+      },
+      "correctChoice": "A",
+      "correctText": "'ACLE' と 'LE'",
+      "explanation": "正解：A\n\nA：正しい。開始位置3から末尾まではACLE、-2は末尾から2文字目を開始位置とするためLEです。\nB：誤り。2つ目の開始位置の解釈が誤りです。\nC：誤り。1つ目は3文字目からなのでRではなくAから始まります。\nD：誤り。2つ目はlength=2なので2文字返します。",
+      "topic": "SUBSTR",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q003",
+      "chapter": 12,
+      "question": "文字列 `ABCDEFG` から、末尾から3文字目を開始位置として2文字取り出したい。最も適切な式はどれか。",
+      "choices": {
+        "A": "SUBSTR('ABCDEFG', -3, 2)",
+        "B": "SUBSTR('ABCDEFG', 3, -2)",
+        "C": "SUBSTR('ABCDEFG', -2, 3)",
+        "D": "SUBSTR('ABCDEFG', 3, 2)"
+      },
+      "correctChoice": "A",
+      "correctText": "SUBSTR('ABCDEFG', -3, 2)",
+      "explanation": "正解：A\n\nA：正しい。負の開始位置は末尾から数えるため、-3から2文字を取得します。\nB：誤り。lengthに負数を指定する形ではありません。\nC：誤り。末尾から2文字目を開始するため、開始位置が違います。\nD：誤り。先頭から3文字目を開始します。",
+      "topic": "SUBSTRの負の開始位置",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q004",
+      "chapter": 12,
+      "question": "商品コード `123` を6文字幅に整形する。左側を0で埋める結果 `000123` と、右側を*で埋める結果 `123***` を得る式の組み合わせとして正しいものはどれか。",
+      "choices": {
+        "A": "LPAD('123',6,'0') / RPAD('123',6,'*')",
+        "B": "RPAD('123',6,'0') / LPAD('123',6,'*')",
+        "C": "LPAD('123',3,'0') / RPAD('123',3,'*')",
+        "D": "LPAD('123',6) / RPAD('123',6)"
+      },
+      "correctChoice": "A",
+      "correctText": "LPAD('123',6,'0') / RPAD('123',6,'*')",
+      "explanation": "正解：A\n\nA：正しい。LPADは左、RPADは右を埋め、lengthは完成後の全体長です。\nB：誤り。左右が逆です。\nC：誤り。全体長3では埋め込みが発生しません。\nD：誤り。埋める文字を省略すると空白が使用され、0や*にはなりません。",
+      "topic": "LPAD・RPAD",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q005",
+      "chapter": 12,
+      "question": "REPLACEファンクションについて正しい記述を2つ選べ。",
+      "choices": {
+        "A": "REPLACE(str, old, new)はoldをnewに置換する",
+        "B": "第3引数を省略すると、oldに一致する文字列は削除される",
+        "C": "第3引数を省略すると、oldは空白に置換される",
+        "D": "REPLACEは文字列の先頭と末尾だけを処理する"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "REPLACE(str, old, new)はoldをnewに置換する、第3引数を省略すると、oldに一致する文字列は削除される",
+      "explanation": "正解：A、B\n\nA：正しい。REPLACEは指定した文字列を別の文字列に置換します。\nB：正しい。変換後文字列を省略すると、変換前文字列に一致する部分が削除されます。\nC：誤り。空白への置換ではなく削除です。\nD：誤り。先頭・末尾に限定されません。",
+      "topic": "REPLACE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q006",
+      "chapter": 12,
+      "question": "値'xxORACLExx'の先頭と末尾に連続する'x'だけを取り除きたい。最も適切な式はどれか。",
+      "choices": {
+        "A": "TRIM('x' FROM 'xxORACLExx')",
+        "B": "REPLACE('xxORACLExx','x')",
+        "C": "TRIM('xx' FROM 'xxORACLExx')",
+        "D": "SUBSTR('xxORACLExx','x')"
+      },
+      "correctChoice": "A",
+      "correctText": "TRIM('x' FROM 'xxORACLExx')",
+      "explanation": "正解：A\n\nA：正しい。TRIMは先頭と末尾から連続する指定文字を削除します。\nB：REPLACEの第3引数省略は文字列中の該当箇所を削除するため、TRIMとは処理範囲が異なります。\nC：誤り。TRIMで削除文字として指定できるのは1文字です。\nD：SUBSTRの用途ではありません。",
+      "topic": "TRIM",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q007",
+      "chapter": 12,
+      "question": "TRIMファンクションについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "LEADINGを指定すると先頭側から削除する",
+        "B": "TRAILINGを指定すると末尾側から削除する",
+        "C": "BOTHを指定すると先頭と末尾から削除する",
+        "D": "削除対象として2文字以上の文字列を指定できる"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "LEADINGを指定すると先頭側から削除する、TRAILINGを指定すると末尾側から削除する、BOTHを指定すると先頭と末尾から削除する",
+      "explanation": "正解：A、B、C\n\nA：正しい。LEADINGは先頭側です。\nB：正しい。TRAILINGは末尾側です。\nC：正しい。BOTHは両端です。\nD：誤り。削除したい文字として指定できるのは1文字です。",
+      "topic": "TRIMの方向指定",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q008",
+      "chapter": 12,
+      "question": "多バイト文字を含む文字列について「格納バイト数ではなく、文字数」を取得したい。使用するファンクションはどれか。",
+      "choices": {
+        "A": "LENGTH",
+        "B": "INSTR",
+        "C": "LPAD",
+        "D": "MOD"
+      },
+      "correctChoice": "A",
+      "correctText": "LENGTH",
+      "explanation": "正解：A\n\nA：正しい。LENGTHは文字数を返すものとして扱います。\nB：誤り。INSTRは対象文字の位置を返します。\nC：誤り。LPADは左側を埋めて文字列長を調整します。\nD：誤り。MODは数値の余りを求めます。",
+      "topic": "LENGTH",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q009",
+      "chapter": 12,
+      "question": "次の式について正しい記述を2つ選べ。\n\nINSTR('BANANA', 'A')",
+      "choices": {
+        "A": "検索開始位置iを省略しているため1として扱う",
+        "B": "何回目かを表すnを省略しているため1として扱う",
+        "C": "見つからない場合はNULLを返す",
+        "D": "戻り値は対象文字列そのものになる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "検索開始位置iを省略しているため1として扱う、何回目かを表すnを省略しているため1として扱う",
+      "explanation": "正解：A、B\n\nA：正しい。iを省略した場合は1です。\nB：正しい。nを省略した場合も1です。\nC：誤り。対象文字が見つからない場合は0を返します。\nD：誤り。戻り値は位置を表す数値です。",
+      "topic": "INSTR",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q010",
+      "chapter": 12,
+      "question": "検索結果を条件分岐に利用するため `INSTR(str,'X')` を実行する。正しい判断を2つ選べ。",
+      "choices": {
+        "A": "Xが存在しなければ0が返る",
+        "B": "Xが存在すれば出現位置を示す数値が返る",
+        "C": "Xが存在しなければ必ずNULLが返る",
+        "D": "戻り値はTRUE/FALSEである"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "Xが存在しなければ0が返る、Xが存在すれば出現位置を示す数値が返る",
+      "explanation": "正解：A、B\n\nA：正しい。検索対象が存在しない場合の戻り値は0です。\nB：正しい。存在する場合は指定条件に対応する出現位置を返します。\nC：誤り。NULLではなく0です。\nD：誤り。位置を示す数値を返します。",
+      "topic": "INSTRの戻り値",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q011",
+      "chapter": 12,
+      "question": "次の3つの式の結果について正しいものを2つ選べ。\n\nROUND(18.617)\nROUND(18.617, 1)\nROUND(18.617, -1)",
+      "choices": {
+        "A": "1つ目は19",
+        "B": "2つ目は18.6",
+        "C": "3つ目は10",
+        "D": "2つ目は18.7"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "1つ目は19、2つ目は18.6",
+      "explanation": "正解：A、B\n\nA：正しい。m省略時は整数になるよう四捨五入され、19です。\nB：正しい。小数点以下1桁へ四捨五入すると18.6です。\nC：誤り。-1では10の位で四捨五入するため20です。\nD：誤り。小数第2位が1なので、小数第1位の6は繰り上がりません。",
+      "topic": "ROUND",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q012",
+      "chapter": 12,
+      "question": "値18.617に対して、`ROUND(...,-1)` と `TRUNC(...,-1)` を実行した結果の組み合わせとして正しいものはどれか。",
+      "choices": {
+        "A": "20 と 10",
+        "B": "10 と 20",
+        "C": "18 と 18",
+        "D": "20 と 20"
+      },
+      "correctChoice": "A",
+      "correctText": "20 と 10",
+      "explanation": "正解：A\n\nA：正しい。ROUNDは10の位で四捨五入して20、TRUNCは10の位で切り捨てて10です。\nB：誤り。ROUNDとTRUNCの結果が逆です。\nC：誤り。m=-1では整数1桁単位の処理ではありません。\nD：誤り。TRUNCは四捨五入せず切り捨てます。",
+      "topic": "ROUND・TRUNC",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q013",
+      "chapter": 12,
+      "question": "次の式の結果として正しいものはどれか。\n\nTRUNC(18.617, -1)",
+      "choices": {
+        "A": "10",
+        "B": "20",
+        "C": "18",
+        "D": "18.6"
+      },
+      "correctChoice": "A",
+      "correctText": "10",
+      "explanation": "正解：A\n\nTRUNCは指定した桁で切り捨てます。-1では10の位単位で切り捨てるため10です。",
+      "topic": "TRUNC（数値）",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q014",
+      "chapter": 12,
+      "question": "数値ファンクションの使用例として正しいものを3つ選べ。",
+      "choices": {
+        "A": "MOD(10,3) は10を3で割った余りを求める",
+        "B": "POWER(2,3) は2の3乗を求める",
+        "C": "TRUNC(18.657,1) は18.6になる",
+        "D": "ROUND(18.617,-1) は10になる"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "MOD(10,3) は10を3で割った余りを求める、POWER(2,3) は2の3乗を求める、TRUNC(18.657,1) は18.6になる",
+      "explanation": "正解：A、B、C\n\nA：正しい。MODは割り算の余りを返します。\nB：正しい。POWER(n,m)はnのm乗です。\nC：正しい。小数点以下1桁で切り捨てるため18.6です。\nD：誤り。10の位で四捨五入するため20です。",
+      "topic": "数値ファンクション",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q015",
+      "chapter": 12,
+      "question": "DATE型 `order_date` に対して `order_date + 1.5` を評価した。結果について正しいものはどれか。",
+      "choices": {
+        "A": "order_dateの1日と12時間後を表すDATE値になる",
+        "B": "1.5か月後を表すDATE値になる",
+        "C": "日時と数値は加算できないためエラーになる",
+        "D": "結果は日数を表す数値1.5になる"
+      },
+      "correctChoice": "A",
+      "correctText": "order_dateの1日と12時間後を表すDATE値になる",
+      "explanation": "正解：A\n\nA：正しい。日時に数値を加える場合、その数値は日数として扱われ、小数も日単位で表現できます。\nB：誤り。月単位の加算ではありません。\nC：誤り。日時＋数値は可能です。\nD：誤り。日時−日時は日数の数値になりますが、日時＋数値の結果は日時型です。",
+      "topic": "日時と数値の演算",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q016",
+      "chapter": 12,
+      "question": "2つのDATE値 `dt1` と `dt2` について、`dt1 - dt2` の結果が `1.5` だった。意味として正しいものはどれか。",
+      "choices": {
+        "A": "dt1はdt2より1日12時間後",
+        "B": "dt1はdt2より1.5か月後",
+        "C": "結果1.5はDATE型",
+        "D": "日時同士の減算は実行できない"
+      },
+      "correctChoice": "A",
+      "correctText": "dt1はdt2より1日12時間後",
+      "explanation": "正解：A\n\nA：正しい。日時−日時は日数を表す数値となり、0.5日は12時間です。\nB：誤り。戻り値の単位は月ではなく日です。\nC：誤り。結果は数値型です。\nD：誤り。日時同士の減算は可能です。",
+      "topic": "日時差",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q017",
+      "chapter": 12,
+      "question": "DATE型のdt1、dt2と数値nがある。実行可能な演算を3つ選べ。",
+      "choices": {
+        "A": "dt1 + n",
+        "B": "dt1 - n",
+        "C": "dt1 - dt2",
+        "D": "dt1 + dt2"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "dt1 + n、dt1 - n、dt1 - dt2",
+      "explanation": "正解：A、B、C\n\nA：正しい。日時＋数値は、数値分の日数を加算した日時になります。\nB：正しい。日時−数値は、数値分の日数を減算した日時になります。\nC：正しい。日時−日時は日数を表す数値になります。\nD：誤り。日時＋日時はできません。",
+      "topic": "日時演算",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q018",
+      "chapter": 12,
+      "question": "基準日dtから3か月前の日付を求めたい。最も適切な式はどれか。",
+      "choices": {
+        "A": "ADD_MONTHS(dt, -3)",
+        "B": "ADD_MONTHS(dt, 3)",
+        "C": "MONTHS_BETWEEN(dt, -3)",
+        "D": "LAST_DAY(dt, -3)"
+      },
+      "correctChoice": "A",
+      "correctText": "ADD_MONTHS(dt, -3)",
+      "explanation": "正解：A\n\nADD_MONTHS(dt,n)はnか月後の日付を返し、nが負数なら過去方向になります。3か月前は-3を指定します。",
+      "topic": "ADD_MONTHS",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q019",
+      "chapter": 12,
+      "question": "MONTHS_BETWEEN(dt1, dt2)の戻り値が整数になる条件として示されているものを2つ選べ。",
+      "choices": {
+        "A": "dt1とdt2が同じ日付の日である",
+        "B": "dt1とdt2がともに各月の最終日である",
+        "C": "dt1とdt2が同じ曜日である",
+        "D": "dt1とdt2が同じ年である"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "dt1とdt2が同じ日付の日である、dt1とdt2がともに各月の最終日である",
+      "explanation": "正解：A、B\n\nA：正しい。同じ日である場合は整数になります。\nB：正しい。両方とも月の最終日の場合も整数になります。\nC・D：整数になる条件として示されていません。",
+      "topic": "MONTHS_BETWEEN",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q020",
+      "chapter": 12,
+      "question": "基準日dtが金曜日そのものだった場合、`NEXT_DAY(dt,'金')` の考え方として正しいものはどれか。",
+      "choices": {
+        "A": "dtより後に来る最初の金曜日を返す",
+        "B": "dt自身を返す",
+        "C": "直前の金曜日を返す",
+        "D": "曜日名は指定できない"
+      },
+      "correctChoice": "A",
+      "correctText": "dtより後に来る最初の金曜日を返す",
+      "explanation": "正解：A\n\nA：正しい。NEXT_DAYは基準日より「後」の最初の指定曜日を返します。\nB：誤り。同じ曜日でも基準日自身ではなく、その後の該当曜日です。\nC：誤り。過去方向を検索するファンクションではありません。\nD：誤り。曜日名を指定する形が示されています。",
+      "topic": "NEXT_DAY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q021",
+      "chapter": 12,
+      "question": "要件と日時ファンクションの組み合わせとして正しいものを3つ選べ。",
+      "choices": {
+        "A": "ある月の最終日 → LAST_DAY(dt)",
+        "B": "3か月前 → ADD_MONTH(dt,-3)",
+        "C": "現在日時 → SYSDATE",
+        "D": "次の指定曜日 → MONTH_BETWEEN(dt1,dt2)"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "ある月の最終日 → LAST_DAY(dt)、3か月前 → ADD_MONTH(dt,-3)、現在日時 → SYSDATE",
+      "explanation": "正解：A、B、C\n\nA：正しい。LAST_DAYは指定日の月末日を返します。\nB：正しい。月加算の引数を負数にすると過去方向になります。\nC：正しい。SYSDATEは引数なしで現在日付を返します。\nD：誤り。次の指定曜日にはNEXT_DAYを使用します。",
+      "topic": "日時ファンクションの使い分け",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q022",
+      "chapter": 12,
+      "question": "同じ日の2つのDATE値に `ROUND(dt,'DD')` を適用する。\n\nA: 11:59:59\nB: 12:00:00\n\n結果について正しいものはどれか。",
+      "choices": {
+        "A": "Aは当日00:00:00、Bは翌日00:00:00",
+        "B": "AもBも当日00:00:00",
+        "C": "AもBも翌日00:00:00",
+        "D": "Aは翌日、Bは当日"
+      },
+      "correctChoice": "A",
+      "correctText": "Aは当日00:00:00、Bは翌日00:00:00",
+      "explanation": "正解：A\n\nA：正しい。DDでの丸めは午前中なら当日0時、12:00:00以降なら翌日0時です。\nB：誤り。Bは午後側として翌日に丸められます。\nC：誤り。Aは午前中なので当日に丸められます。\nD：誤り。関係が逆です。",
+      "topic": "DATEのROUND DD",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q023",
+      "chapter": 12,
+      "question": "同じ月の15日と16日に対して `ROUND(dt,'MM')` を実行した。結果の組み合わせとして正しいものはどれか。",
+      "choices": {
+        "A": "15日→当月1日、16日→翌月1日",
+        "B": "15日→翌月1日、16日→当月1日",
+        "C": "どちらも当月1日",
+        "D": "どちらも翌月1日"
+      },
+      "correctChoice": "A",
+      "correctText": "15日→当月1日、16日→翌月1日",
+      "explanation": "正解：A\n\nA：正しい。1～15日は当月1日、16日以降は翌月1日に丸められます。\nB：誤り。境界の扱いが逆です。\nC：誤り。16日は翌月側です。\nD：誤り。15日は当月側です。",
+      "topic": "DATEのROUND MM",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q024",
+      "chapter": 12,
+      "question": "同じ年の6月30日と7月1日に対して `ROUND(dt,'YY')` を実行した。結果について正しいものはどれか。",
+      "choices": {
+        "A": "6月は当年1月1日、7月は翌年1月1日",
+        "B": "どちらも当年1月1日",
+        "C": "6月は翌年、7月は当年",
+        "D": "どちらも翌年1月1日"
+      },
+      "correctChoice": "A",
+      "correctText": "6月は当年1月1日、7月は翌年1月1日",
+      "explanation": "正解：A\n\nA：正しい。1～6月は当年1月1日、それ以外は翌年1月1日へ丸めます。\nB：誤り。7月は翌年側です。\nC：誤り。境界の扱いが逆です。\nD：誤り。6月は当年側です。",
+      "topic": "DATEのROUND YY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch12q025",
+      "chapter": 12,
+      "question": "DATE値に対するTRUNCについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "TRUNC(dt,'DD') は当日00:00:00",
+        "B": "TRUNC(dt,'MM') は当月1日",
+        "C": "TRUNC(dt,'YY') は当年1月1日",
+        "D": "TRUNC(dt,'DD') は正午以降なら翌日00:00:00"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "TRUNC(dt,'DD') は当日00:00:00、TRUNC(dt,'MM') は当月1日、TRUNC(dt,'YY') は当年1月1日",
+      "explanation": "正解：A、B、C\n\nA：正しい。DDで切り捨てると当日の0時です。\nB：正しい。MMで切り捨てると当月1日です。\nC：正しい。YYで切り捨てると当年1月1日です。\nD：誤り。正午を境に翌日へ進むのはROUNDの説明で、TRUNCではありません。",
+      "topic": "DATEのTRUNC",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q026",
+      "chapter": 12,
+      "question": "日時のROUND/TRUNCでformatを省略した場合について正しいものを2つ選べ。",
+      "choices": {
+        "A": "ROUND(dt) はROUND(dt,'DD')と同じ扱い",
+        "B": "TRUNC(dt) はTRUNC(dt,'DD')と同じ扱い",
+        "C": "省略するとMMとして扱う",
+        "D": "formatは必須なので省略すると必ずエラー"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ROUND(dt) はROUND(dt,'DD')と同じ扱い、TRUNC(dt) はTRUNC(dt,'DD')と同じ扱い",
+      "explanation": "正解：A、B\n\nA：正しい。ROUNDのformat省略はDDと同義です。\nB：正しい。TRUNCのformat省略もDDと同義です。\nC：誤り。MMではありません。\nD：誤り。省略可能です。",
+      "topic": "日時ROUND/TRUNCの既定",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch12q027",
+      "chapter": 12,
+      "question": "1行ごとに文字列加工・数値計算・日時加工を行いたい。単一行ファンクションについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "SELECT句で使用できる",
+        "B": "WHERE句で使用できる",
+        "C": "HAVING句でも列やリテラルを指定できる位置で使用できる",
+        "D": "表全体に対して必ず1つの結果だけを返す"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "SELECT句で使用できる、WHERE句で使用できる、HAVING句でも列やリテラルを指定できる位置で使用できる",
+      "explanation": "正解：A、B、C\n\nA：正しい。SELECT句の式で使用できます。\nB：正しい。WHERE句の条件式でも使用できます。\nC：正しい。HAVINGなど、列やリテラルを指定できる箇所で使用可能です。\nD：誤り。単一行ファンクションは各行に対して結果を返すもので、表全体で1結果に限定されません。",
+      "topic": "単一行ファンクション",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q001",
+      "chapter": 13,
+      "question": "次の式の評価順序について正しいものはどれか。\n\nTO_CHAR(ROUND(order_date, 'MM'), 'YYYY-MM-DD')",
+      "choices": {
+        "A": "ROUNDが先に実行され、その結果にTO_CHARが適用される",
+        "B": "TO_CHARが先に実行され、その結果にROUNDが適用される",
+        "C": "2つのファンクションは同時に実行される",
+        "D": "ファンクションはネストできない"
+      },
+      "correctChoice": "A",
+      "correctText": "ROUNDが先に実行され、その結果にTO_CHARが適用される",
+      "explanation": "正解：A\n\nファンクションをネストした場合は内側から先に実行されます。この式ではROUNDの結果がTO_CHARへ渡されます。",
+      "topic": "ファンクションのネスト",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q002",
+      "chapter": 13,
+      "question": "次の式を考える。\n\nTO_CHAR(ROUND(order_date,'MM'),'YYYY-MM-DD')\n\nファンクションの実行順序として正しいものはどれか。",
+      "choices": {
+        "A": "内側のROUNDが先、その結果に外側のTO_CHARを適用する",
+        "B": "外側のTO_CHARが先、その文字列をROUNDする",
+        "C": "両方同時に評価されるため順序はない",
+        "D": "ファンクションは2段以上ネストできない"
+      },
+      "correctChoice": "A",
+      "correctText": "内側のROUNDが先、その結果に外側のTO_CHARを適用する",
+      "explanation": "正解：A\n\nA：正しい。ネストしたファンクションは内側から外側へ評価されます。\nB：誤り。評価順序が逆です。\nC：誤り。内側の結果が外側の引数になるため順序があります。\nD：誤り。ファンクションのネスト数に制限はないとされています。",
+      "topic": "ファンクションのネスト",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q003",
+      "chapter": 13,
+      "question": "DATE型のhire_dateを文字列へ変換する。\n\nTO_CHAR(hire_date)\n\nformatを省略した場合の説明として正しいものはどれか。",
+      "choices": {
+        "A": "NLS_DATE_FORMATに設定された書式モデルが使用される",
+        "B": "常にYYYY-MM-DDになる",
+        "C": "NLS_TIMESTAMP_FORMATが使用される",
+        "D": "formatは必須なのでエラーになる"
+      },
+      "correctChoice": "A",
+      "correctText": "NLS_DATE_FORMATに設定された書式モデルが使用される",
+      "explanation": "正解：A\n\nA：正しい。日時型TO_CHARでformatを省略するとNLS_DATE_FORMATの書式モデルが使用されます。\nB：誤り。固定のYYYY-MM-DDではありません。\nC：誤り。DATE型のTO_CHARで参照するのはNLS_DATE_FORMATです。\nD：誤り。formatは省略可能です。",
+      "topic": "TO_CHAR日時",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q004",
+      "chapter": 13,
+      "question": "DATE値を `TO_CHAR` で文字列化するとき、NLS_DATE_LANGUAGEの指定が結果に影響し得る書式要素を2つ選べ。",
+      "choices": {
+        "A": "MONTH",
+        "B": "DAY",
+        "C": "DD",
+        "D": "HH24"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "MONTH、DAY",
+      "explanation": "正解：A、B\n\nA：正しい。月名は言語設定の影響を受けます。\nB：正しい。曜日名も言語設定の影響を受けます。\nC：誤り。日を数値で表すDDは月名・曜日名の言語選択とは異なります。\nD：誤り。24時間制の時を表すHH24は言語名表示ではありません。",
+      "topic": "NLS_DATE_LANGUAGE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q005",
+      "chapter": 13,
+      "question": "次の式を実行する。\n\nTO_CHAR(12345.67, '999,999.999')\n\n結果の考え方として正しいものはどれか。",
+      "choices": {
+        "A": "指定した小数部3桁に合わせ、12345.670のように文字列化される",
+        "B": "小数部は切り捨てられて12345になる",
+        "C": "整数部の桁数が不足するため必ず#になる",
+        "D": "TO_CHARは数値には使用できない"
+      },
+      "correctChoice": "A",
+      "correctText": "指定した小数部3桁に合わせ、12345.670のように文字列化される",
+      "explanation": "正解：A\n\nA：正しい。数値TO_CHARは指定した書式に従って文字列化し、小数部の桁位置も反映します。\nB：誤り。この書式は小数部を削除する指定ではありません。\nC：誤り。この書式では整数部を表す桁位置が足りています。\nD：誤り。TO_CHARは数値型にも使用できます。",
+      "topic": "数値TO_CHAR",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q006",
+      "chapter": 13,
+      "question": "番号12345を固定幅の表示用文字列 `012345` にしたい。最も適切な式はどれか。",
+      "choices": {
+        "A": "TO_CHAR(12345,'099999')",
+        "B": "TO_CHAR(12345,'99999')",
+        "C": "TO_NUMBER(12345,'099999')",
+        "D": "TO_DATE(12345,'099999')"
+      },
+      "correctChoice": "A",
+      "correctText": "TO_CHAR(12345,'099999')",
+      "explanation": "正解：A\n\nA：正しい。0書式要素は不足する桁を先頭ゼロで埋める用途に使用できます。\nB：誤り。9は有効桁位置を表しますが、ここで求める先頭ゼロの指定ではありません。\nC：誤り。TO_NUMBERは文字列→数値の変換です。\nD：誤り。TO_DATEは日時変換です。",
+      "topic": "数値書式0",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q007",
+      "chapter": 13,
+      "question": "数値書式モデルと意味の組み合わせとして正しいものを3つ選べ。",
+      "choices": {
+        "A": "$ — ドル記号を数値の前に付ける",
+        "B": "L — ローカル通貨記号を付ける",
+        "C": "C — ISO通貨記号を付ける",
+        "D": "0 — ローカル通貨記号を付ける"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "$ — ドル記号を数値の前に付ける、L — ローカル通貨記号を付ける、C — ISO通貨記号を付ける",
+      "explanation": "正解：A、B、C\n\n$、L、Cはそれぞれドル記号、ローカル通貨記号、ISO通貨記号に関する書式です。0は不足桁をゼロで埋める書式です。",
+      "topic": "通貨書式モデル",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q008",
+      "chapter": 13,
+      "question": "数値書式モデルD/Gを使う理由について正しいものを2つ選べ。",
+      "choices": {
+        "A": "Dは地域設定に応じた小数点位置を表せる",
+        "B": "Gは地域設定に応じた桁区切り位置を表せる",
+        "C": "Dは常にピリオド、Gは常にカンマに固定される",
+        "D": "DとGは日時書式専用である"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "Dは地域設定に応じた小数点位置を表せる、Gは地域設定に応じた桁区切り位置を表せる",
+      "explanation": "正解：A、B\n\nA：正しい。Dは地域設定依存の小数点記号を扱う書式要素です。\nB：正しい。Gは地域設定依存の桁区切り記号を扱います。\nC：誤り。地域設定によって表示内容が変化します。\nD：誤り。数値書式モデルとして使用されます。",
+      "topic": "数値書式D・G",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q009",
+      "chapter": 13,
+      "question": "`TO_CHAR`で数値を書式化したところ、指定したformatの整数部の桁数より実データの整数部が大きかった。結果として示されている動作はどれか。",
+      "choices": {
+        "A": "#で表示される",
+        "B": "上位桁だけ自動的に切り捨てられる",
+        "C": "NULLになる",
+        "D": "小数部だけが表示される"
+      },
+      "correctChoice": "A",
+      "correctText": "#で表示される",
+      "explanation": "正解：A\n\nA：正しい。数値を書式に収められない場合、#での表示が示されています。\nB：誤り。上位桁を切り捨てて別の値として表示する扱いではありません。\nC：誤り。NULLへ変換されるわけではありません。\nD：誤り。整数部不足を小数部だけの表示で補うものではありません。",
+      "topic": "TO_CHAR書式桁不足",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q010",
+      "chapter": 13,
+      "question": "文字列 `$19.123` を数値19.123へ変換したい。書式内の通貨記号と小数点位置も解釈させる式として適切なものはどれか。",
+      "choices": {
+        "A": "TO_NUMBER('$19.123','$99D999')",
+        "B": "TO_CHAR('$19.123','$99D999')",
+        "C": "TO_DATE('$19.123','$99D999')",
+        "D": "TO_NUMBER('$19.123','999999')"
+      },
+      "correctChoice": "A",
+      "correctText": "TO_NUMBER('$19.123','$99D999')",
+      "explanation": "正解：A\n\nA：正しい。TO_NUMBERは文字列→数値の明示変換で、文字列に対応する書式を指定できます。\nB：誤り。TO_CHARは数値や日時を文字列に変換する側です。\nC：誤り。日時変換ではありません。\nD：誤り。入力文字列に含まれる通貨記号・小数点を解釈する書式になっていません。",
+      "topic": "TO_NUMBER",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q011",
+      "chapter": 13,
+      "question": "TO_DATE(str, format, NLS_DATE_LANGUAGE=language)について正しいものを2つ選べ。",
+      "choices": {
+        "A": "formatを省略するとNLS_DATE_FORMATに設定されたモデルが使用される",
+        "B": "language指定は月名や曜日名を扱う場合に関係する",
+        "C": "formatを省略すると常にYYYY-MM-DDになる",
+        "D": "TO_DATEは数値型への変換に使用する"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "formatを省略するとNLS_DATE_FORMATに設定されたモデルが使用される、language指定は月名や曜日名を扱う場合に関係する",
+      "explanation": "正解：A、B\n\nA：正しい。format省略時はNLS_DATE_FORMATのモデルが使われます。\nB：正しい。languageは月名・曜日名の言語指定に関係します。\nC・D：定義と一致しません。",
+      "topic": "TO_DATE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q012",
+      "chapter": 13,
+      "question": "NUMBER型列amountに次の値を挿入する。\n\nINSERT INTO t(amount) VALUES('990');\n\nこのSQLについて適切な説明はどれか。",
+      "choices": {
+        "A": "文字列990を数値へ暗黙変換できるため実行可能",
+        "B": "NUMBER列には引用符付き文字列を一切指定できない",
+        "C": "必ずTO_CHARを使用しなければならない",
+        "D": "文字列はDATE型にしか暗黙変換できない"
+      },
+      "correctChoice": "A",
+      "correctText": "文字列990を数値へ暗黙変換できるため実行可能",
+      "explanation": "正解：A\n\nA：正しい。数値として解釈できる文字リテラルはNUMBER型へ暗黙変換できる扱いです。\nB：誤り。変換可能な文字列なら暗黙変換できます。\nC：誤り。TO_CHARは文字列化するファンクションで、ここで必要な方向とは逆です。\nD：誤り。数値型への暗黙変換も示されています。",
+      "topic": "暗黙的な数値変換",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q013",
+      "chapter": 13,
+      "question": "NUMBER型列amountへ文字列 `ABC` を格納しようとした。暗黙変換の観点から適切な結果はどれか。",
+      "choices": {
+        "A": "数値へ変換できないため実行時エラー",
+        "B": "自動的に0へ変換される",
+        "C": "自動的にNULLへ変換される",
+        "D": "文字列ABCのままNUMBER列に格納される"
+      },
+      "correctChoice": "A",
+      "correctText": "数値へ変換できないため実行時エラー",
+      "explanation": "正解：A\n\nA：正しい。変換先のNUMBERとして解釈できない文字列は暗黙変換に失敗し、実行時エラーになります。\nB：誤り。0への自動置換は示されていません。\nC：誤り。NULLへの自動置換も示されていません。\nD：誤り。NUMBER列へ文字列のまま保持することはできません。",
+      "topic": "暗黙変換エラー",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q014",
+      "chapter": 13,
+      "question": "DATE型列に文字リテラルをそのままINSERTする。暗黙変換が成功するための前提として最も重要なものはどれか。",
+      "choices": {
+        "A": "文字列がNLS_DATE_FORMATの書式に合致する",
+        "B": "文字列がNLS_TIMESTAMP_FORMATにだけ合致する",
+        "C": "必ず月名を含む",
+        "D": "必ずTO_CHARで囲む"
+      },
+      "correctChoice": "A",
+      "correctText": "文字列がNLS_DATE_FORMATの書式に合致する",
+      "explanation": "正解：A\n\nA：正しい。DATE型への暗黙変換ではNLS_DATE_FORMATに合致する文字列であることが成功条件として示されています。\nB：誤り。ここで対象はDATE型です。\nC：誤り。月名は必須ではありません。\nD：誤り。TO_CHARは日時→文字列の変換です。",
+      "topic": "DATEの暗黙変換",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q015",
+      "chapter": 13,
+      "question": "次の式を実行した。\n\nROUND('2021/01/02 01:02:03')\n\n実行時エラーになる理由として最も適切なものはどれか。",
+      "choices": {
+        "A": "ROUNDは数値型と日時型の両方に使用でき、文字列からどちらへ変換すべきか判断できない",
+        "B": "ROUNDは数値型にしか使用できない",
+        "C": "文字列はどのデータ型にも暗黙変換できない",
+        "D": "ROUNDは引数を2つ必ず必要とする"
+      },
+      "correctChoice": "A",
+      "correctText": "ROUNDは数値型と日時型の両方に使用でき、文字列からどちらへ変換すべきか判断できない",
+      "explanation": "正解：A\n\nA：正しい。変換先候補が数値・日時の両方にあるため、自動的に型を決められない例です。\nB：誤り。ROUNDは日時にも使用できます。\nC：誤り。文字列の暗黙変換自体は数値・日時ともに可能な場合があります。\nD：誤り。第2引数を省略できる形があります。",
+      "topic": "曖昧な暗黙変換",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q016",
+      "chapter": 13,
+      "question": "NUMBER型のsalaryにNULLが含まれる。`NVL(salary, '0')` を使用した場合の型変換について正しいものはどれか。",
+      "choices": {
+        "A": "replace側の'0'をsalaryのNUMBER型へ暗黙変換して使用する",
+        "B": "salaryを文字列型へ変換して返す",
+        "C": "型が違う時点で必ず構文エラー",
+        "D": "NVLはNULLではない場合だけreplaceを返す"
+      },
+      "correctChoice": "A",
+      "correctText": "replace側の'0'をsalaryのNUMBER型へ暗黙変換して使用する",
+      "explanation": "正解：A\n\nA：正しい。NVLではreplace側を第1引数inの型へ暗黙変換する扱いです。\nB：誤り。変換方向が逆です。\nC：誤り。変換可能なら使用できます。変換できない場合に実行時エラーです。\nD：誤り。NULLの場合にreplaceを返します。",
+      "topic": "NVLと型変換",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q017",
+      "chapter": 13,
+      "question": "`NVL2(commission_pct, salary, 0)` を考える。NVL2の戻り値の選択について正しいものを2つ選べ。",
+      "choices": {
+        "A": "commission_pctがNULLでなければsalaryを返す",
+        "B": "commission_pctがNULLなら0を返す",
+        "C": "commission_pctがNULLならsalaryを返す",
+        "D": "commission_pct自身を必ず返す"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "commission_pctがNULLでなければsalaryを返す、commission_pctがNULLなら0を返す",
+      "explanation": "正解：A、B\n\nA：正しい。第1引数が非NULLならout1を返します。\nB：正しい。第1引数がNULLならout2を返します。\nC：誤り。NULLの場合はout2側です。\nD：誤り。第1引数は分岐判定に使われ、戻り値はout1/out2から選ばれます。",
+      "topic": "NVL2",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q018",
+      "chapter": 13,
+      "question": "NVL2(in, out1, out2) でout1とout2のデータ型が異なる。型変換について正しいものはどれか。",
+      "choices": {
+        "A": "out2をout1のデータ型へ暗黙変換する",
+        "B": "out1をout2のデータ型へ暗黙変換する",
+        "C": "必ず両方を文字列へ変換する",
+        "D": "型が異なるだけで必ず構文エラーになる"
+      },
+      "correctChoice": "A",
+      "correctText": "out2をout1のデータ型へ暗黙変換する",
+      "explanation": "正解：A\n\nA：正しい。示されている規則ではout2をout1の型へ暗黙変換します。\nB：誤り。変換方向が逆です。\nC：誤り。必ず文字列型へ統一する規則ではありません。\nD：誤り。変換可能なら処理でき、変換できない場合に実行時エラーになります。",
+      "topic": "NVL2の型変換",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q019",
+      "chapter": 13,
+      "question": "次の2式の結果について正しいものを2つ選べ。\n\nNULLIF(10,10)\nNULLIF(10,20)",
+      "choices": {
+        "A": "1つ目はNULL",
+        "B": "2つ目は10",
+        "C": "1つ目は10",
+        "D": "2つ目はNULL"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "1つ目はNULL、2つ目は10",
+      "explanation": "正解：A、B\n\nA：正しい。inとtargetが等しい場合はNULLを返します。\nB：正しい。等しくない場合はinを返すため10です。\nC：誤り。等しい場合はinではなくNULLです。\nD：誤り。等しくない場合はNULLではありません。",
+      "topic": "NULLIF",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q020",
+      "chapter": 13,
+      "question": "NULLIF(in,target) の使用条件・戻り値について正しいものを2つ選べ。",
+      "choices": {
+        "A": "第1引数inにNULLを指定しない",
+        "B": "inとtargetは同じデータ型である必要がある",
+        "C": "inとtargetが異なると必ずNULLを返す",
+        "D": "第1引数がNULLでも常にinを返す"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "第1引数inにNULLを指定しない、inとtargetは同じデータ型である必要がある",
+      "explanation": "正解：A、B\n\nA：正しい。NULLIFの第1引数inにはNULLを指定しないという条件です。\nB：正しい。inとtargetは同じデータ型である必要があります。\nC：誤り。等しい場合にNULL、異なる場合はinを返します。\nD：誤り。第1引数NULLを前提にする説明は条件に反します。",
+      "topic": "NULLIFの引数条件",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q021",
+      "chapter": 13,
+      "question": "次の式を評価する。\n\nCOALESCE(NULL, NULL, 'A', 'B')\n\n戻り値と評価の考え方として正しいものはどれか。",
+      "choices": {
+        "A": "最初に見つかる非NULL値'A'を返す",
+        "B": "最後の非NULL値'B'を返す",
+        "C": "NULL引数を含むため必ずエラー",
+        "D": "すべての引数を連結してABを返す"
+      },
+      "correctChoice": "A",
+      "correctText": "最初に見つかる非NULL値'A'を返す",
+      "explanation": "正解：A\n\nA：正しい。COALESCEは左から見て最初の非NULL値を返します。\nB：誤り。最後ではなく最初の非NULL値です。\nC：誤り。引数としてNULLを指定できます。\nD：誤り。連結ファンクションではありません。",
+      "topic": "COALESCE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q022",
+      "chapter": 13,
+      "question": "COALESCEについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "複数の引数から最初に見つかった非NULL値を返す",
+        "B": "すべてNULLならNULLを返す",
+        "C": "引数そのものにNULLを指定できる",
+        "D": "異なるデータ型を自由に混在させても型変換条件を考える必要はない"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "複数の引数から最初に見つかった非NULL値を返す、すべてNULLならNULLを返す、引数そのものにNULLを指定できる",
+      "explanation": "正解：A、B、C\n\nA：正しい。左から最初に見つかった非NULL値を返します。\nB：正しい。非NULL値が1つもなければNULLです。\nC：正しい。NULLを引数として指定できます。\nD：誤り。引数は同じデータ型である必要があるという条件があります。",
+      "topic": "COALESCE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q023",
+      "chapter": 13,
+      "question": "次の要件とNULL関連ファンクションの組み合わせとして正しいものを3つ選べ。",
+      "choices": {
+        "A": "NULLなら代替値を返す → NVL",
+        "B": "NULLかどうかで2つの戻り値を切り替える → NVL2",
+        "C": "2値が等しければNULLを返す → NULLIF",
+        "D": "最初の非NULL値を探す → NULLIF"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "NULLなら代替値を返す → NVL、NULLかどうかで2つの戻り値を切り替える → NVL2、2値が等しければNULLを返す → NULLIF",
+      "explanation": "正解：A、B、C\n\nA：正しい。NVLは第1引数がNULLの場合に代替値を返します。\nB：正しい。NVL2は第1引数のNULL/非NULLでout2/out1を切り替えます。\nC：正しい。NULLIFは2値が等しい場合にNULLを返します。\nD：誤り。最初の非NULL値を返すのはCOALESCEです。",
+      "topic": "NULL関連ファンクションの使い分け",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch13q024",
+      "chapter": 13,
+      "question": "数値nと日時dtを `CONCAT(n, dt)` に渡した場合の扱いとして正しいものはどれか。",
+      "choices": {
+        "A": "数値型と日時型は文字列連結に必要な形へ暗黙変換され、実行可能",
+        "B": "数値と日時は絶対に暗黙変換できないため必ずエラー",
+        "C": "dtは数値に変換されて加算される",
+        "D": "CONCATはNUMBER型だけを受け取る"
+      },
+      "correctChoice": "A",
+      "correctText": "数値型と日時型は文字列連結に必要な形へ暗黙変換され、実行可能",
+      "explanation": "正解：A\n\nA：正しい。数値型や日時型が暗黙的に型変換され、CONCATで扱える例が示されています。\nB：誤り。暗黙変換可能な例として扱われます。\nC：誤り。文字列連結であり、日時を数値加算する処理ではありません。\nD：誤り。CONCATをNUMBER専用とする説明ではありません。",
+      "topic": "CONCATと暗黙変換",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch13q025",
+      "chapter": 13,
+      "question": "日時文字列を扱う際の記述として正しいものを2つ選べ。",
+      "choices": {
+        "A": "TO_DATEではformatを明示して文字列を日時型へ変換できる",
+        "B": "暗黙変換に依存する場合はNLS_DATE_FORMATとの一致が影響する",
+        "C": "TO_DATEは数値を文字列へ変換する",
+        "D": "暗黙変換ではNLS_DATE_FORMATは参照されない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "TO_DATEではformatを明示して文字列を日時型へ変換できる、暗黙変換に依存する場合はNLS_DATE_FORMATとの一致が影響する",
+      "explanation": "正解：A、B\n\nA：正しい。TO_DATEは文字列を日時型へ明示的に変換できます。\nB：正しい。日時への暗黙変換ではNLS_DATE_FORMATとの一致が条件になります。\nC・D：定義と異なります。",
+      "topic": "明示変換と暗黙変換",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q001",
+      "chapter": 14,
+      "question": "EMP表のHIREDATE列にはNULLが含まれている。最も新しい入社日だけを1行で取得したい。適切な式はどれか。",
+      "choices": {
+        "A": "MAX(hiredate)",
+        "B": "MIN(hiredate)",
+        "C": "COUNT(hiredate)",
+        "D": "MAX(*)"
+      },
+      "correctChoice": "A",
+      "correctText": "MAX(hiredate)",
+      "explanation": "正解：A\n\nA：正しい。日時型にもMAXを使用でき、最新日時が最大値として返ります。NULLは集計対象外です。\nB：誤り。MINは最も古い日時を返します。\nC：誤り。COUNTは件数を返します。\nD：誤り。MAXに*を指定する形ではありません。",
+      "topic": "日時型のMAX",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q002",
+      "chapter": 14,
+      "question": "JOB列に `CLERK`、`MANAGER`、`SALESMAN`、NULL が格納されている。`MAX(job)` の考え方として正しいものはどれか。",
+      "choices": {
+        "A": "NULLを除外し、文字列の大小関係で最大の値を返す",
+        "B": "文字型にはMAXを使用できない",
+        "C": "NULLが1件でもあるため結果は必ずNULL",
+        "D": "文字列の長さが最長の値を返す"
+      },
+      "correctChoice": "A",
+      "correctText": "NULLを除外し、文字列の大小関係で最大の値を返す",
+      "explanation": "正解：A\n\nA：正しい。文字データ型にもMAXを使用でき、NULLを除外してORDER BYと同様の大小関係で最大を求めます。\nB：誤り。MAX/MINは文字型にも使用できます。\nC：誤り。集計ファンクションでは引数列のNULLは対象外です。\nD：誤り。文字列長ではなく文字列の大小関係です。",
+      "topic": "文字型のMAX",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q003",
+      "chapter": 14,
+      "question": "EMP表に100行あり、COMM列がNULLではない行が35行ある。次のSQLを実行した場合の組み合わせとして正しいものはどれか。\n\nSELECT COUNT(*), COUNT(comm) FROM emp;",
+      "choices": {
+        "A": "100, 100",
+        "B": "100, 35",
+        "C": "35, 100",
+        "D": "35, 35"
+      },
+      "correctChoice": "B",
+      "correctText": "100, 35",
+      "explanation": "正解：B\n\nCOUNT(*)は行そのものを数えるためNULLを含む行も対象です。一方、COUNT(comm)はCOMMがNULLの行を除外して数えるため35になります。",
+      "topic": "COUNTとNULL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q004",
+      "chapter": 14,
+      "question": "EMP表に100行あり、COMM列がNULLではない行が35行ある。次のSQLについて正しいものを3つ選べ。\n\nSELECT COUNT(*), COUNT(comm), AVG(comm)\nFROM emp;",
+      "choices": {
+        "A": "COUNT(*)は100を返す",
+        "B": "COUNT(comm)は35を返す",
+        "C": "AVG(comm)ではCOMMがNULLの行は平均計算の対象外",
+        "D": "COMMにNULLがあるためAVG(comm)は必ず実行時エラー"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "COUNT(*)は100を返す、COUNT(comm)は35を返す、AVG(comm)ではCOMMがNULLの行は平均計算の対象外",
+      "explanation": "正解：A、B、C\n\nA：正しい。COUNT(*)は行自体を数えるため100行すべてが対象です。\nB：正しい。COUNT(列)はNULLを除外するため35です。\nC：正しい。集計ファンクションの引数列に含まれるNULLは対象外です。\nD：誤り。NULLが含まれていても集計ファンクションは実行時エラーにはなりません。",
+      "topic": "集計ファンクションとNULL",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q005",
+      "chapter": 14,
+      "question": "JOB列に `CLERK, CLERK, MANAGER, MANAGER, SALESMAN` が格納されている。異なるJOBの数を求めるSQLとして適切なものはどれか。",
+      "choices": {
+        "A": "SELECT COUNT(job) FROM emp;",
+        "B": "SELECT COUNT(DISTINCT job) FROM emp;",
+        "C": "SELECT DISTINCT COUNT(*) FROM emp;",
+        "D": "SELECT COUNT(DISTINCT *) FROM emp;"
+      },
+      "correctChoice": "B",
+      "correctText": "SELECT COUNT(DISTINCT job) FROM emp;",
+      "explanation": "正解：B\n\n集計ファンクションの引数にDISTINCTを指定すると、重複を除いた値を対象に集計できます。`DISTINCT *` という指定はできません。",
+      "topic": "COUNT DISTINCT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q006",
+      "chapter": 14,
+      "question": "JOB列の重複を除いた値だけを対象に集計したい。DISTINCTの使用について正しいものを2つ選べ。",
+      "choices": {
+        "A": "COUNT(DISTINCT job) のように使用できる",
+        "B": "AVG(DISTINCT sal) のように使用できる",
+        "C": "COUNT(DISTINCT *) が正しい",
+        "D": "DISTINCTは集計ファンクションの引数には指定できない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "COUNT(DISTINCT job) のように使用できる、AVG(DISTINCT sal) のように使用できる",
+      "explanation": "正解：A、B\n\nA：正しい。集計ファンクションの列指定にDISTINCTを付けられます。\nB：正しい。AVGでもDISTINCTを列の前に指定できます。\nC：誤り。DISTINCT * は不可です。\nD：誤り。列に対するDISTINCTは使用できます。",
+      "topic": "集計とDISTINCT",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q007",
+      "chapter": 14,
+      "question": "部門と職種の組み合わせごとに人数を集計したい。適切なSQLはどれか。",
+      "choices": {
+        "A": "SELECT deptno, job, COUNT(*) FROM emp GROUP BY deptno, job",
+        "B": "SELECT deptno, job, COUNT(*) FROM emp GROUP BY deptno",
+        "C": "SELECT deptno, job, COUNT(*) FROM emp GROUP BY job",
+        "D": "SELECT deptno, job, COUNT(*) FROM emp"
+      },
+      "correctChoice": "A",
+      "correctText": "SELECT deptno, job, COUNT(*) FROM emp GROUP BY deptno, job",
+      "explanation": "正解：A\n\nA：正しい。部門×職種という組み合わせでグループ化するには両列をGROUP BYに指定します。\nB：誤り。jobがグループ化されていません。\nC：誤り。deptnoがグループ化されていません。\nD：誤り。集計値と通常列を同時に出力するのに必要なグループ化がありません。",
+      "topic": "複数列GROUP BY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q008",
+      "chapter": 14,
+      "question": "次のSQLで、SALが700以下の行を集計対象から除外する処理が行われるタイミングとして正しいものはどれか。\n\nSELECT job, COUNT(*)\nFROM emp\nWHERE sal > 700\nGROUP BY job;",
+      "choices": {
+        "A": "GROUP BYで集計した後",
+        "B": "GROUP BYでグループ化する前",
+        "C": "SELECT句を評価した後",
+        "D": "ORDER BYの後"
+      },
+      "correctChoice": "B",
+      "correctText": "GROUP BYでグループ化する前",
+      "explanation": "正解：B\n\nWHEREによる行の絞り込みはGROUP BYによるグループ化・集計より前に行われます。そのためSALが700以下の行はグループ化の対象になりません。",
+      "topic": "WHEREとGROUP BY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q009",
+      "chapter": 14,
+      "question": "部門ごとの平均給与を求め、平均給与が3000を超える部門だけを残したい。適切な条件指定はどれか。",
+      "choices": {
+        "A": "WHERE AVG(sal) > 3000",
+        "B": "HAVING AVG(sal) > 3000",
+        "C": "WHERE sal = AVG(sal)",
+        "D": "ON AVG(sal) > 3000"
+      },
+      "correctChoice": "B",
+      "correctText": "HAVING AVG(sal) > 3000",
+      "explanation": "正解：B\n\n集計後のグループを集計結果で絞り込む場合はHAVINGを使用します。WHEREは集計前の行を絞り込むため、GROUP BYと組み合わせた集計ファンクションを条件に指定する用途ではありません。",
+      "topic": "HAVING",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q010",
+      "chapter": 14,
+      "question": "WHEREとHAVINGの役割について正しいものを3つ選べ。",
+      "choices": {
+        "A": "WHEREはグループ化前の行を絞り込む",
+        "B": "HAVINGはグループ化後の結果を絞り込む",
+        "C": "HAVINGでは集計ファンクションを条件に使用できる",
+        "D": "WHEREではGROUP BY後の集計値を条件に使用する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "WHEREはグループ化前の行を絞り込む、HAVINGはグループ化後の結果を絞り込む、HAVINGでは集計ファンクションを条件に使用できる",
+      "explanation": "正解：A、B、C\n\nWHEREは集計前、HAVINGは集計後の絞り込みです。HAVINGではCOUNTやAVGなどの集計結果を条件にできます。",
+      "topic": "WHEREとHAVING",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q011",
+      "chapter": 14,
+      "question": "次のSQLについて正しい説明はどれか。\n\nSELECT job, COUNT(*)\nFROM emp\nGROUP BY job\nHAVING COUNT(*) > 3;",
+      "choices": {
+        "A": "各JOBのうち、所属行数が4行以上のグループが返る",
+        "B": "EMP全体が4行以上ならすべてのJOBが返る",
+        "C": "COUNT(*)はHAVINGでは使用できない",
+        "D": "HAVINGはGROUP BYより先に評価される"
+      },
+      "correctChoice": "A",
+      "correctText": "各JOBのうち、所属行数が4行以上のグループが返る",
+      "explanation": "正解：A\n\nJOBごとにグループ化してCOUNT(*)を求め、その集計結果が3より大きいグループだけをHAVINGで残します。",
+      "topic": "HAVINGによる集計後絞り込み",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q012",
+      "chapter": 14,
+      "question": "次のSQLでHAVING句に使用している `COUNT(deptno)` がSELECTリストにない。このSQLの考え方として正しいものはどれか。\n\nSELECT job\nFROM emp\nGROUP BY job\nHAVING COUNT(deptno) > 4;",
+      "choices": {
+        "A": "HAVINGで使用する集計ファンクションは必ずSELECTリストにも必要",
+        "B": "HAVINGで使用する集計ファンクションはSELECTリストに存在しなくてもよい",
+        "C": "SELECTリストに集計ファンクションがないためGROUP BYは使用できない",
+        "D": "HAVINGは列名を一切参照できない"
+      },
+      "correctChoice": "B",
+      "correctText": "HAVINGで使用する集計ファンクションはSELECTリストに存在しなくてもよい",
+      "explanation": "正解：B\n\nHAVINGの条件に使用する集計ファンクションや列が、必ずしもSELECTリストに現れる必要はありません。",
+      "topic": "HAVINGとSELECTリスト",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q013",
+      "chapter": 14,
+      "question": "次のSQLの処理として正しいものはどれか。\n\nSELECT MAX(AVG(sal))\nFROM emp\nGROUP BY deptno;",
+      "choices": {
+        "A": "EMP全体の最大給与を求め、その値の平均を求める",
+        "B": "部門ごとの平均給与を求め、その中の最大値を求める",
+        "C": "部門ごとの最大給与を求め、その平均を求める",
+        "D": "AVGとMAXはネストできないため必ずエラーになる"
+      },
+      "correctChoice": "B",
+      "correctText": "部門ごとの平均給与を求め、その中の最大値を求める",
+      "explanation": "正解：B\n\n内側のAVG(sal)がDEPTNOごとに計算され、複数の平均値が得られます。その結果に対して外側のMAXが適用され、最も大きい平均給与が返ります。",
+      "topic": "集計ファンクションのネスト",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q014",
+      "chapter": 14,
+      "question": "集計ファンクションのネストについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "グループごとの集計結果をさらに集計する形で使用できる",
+        "B": "ネストして使用する場合はGROUP BYが必要となる",
+        "C": "3段階以上の集計ファンクションを自由にネストできる",
+        "D": "内側より外側の集計ファンクションが先に実行される"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "グループごとの集計結果をさらに集計する形で使用できる、ネストして使用する場合はGROUP BYが必要となる",
+      "explanation": "正解：A、B\n\nまずGROUP BYにより複数グループの集計結果を作り、その結果を外側の集計ファンクションでさらに集計します。集計ファンクションのネストは2段階までです。",
+      "topic": "集計ファンクションのネスト",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q015",
+      "chapter": 14,
+      "question": "部門ごとのAVG(sal)をさらにMAXで集計し、最終結果を1行にしたい。このときSELECTリストへDEPTNOも同時に出力する考え方として正しいものはどれか。",
+      "choices": {
+        "A": "最終結果がグループ別に残るため必ずDEPTNOも表示される",
+        "B": "2段階目の集計でグループ別の結果をさらに集約するため、DEPTNOをそのままSELECTリストへ出すことはできない",
+        "C": "DEPTNOは文字列に変換すれば必ず表示できる",
+        "D": "MAXをMINへ変えればDEPTNOを表示できる"
+      },
+      "correctChoice": "B",
+      "correctText": "2段階目の集計でグループ別の結果をさらに集約するため、DEPTNOをそのままSELECTリストへ出すことはできない",
+      "explanation": "正解：B\n\n部門ごとのAVGという複数行の結果を、外側のMAXでさらに1つの値へ集約します。その最終結果と個別グループのDEPTNOをそのまま並べて取得する形にはできません。",
+      "topic": "ネスト集計とSELECTリスト",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q016",
+      "chapter": 14,
+      "question": "GROUP BYを含む問い合わせで、SELECTリストに指定できるものとして適切な組み合わせを2つ選べ。",
+      "choices": {
+        "A": "GROUP BYに指定した列",
+        "B": "集計ファンクションによる値",
+        "C": "GROUP BYに指定していない通常列を無条件で指定",
+        "D": "WHERE句に存在する列ならGROUP BYなしで必ず指定可能"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "GROUP BYに指定した列、集計ファンクションによる値",
+      "explanation": "正解：A、B\n\nグループ化した問い合わせでは、グループ化に使用した列と集計結果をSELECTリストに指定できます。グループ化していない通常列をそのままSELECTすることはできません。",
+      "topic": "GROUP BYとSELECTリスト",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q017",
+      "chapter": 14,
+      "question": "次のSQLの論理的な処理順序として正しいものはどれか。\n\nSELECT deptno, COUNT(*) AS cnt\nFROM emp\nWHERE sal >= 2000\nGROUP BY deptno\nHAVING COUNT(*) >= 2\nORDER BY cnt DESC;",
+      "choices": {
+        "A": "FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY",
+        "B": "SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY",
+        "C": "FROM → GROUP BY → WHERE → SELECT → HAVING → ORDER BY",
+        "D": "FROM → WHERE → SELECT → GROUP BY → ORDER BY → HAVING"
+      },
+      "correctChoice": "A",
+      "correctText": "FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY",
+      "explanation": "正解：A\n\nA：正しい。データ準備後にWHERE、GROUP BY、HAVINGが行われ、その後SELECT、ORDER BYという順序です。\nB：誤り。SELECTは論理処理上FROMより先ではありません。\nC：誤り。WHEREはGROUP BYより前です。\nD：誤り。SELECTはGROUP BY/HAVINGより後で、ORDER BYはHAVINGより後です。",
+      "topic": "SQLの論理処理順",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q018",
+      "chapter": 14,
+      "question": "JOINを含む集計SQLの論理処理について正しいものを2つ選べ。",
+      "choices": {
+        "A": "FROM/JOINの後にON条件が評価される",
+        "B": "WHEREはGROUP BYより前に評価される",
+        "C": "HAVINGはGROUP BYより前に評価される",
+        "D": "ORDER BYはSELECTより前に評価される"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "FROM/JOINの後にON条件が評価される、WHEREはGROUP BYより前に評価される",
+      "explanation": "正解：A、B\n\nA：正しい。まずFROM/JOINで対象を準備し、ONで結合条件を評価します。\nB：正しい。WHEREで行を絞り込んだ後にGROUP BYします。\nC：誤り。HAVINGはグループ化後の絞り込みです。\nD：誤り。ORDER BYはSELECT後の並べ替えです。",
+      "topic": "JOINを含む論理処理順",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q019",
+      "chapter": 14,
+      "question": "次のSQLで `cnt` をORDER BYに使用できる理由として最も適切なものはどれか。\n\nSELECT deptno, COUNT(*) AS cnt\nFROM emp\nGROUP BY deptno\nORDER BY cnt DESC;",
+      "choices": {
+        "A": "論理処理上、SELECTで列別名が定義された後にORDER BYが評価されるため",
+        "B": "ORDER BYは常にFROMより先に評価されるため",
+        "C": "cntは表EMPの実列として自動作成されるため",
+        "D": "列別名はWHEREでも同じ理由で使用できるため"
+      },
+      "correctChoice": "A",
+      "correctText": "論理処理上、SELECTで列別名が定義された後にORDER BYが評価されるため",
+      "explanation": "正解：A\n\nA：正しい。SELECTで定義された列別名を、その後のORDER BYで参照できます。\nB：誤り。ORDER BYは処理の後半です。\nC：誤り。列別名は表へ実列を追加するものではありません。\nD：誤り。WHEREはSELECTより前に評価されるため同じ考え方ではありません。",
+      "topic": "列別名とORDER BY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q020",
+      "chapter": 14,
+      "question": "問い合わせの論理的な処理順序について正しいものを3つ選べ。",
+      "choices": {
+        "A": "WHEREはGROUP BYより前に処理される",
+        "B": "HAVINGはGROUP BYより後に処理される",
+        "C": "ORDER BYはSELECTより後に処理される",
+        "D": "SELECTはFROMより前に処理される"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "WHEREはGROUP BYより前に処理される、HAVINGはGROUP BYより後に処理される、ORDER BYはSELECTより後に処理される",
+      "explanation": "正解：A、B、C\n\nWHEREで行を絞ってからグループ化し、HAVINGでグループを絞り込みます。SELECTで出力内容や別名を定義した後、ORDER BYで並べ替えます。",
+      "topic": "SQL処理順序",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q021",
+      "chapter": 14,
+      "question": "EMP表で `SELECT deptno, COUNT(*) FROM emp GROUP BY deptno;` を実行した。DEPTNOがNULLの行が存在する場合のCOUNT(*)について最も適切な考え方はどれか。",
+      "choices": {
+        "A": "COUNT(*)はNULLを含む行も行数として数える",
+        "B": "DEPTNOがNULLの行が1件でもあると実行時エラー",
+        "C": "COUNT(*)はNULL列がある行をすべて除外する",
+        "D": "COUNT(*)は数値列にのみ使用できる"
+      },
+      "correctChoice": "A",
+      "correctText": "COUNT(*)はNULLを含む行も行数として数える",
+      "explanation": "正解：A\n\nCOUNT(*)は特定列の値ではなく行を数えるため、行内にNULLが含まれていても集計対象になります。",
+      "topic": "COUNT(*)",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q022",
+      "chapter": 14,
+      "question": "SAL列のNULLを除外した件数と、EMP表全体の行数を同時に確認したい。SELECTリストとして適切なものはどれか。",
+      "choices": {
+        "A": "COUNT(sal), COUNT(*)",
+        "B": "COUNT(*), DISTINCT *",
+        "C": "MAX(sal), DISTINCT sal",
+        "D": "COUNT(DISTINCT *), COUNT(sal)"
+      },
+      "correctChoice": "A",
+      "correctText": "COUNT(sal), COUNT(*)",
+      "explanation": "正解：A\n\nCOUNT(sal)はSALがNULLでない行数、COUNT(*)は表の行数を返します。両者を比較することでNULLを含む行の存在も把握できます。",
+      "topic": "COUNT列とCOUNT(*)",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q023",
+      "chapter": 14,
+      "question": "次の要件を満たすSQLの句の使い分けとして適切なものはどれか。\n\n「給与が1000を超える従業員だけを対象に職種別人数を集計し、その人数が5人以上の職種だけを表示する」",
+      "choices": {
+        "A": "WHEREでsal > 1000、HAVINGでCOUNT(*) >= 5",
+        "B": "HAVINGでsal > 1000、WHEREでCOUNT(*) >= 5",
+        "C": "WHEREでsal > 1000とCOUNT(*) >= 5の両方を指定",
+        "D": "HAVINGでsal > 1000とCOUNT(*) >= 5の両方を指定"
+      },
+      "correctChoice": "A",
+      "correctText": "WHEREでsal > 1000、HAVINGでCOUNT(*) >= 5",
+      "explanation": "正解：A\n\n個々の行に対するSAL条件は集計前のWHERE、職種ごとのCOUNT(*)条件は集計後のHAVINGで指定します。",
+      "topic": "WHEREとHAVINGの使い分け",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q024",
+      "chapter": 14,
+      "question": "集計問い合わせについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "HAVINGの条件に指定した集計ファンクションはSELECTリストに必須ではない",
+        "B": "GROUP BYには複数列を指定できる",
+        "C": "WHEREでは集計後のCOUNT(*)を条件にする",
+        "D": "DISTINCT * を集計ファンクションの引数に指定できる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "HAVINGの条件に指定した集計ファンクションはSELECTリストに必須ではない、GROUP BYには複数列を指定できる",
+      "explanation": "正解：A、B\n\nHAVINGで用いる集計式はSELECTリストに必須ではなく、GROUP BYは複数列の組み合わせを指定できます。WHEREは集計前の行に対する条件です。",
+      "topic": "集計問い合わせ総合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch14q025",
+      "chapter": 14,
+      "question": "部門ごとの平均給与のうち最も小さい値を求めたい。集計の考え方として適切なものはどれか。",
+      "choices": {
+        "A": "部門ごとにAVG(sal)を求め、その結果へMINを適用する",
+        "B": "EMP全体のMIN(sal)を求め、その結果へAVGを適用する",
+        "C": "部門ごとのCOUNT(*)を求め、その結果へAVGを適用する",
+        "D": "WHERE句へMIN(AVG(sal))を指定する"
+      },
+      "correctChoice": "A",
+      "correctText": "部門ごとにAVG(sal)を求め、その結果へMINを適用する",
+      "explanation": "正解：A\n\nまずGROUP BYにより部門ごとのAVG(sal)を複数求め、その集計結果へ外側のMINを適用する、という2段階の集計になります。",
+      "topic": "ネスト集計の応用",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch14q026",
+      "chapter": 14,
+      "question": "次のSQLについて正しいものを2つ選べ。\n\nSELECT deptno, COUNT(*) AS cnt\nFROM emp\nWHERE sal >= 2000\nGROUP BY deptno\nHAVING COUNT(*) >= 2\nORDER BY cnt DESC;",
+      "choices": {
+        "A": "SALが2000未満の行はグループ化前に除外される",
+        "B": "COUNT(*)が2未満のグループはHAVINGで除外される",
+        "C": "cntはWHERE句で定義される",
+        "D": "ORDER BYはGROUP BYより先に処理される"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "SALが2000未満の行はグループ化前に除外される、COUNT(*)が2未満のグループはHAVINGで除外される",
+      "explanation": "正解：A、B\n\nWHEREで対象行を先に絞り、その後DEPTNOごとにグループ化します。HAVINGは集計後にCOUNT(*)が2以上のグループだけを残します。cntはSELECT句で定義され、ORDER BYで利用されます。",
+      "topic": "集計SQL総合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q001",
+      "chapter": 15,
+      "question": "EMP表とDEPT表を結合する。DEPTNOが両表で一致する従業員だけを取得し、対応する部門がない従業員は除外したい。適切な結合はどれか。",
+      "choices": {
+        "A": "INNER JOIN",
+        "B": "LEFT OUTER JOIN",
+        "C": "FULL OUTER JOIN",
+        "D": "CROSS JOIN"
+      },
+      "correctChoice": "A",
+      "correctText": "INNER JOIN",
+      "explanation": "正解：A\n\nA：正しい。内部結合は結合条件を満たす行だけを返します。\nB：誤り。左外部結合では左表の不一致行も残ります。\nC：誤り。完全外部結合では両表の不一致行も残ります。\nD：誤り。クロス結合は結合条件を使わず全組合せを返します。",
+      "topic": "内部結合",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q002",
+      "chapter": 15,
+      "question": "`FROM emp e JOIN dept d ON e.deptno = d.deptno` におけるJOINについて正しいものはどれか。",
+      "choices": {
+        "A": "INNERを省略した内部結合として扱われる",
+        "B": "自動的に完全外部結合になる",
+        "C": "結合条件を指定しているためCROSS JOINになる",
+        "D": "JOINはOUTERを必ず明示しなければならない"
+      },
+      "correctChoice": "A",
+      "correctText": "INNERを省略した内部結合として扱われる",
+      "explanation": "正解：A\n\nJOINの前のINNERは省略できます。この構文ではON条件を満たす行だけが取得される内部結合になります。",
+      "topic": "INNER省略",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q003",
+      "chapter": 15,
+      "question": "CUSTOMERを左表、ORDERSを右表として結合する。注文がない顧客も残し、注文がある場合は注文情報も表示したい。最も適切なFROM句はどれか。",
+      "choices": {
+        "A": "FROM customer c LEFT OUTER JOIN orders o ON c.customer_id = o.customer_id",
+        "B": "FROM customer c INNER JOIN orders o ON c.customer_id = o.customer_id",
+        "C": "FROM customer c RIGHT OUTER JOIN orders o ON c.customer_id = o.customer_id",
+        "D": "FROM customer c CROSS JOIN orders o"
+      },
+      "correctChoice": "A",
+      "correctText": "FROM customer c LEFT OUTER JOIN orders o ON c.customer_id = o.customer_id",
+      "explanation": "正解：A\n\nA：正しい。左表CUSTOMERの不一致行も保持するためLEFT OUTER JOINが要件に合います。\nB：誤り。内部結合では注文のない顧客が除外されます。\nC：誤り。右表ORDERSを保持する方向で、顧客を必ず残す要件とは逆です。\nD：誤り。全組合せを返すため、顧客と注文の対応付けになりません。",
+      "topic": "左外部結合",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q004",
+      "chapter": 15,
+      "question": "外部結合について正しいものを3つ選べ。",
+      "choices": {
+        "A": "LEFT OUTER JOINは左表の不一致行も結果に残せる",
+        "B": "RIGHT OUTER JOINは右表の不一致行も結果に残せる",
+        "C": "FULL OUTER JOINは両表の不一致行も結果に残せる",
+        "D": "外部結合では結合条件を満たす行を取得できない"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "LEFT OUTER JOINは左表の不一致行も結果に残せる、RIGHT OUTER JOINは右表の不一致行も結果に残せる、FULL OUTER JOINは両表の不一致行も結果に残せる",
+      "explanation": "正解：A、B、C\n\nA：正しい。左表を保持する外部結合です。\nB：正しい。右表を保持する外部結合です。\nC：正しい。両側の不一致行を保持します。\nD：誤り。一致行も取得しつつ、指定側の不一致行も追加で残します。",
+      "topic": "外部結合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q005",
+      "chapter": 15,
+      "question": "EMPとDEPTの両方にDEPTNO列が存在する。次のSELECTで、どの表のDEPTNOかを明確にするための記述として適切なものはどれか。\n\nSELECT ?, e.ename\nFROM emp e JOIN dept d\nON e.deptno = d.deptno;",
+      "choices": {
+        "A": "e.deptno",
+        "B": "deptnoだけで十分",
+        "C": "emp.deptno",
+        "D": "e->deptno"
+      },
+      "correctChoice": "A",
+      "correctText": "e.deptno",
+      "explanation": "正解：A\n\nA：正しい。表別名eを付けているため、e.deptnoのように表接頭辞で明示できます。\nB：誤り。複数表に同名列がある場合、どちらの列か曖昧になります。\nC：誤り。表別名を付けた後は実表名ではなくその別名を接頭辞として使用します。\nD：誤り。この構文は表接頭辞の記法ではありません。",
+      "topic": "表接頭辞と表別名",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q006",
+      "chapter": 15,
+      "question": "EMP表に別名 `e` を付けた。\n\nFROM emp e\n\nこの後のSELECT句・ON句・WHERE句でEMPのSAL列を参照する記述として正しいものはどれか。",
+      "choices": {
+        "A": "e.sal",
+        "B": "emp.sal",
+        "C": "emp.e.sal",
+        "D": "salはどの状況でも必ず曖昧になる"
+      },
+      "correctChoice": "A",
+      "correctText": "e.sal",
+      "explanation": "正解：A\n\nA：正しい。表に別名を付けた後は、その別名を表接頭辞として使用します。\nB：誤り。別名を付けた後に実表名を接頭辞として使うとエラーになります。\nC：誤り。このような二重の接頭辞は使用しません。\nD：誤り。同名列がない場面では列名だけでも参照できることがありますが、ここで正しい接頭辞はeです。",
+      "topic": "表別名",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q007",
+      "chapter": 15,
+      "question": "EMPとDEPTに同名のDEPTNO列があり、その列を等価結合したい。使用可能な構文を2つ選べ。",
+      "choices": {
+        "A": "JOIN ... ON e.deptno = d.deptno",
+        "B": "JOIN ... USING (deptno)",
+        "C": "JOIN ... USING (e.deptno = d.deptno)",
+        "D": "JOIN ... USING (e.deptno)"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "JOIN ... ON e.deptno = d.deptno、JOIN ... USING (deptno)",
+      "explanation": "正解：A、B\n\nA：正しい。ONでは左右の列を明示して結合条件を書けます。\nB：正しい。USINGは同名の結合列名を指定する構文です。\nC：誤り。USING内に等式を書く構文ではありません。\nD：誤り。USINGの結合列には表接頭辞を付けず列名を指定します。",
+      "topic": "ON・USING",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q008",
+      "chapter": 15,
+      "question": "JOIN USING と NATURAL JOIN について正しいものを3つ選べ。",
+      "choices": {
+        "A": "USINGは両表で同じ名前の列を結合列として指定できる",
+        "B": "NATURAL JOINは同名かつ同じデータ型の列を自動的に結合に使用する",
+        "C": "NATURAL JOINで条件に該当する同名列が複数あれば、それらすべてが結合に使用される",
+        "D": "USINGでは=以外の非等価条件を自由に記述できる"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "USINGは両表で同じ名前の列を結合列として指定できる、NATURAL JOINは同名かつ同じデータ型の列を自動的に結合に使用する、NATURAL JOINで条件に該当する同名列が複数あれば、それらすべてが結合に使用される",
+      "explanation": "正解：A、B、C\n\nA：正しい。同名列をUSING句に列名として指定します。\nB：正しい。NATURAL JOINは同名・同データ型の列を自動選択します。\nC：正しい。該当列が複数あれば、すべて結合条件になります。\nD：誤り。非等価条件にはONを使用し、USINGはその用途ではありません。",
+      "topic": "USING・NATURAL JOIN",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q009",
+      "chapter": 15,
+      "question": "2表に `DEPTNO` と `LOCATION_ID` という同名・同データ型の列がそれぞれ存在する。NATURAL JOINした場合の結合条件として正しいものはどれか。",
+      "choices": {
+        "A": "DEPTNOとLOCATION_IDの両方が自動的に使用される",
+        "B": "最初に見つかったDEPTNOだけが使用される",
+        "C": "どの列も指定していないためCROSS JOINになる",
+        "D": "NATURAL JOINでは同名列が2つ以上あると必ず構文エラーになる"
+      },
+      "correctChoice": "A",
+      "correctText": "DEPTNOとLOCATION_IDの両方が自動的に使用される",
+      "explanation": "正解：A\n\nA：正しい。同名かつ同データ型の列が複数ある場合、それらすべてが結合に使用されます。\nB：誤り。1列だけを自動選択するわけではありません。\nC：誤り。NATURAL JOINは条件候補を自動決定します。\nD：誤り。複数列を条件として結合できます。",
+      "topic": "NATURAL JOIN",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q010",
+      "chapter": 15,
+      "question": "結合列の名前がEMP表ではDEPTNO、DEPT表ではDEPARTMENT_IDである。この2列を等価結合する構文として最も適切なものはどれか。",
+      "choices": {
+        "A": "JOIN ... ON e.deptno = d.department_id",
+        "B": "JOIN ... USING(deptno)だけを使用する",
+        "C": "NATURAL JOINだけを使用する",
+        "D": "CROSS JOINだけを使用する"
+      },
+      "correctChoice": "A",
+      "correctText": "JOIN ... ON e.deptno = d.department_id",
+      "explanation": "正解：A\n\n左右で結合列の名前が異なる場合は、ON句でそれぞれの列を明示して条件を指定できます。USINGは同名列を結合する場合に利用します。",
+      "topic": "JOIN ON",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q011",
+      "chapter": 15,
+      "question": "次のFROM/WHEREによる結合の説明として正しいものはどれか。\n\nFROM emp e, dept d\nWHERE e.deptno = d.deptno",
+      "choices": {
+        "A": "FROM句へ表をカンマ区切りで列挙し、WHERE句へ結合条件を指定している",
+        "B": "CROSS JOINキーワードがないため構文エラー",
+        "C": "必ず完全外部結合になる",
+        "D": "WHERE句には検索条件を追加できない"
+      },
+      "correctChoice": "A",
+      "correctText": "FROM句へ表をカンマ区切りで列挙し、WHERE句へ結合条件を指定している",
+      "explanation": "正解：A\n\nJOINキーワードを使わず、FROM句で複数表をカンマ区切りにし、WHERE句へ結合条件を記述する形式です。結合条件以外の検索条件もWHEREへ追加できます。",
+      "topic": "WHERE句による結合",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q012",
+      "chapter": 15,
+      "question": "T1が5行、T2が4行ある。次のSQLで結合条件を記述しなかった。\n\nSELECT *\nFROM t1, t2;\n\n結果行数として正しいものはどれか。",
+      "choices": {
+        "A": "20行",
+        "B": "9行",
+        "C": "5行",
+        "D": "4行"
+      },
+      "correctChoice": "A",
+      "correctText": "20行",
+      "explanation": "正解：A\n\nA：正しい。結合条件がないためクロス結合となり、5×4=20通りの組合せです。\nB：誤り。行数を加算するのではありません。\nC：誤り。T1の行数だけにはなりません。\nD：誤り。T2の行数だけにもなりません。",
+      "topic": "クロス結合の行数",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q013",
+      "chapter": 15,
+      "question": "T1が4行、T2が6行、T3が2行ある。3表を結合条件なしで組み合わせた場合の結果行数はどれか。",
+      "choices": {
+        "A": "48行",
+        "B": "12行",
+        "C": "24行",
+        "D": "8行"
+      },
+      "correctChoice": "A",
+      "correctText": "48行",
+      "explanation": "正解：A\n\nA：正しい。クロス結合では各表の行の全組合せとなるため4×6×2=48行です。\nB：誤り。4+6+2の加算ではありません。\nC：誤り。T3を考慮していません。\nD：誤り。各表を1回ずつ加算・選択する処理ではありません。",
+      "topic": "3表のクロス結合",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q014",
+      "chapter": 15,
+      "question": "クロス結合を明示するSQLとして適切なものはどれか。",
+      "choices": {
+        "A": "FROM t1 CROSS JOIN t2",
+        "B": "FROM t1 INNER JOIN t2だけを書き結合条件を省略する",
+        "C": "FROM t1 NATURAL OUTER t2",
+        "D": "FROM t1 USING t2"
+      },
+      "correctChoice": "A",
+      "correctText": "FROM t1 CROSS JOIN t2",
+      "explanation": "正解：A\n\nクロス結合は `CROSS JOIN` と明示して記述できます。結合条件は指定しません。",
+      "topic": "CROSS JOIN構文",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q015",
+      "chapter": 15,
+      "question": "クロス結合について正しいものを3つ選べ。",
+      "choices": {
+        "A": "各表の行のすべての組合せを返す",
+        "B": "CROSS JOINを明示して記述できる",
+        "C": "FROM句に表をカンマで列挙し、結合条件を指定しない形でも発生する",
+        "D": "必ず=による結合条件を指定する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "各表の行のすべての組合せを返す、CROSS JOINを明示して記述できる、FROM句に表をカンマで列挙し、結合条件を指定しない形でも発生する",
+      "explanation": "正解：A、B、C\n\nA：正しい。デカルト積として全組合せを返します。\nB：正しい。CROSS JOINという明示構文があります。\nC：正しい。カンマ列挙で関連付け条件を指定しない場合もクロス結合になります。\nD：誤り。結合条件を指定しないのがクロス結合です。",
+      "topic": "クロス結合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q016",
+      "chapter": 15,
+      "question": "PARTS表には `parts_id` と、その親部品を示す `parent_parts_id` がある。同一表から親部品名と子部品名を取得したい。最も適切な考え方はどれか。",
+      "choices": {
+        "A": "PARTS表を別名を変えて2回参照し、自己結合する",
+        "B": "PARTS表を1回だけ参照し、CROSS JOINする",
+        "C": "集計ファンクションMAXで親部品を求める",
+        "D": "DISTINCTだけで親子関係を取得する"
+      },
+      "correctChoice": "A",
+      "correctText": "PARTS表を別名を変えて2回参照し、自己結合する",
+      "explanation": "正解：A\n\n自己結合では同じ表を別の役割として複数回参照します。親側と子側に異なる表別名を付け、親のPARTS_IDと子のPARENT_PARTS_IDを対応させることで親子関係を取得できます。",
+      "topic": "自己結合",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q017",
+      "chapter": 15,
+      "question": "PARTS表を `p` と `c` の2つの役割に分け、親部品と子部品を自己結合する。結合条件として適切なものはどれか。",
+      "choices": {
+        "A": "p.parts_id = c.parent_parts_id",
+        "B": "p.parent_parts_id = c.parent_parts_idだけ",
+        "C": "p.parts_id = p.parent_parts_id",
+        "D": "c.parts_id = c.parent_parts_id"
+      },
+      "correctChoice": "A",
+      "correctText": "p.parts_id = c.parent_parts_id",
+      "explanation": "正解：A\n\n親側pのPARTS_IDを、子側cのPARENT_PARTS_IDと対応させることで、各子部品がどの親部品に属するかを取得できます。",
+      "topic": "自己結合の条件",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q018",
+      "chapter": 15,
+      "question": "EMP表を `e` と `m` の2つの役割に分けて自己結合する。表別名が必要な主な理由はどれか。",
+      "choices": {
+        "A": "同じ表を従業員側と上司側として区別して参照するため",
+        "B": "自己結合では表を物理的に2つ複製する必要があるため",
+        "C": "自己結合では列名を使えないため",
+        "D": "自己結合はCROSS JOINでしか実行できないため"
+      },
+      "correctChoice": "A",
+      "correctText": "同じ表を従業員側と上司側として区別して参照するため",
+      "explanation": "正解：A\n\nA：正しい。同じ表を異なる役割として扱うため、別名で区別します。\nB：誤り。物理的な表コピーは不要です。\nC：誤り。列は通常どおり参照できます。\nD：誤り。ON、USING、NATURAL JOIN、WHERE構文なども使用できます。",
+      "topic": "自己結合と表別名",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q019",
+      "chapter": 15,
+      "question": "自己結合について正しいものを3つ選べ。",
+      "choices": {
+        "A": "同じ表同士を結合できる",
+        "B": "表別名で各参照を区別する",
+        "C": "外部結合として自己結合することもできる",
+        "D": "自己結合ではON句を使用できない"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "同じ表同士を結合できる、表別名で各参照を区別する、外部結合として自己結合することもできる",
+      "explanation": "正解：A、B、C\n\n自己結合は同一表を別名で複数回参照して結合します。ON、USING、NATURAL JOIN、WHEREによる結合などを利用でき、外部結合も可能です。",
+      "topic": "自己結合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q020",
+      "chapter": 15,
+      "question": "Oracle独自の外部結合演算子 `(+)` を使う次の条件について正しい説明はどれか。\n\ne.deptno = d.deptno(+)",
+      "choices": {
+        "A": "d側で一致しない行を補う外部結合を表す",
+        "B": "e側だけを削除する条件を表す",
+        "C": "完全外部結合を表す",
+        "D": "クロス結合を表す"
+      },
+      "correctChoice": "A",
+      "correctText": "d側で一致しない行を補う外部結合を表す",
+      "explanation": "正解：A\n\nOracle独自構文では、条件を満たさない側に `(+)` を付けます。この例ではd側が外部結合の対象になります。",
+      "topic": "Oracle外部結合演算子",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q021",
+      "chapter": 15,
+      "question": "Oracle独自の外部結合演算子 `(+)` について正しいものを2つ選べ。",
+      "choices": {
+        "A": "条件を満たさない行も補う側の列に(+)を付ける",
+        "B": "この構文だけで完全外部結合を表現できる",
+        "C": "現在はSQL標準の外部結合構文の利用が推奨される",
+        "D": "(+)は等価結合にしか使用できず非等価結合には使えない"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "条件を満たさない行も補う側の列に(+)を付ける、現在はSQL標準の外部結合構文の利用が推奨される",
+      "explanation": "正解：A、C\n\nA：正しい。例 `table1.cola = table2.colb(+)` ではtable2側が外部結合側です。\nB：誤り。この構文では完全外部結合はできません。\nC：正しい。Oracle独自構文よりSQL標準の外部結合構文が推奨されています。\nD：誤り。非等価結合でもOracle独自の外部結合構文を使用できるとされています。",
+      "topic": "Oracle独自の外部結合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q022",
+      "chapter": 15,
+      "question": "3表以上を結合する場合について正しいものを2つ選べ。",
+      "choices": {
+        "A": "ONを使った構文で結合できる",
+        "B": "USINGやNATURAL JOINを使う構文でも3表以上を結合できる",
+        "C": "Oracleでは2表までしかJOINできない",
+        "D": "3表以上では必ずCROSS JOINになる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ONを使った構文で結合できる、USINGやNATURAL JOINを使う構文でも3表以上を結合できる",
+      "explanation": "正解：A、B\n\nA：正しい。ONを使って複数表を順に結合できます。\nB：正しい。USINGやNATURAL JOINを使う構文でも3表以上の結合が可能です。\nC：誤り。2表に限定されません。\nD：誤り。結合条件を適切に指定すればクロス結合に限定されません。",
+      "topic": "3表以上の結合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q023",
+      "chapter": 15,
+      "question": "従業員の給与SALが、給与等級表JOB_GRADESのLOWEST_SAL以上HIGHEST_SAL以下となる等級を結び付けたい。適切な結合条件はどれか。",
+      "choices": {
+        "A": "e.sal BETWEEN g.lowest_sal AND g.highest_sal",
+        "B": "e.sal = g.lowest_sal AND g.highest_sal",
+        "C": "USING(sal, lowest_sal, highest_sal)だけ",
+        "D": "NATURAL JOINだけ"
+      },
+      "correctChoice": "A",
+      "correctText": "e.sal BETWEEN g.lowest_sal AND g.highest_sal",
+      "explanation": "正解：A\n\n`=` 以外の条件でも結合できます。範囲を持つ等級表と給与を対応付ける場合、BETWEENによる非等価結合を使用できます。",
+      "topic": "非等価結合",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q024",
+      "chapter": 15,
+      "question": "非等価結合について正しいものを2つ選べ。",
+      "choices": {
+        "A": "ON句ではBETWEENなどの条件を結合条件に使用できる",
+        "B": "USINGやNATURAL JOINは非等価条件を指定する用途には使用できない",
+        "C": "非等価結合では必ずCROSS JOINを使用する",
+        "D": "非等価結合はOracleでは実行できない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ON句ではBETWEENなどの条件を結合条件に使用できる、USINGやNATURAL JOINは非等価条件を指定する用途には使用できない",
+      "explanation": "正解：A、B\n\nON句では等価条件以外も指定でき、BETWEENを用いた範囲結合も可能です。一方、USINGやNATURAL JOINはこのような非等価条件を明示する用途には使用できません。",
+      "topic": "非等価結合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q025",
+      "chapter": 15,
+      "question": "SQL標準のJOIN構文とOracle独自の結合構文について正しいものを2つ選べ。",
+      "choices": {
+        "A": "SQL標準のJOIN構文はSQL1999準拠のANSI/ISO構文と呼ばれることがある",
+        "B": "SQL標準構文とOracle独自構文で必ず性能差が発生する",
+        "C": "Oracle独自の外部結合構文では完全外部結合を表せない",
+        "D": "Oracle独自構文にNATURAL JOINと同じ構文がある"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "SQL標準のJOIN構文はSQL1999準拠のANSI/ISO構文と呼ばれることがある、Oracle独自の外部結合構文では完全外部結合を表せない",
+      "explanation": "正解：A、C\n\nA：正しい。SQL1999準拠のANSI/ISO構文という呼び方が示されています。\nB：誤り。両構文にパフォーマンス差はないとされています。\nC：正しい。(+)を使うOracle独自構文では完全外部結合は不可です。\nD：誤り。Oracle独自の外部結合構文に自然結合の構文はありません。",
+      "topic": "SQL標準とOracle独自構文",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q026",
+      "chapter": 15,
+      "question": "JOIN構文の使い分けについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "左右の結合列名が異なる場合はONで条件を明示できる",
+        "B": "同名列を結合する場合はUSINGを利用できる",
+        "C": "同名かつ同じデータ型の列を自動利用するのがNATURAL JOIN",
+        "D": "CROSS JOINでは必ずON句を指定する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "左右の結合列名が異なる場合はONで条件を明示できる、同名列を結合する場合はUSINGを利用できる、同名かつ同じデータ型の列を自動利用するのがNATURAL JOIN",
+      "explanation": "正解：A、B、C\n\nONは柔軟に結合条件を書け、USINGは同名列、NATURAL JOINは同名かつ同じデータ型の列を自動利用します。CROSS JOINでは結合条件を指定しません。",
+      "topic": "JOIN構文比較",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q027",
+      "chapter": 15,
+      "question": "T1が3行、T2が3行あり、それぞれの値が `1,2,3` と `A,B,C` である。`SELECT c1, c2 FROM t1 CROSS JOIN t2;` の結果について正しいものはどれか。",
+      "choices": {
+        "A": "9行となり、1-Aから3-Cまで全組み合わせが含まれる",
+        "B": "3行となり、1-A、2-B、3-Cだけが含まれる",
+        "C": "6行となる",
+        "D": "同名列がないため0行となる"
+      },
+      "correctChoice": "A",
+      "correctText": "9行となり、1-Aから3-Cまで全組み合わせが含まれる",
+      "explanation": "正解：A\n\n3行と3行のクロス結合では3×3の9行が返り、それぞれの行の全組み合わせが結果になります。",
+      "topic": "クロス結合の行数",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q028",
+      "chapter": 15,
+      "question": "次の要件に最も適した結合はどれか。\n\n「両表の一致行に加え、左表だけに存在する行と右表だけに存在する行もすべて結果に残したい」",
+      "choices": {
+        "A": "FULL OUTER JOIN",
+        "B": "INNER JOIN",
+        "C": "CROSS JOIN",
+        "D": "NATURAL JOINでなければならない"
+      },
+      "correctChoice": "A",
+      "correctText": "FULL OUTER JOIN",
+      "explanation": "正解：A\n\n左右どちらの未一致行も残したい場合はFULL OUTER JOINを使用します。",
+      "topic": "FULL OUTER JOIN",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch15q029",
+      "chapter": 15,
+      "question": "結合に関する記述として正しいものを3つ選べ。",
+      "choices": {
+        "A": "内部結合は結合条件を満たす行だけを返す",
+        "B": "外部結合では条件を満たさない側の行も残せる",
+        "C": "クロス結合は行の全組み合わせを返す",
+        "D": "自己結合では同一表を2回参照してはならない"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "内部結合は結合条件を満たす行だけを返す、外部結合では条件を満たさない側の行も残せる、クロス結合は行の全組み合わせを返す",
+      "explanation": "正解：A、B、C\n\n内部結合・外部結合・クロス結合はそれぞれ結果に残す行の考え方が異なります。自己結合は、まさに同一表を複数の役割で参照して結合する方法です。",
+      "topic": "結合総合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch15q030",
+      "chapter": 15,
+      "question": "次のSQLを実行する。\n\nSELECT p.pname, c.pname\nFROM parts p JOIN parts c\nON p.parts_id = c.parent_parts_id;\n\nこのSQLについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "PARTS表を親部品pと子部品cの2つの役割として自己結合している",
+        "B": "p.parts_idとc.parent_parts_idが一致する親子関係を取得する",
+        "C": "結合条件がないためデカルト積になる",
+        "D": "同じ表を2回参照するSQLはOracleでは実行できない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "PARTS表を親部品pと子部品cの2つの役割として自己結合している、p.parts_idとc.parent_parts_idが一致する親子関係を取得する",
+      "explanation": "正解：A、B\n\nA：正しい。同一表PARTSを別名p/cで2つの役割に分ける自己結合です。\nB：正しい。ON句が親部品IDと子側の親部品IDを対応付けます。\nC：誤り。ON句に結合条件があります。\nD：誤り。自己結合として同じ表を複数回参照できます。",
+      "topic": "自己結合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch16q001",
+      "chapter": 16,
+      "question": "次のSQLを実行したところ、副問い合わせが2行を返した。どの結果になるか。\n\nSELECT employee_id\nFROM employees\nWHERE salary = (SELECT salary FROM employees WHERE department_id = 10);",
+      "choices": {
+        "A": "副問い合わせが複数行を返すためエラーになる",
+        "B": "2行のsalaryのどちらかと一致する従業員が返る",
+        "C": "副問い合わせの先頭行だけが使用される",
+        "D": "副問い合わせの結果は自動的にINとして扱われる"
+      },
+      "correctChoice": "A",
+      "correctText": "副問い合わせが複数行を返すためエラーになる",
+      "explanation": "正解：A\n\n`=` の右辺は1つの値を期待しています。スカラー副問い合わせが複数行を返すと、1つのスカラー値として扱えないためエラーになります。複数行のいずれかと比較したい場合は、`IN` など複数値を扱える条件が必要です。",
+      "topic": "スカラー副問い合わせの行数",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q002",
+      "chapter": 16,
+      "question": "副問い合わせが複数行を返す可能性がある。戻された値のいずれかと `job_id` が一致する行を検索したい。適切な条件はどれか。",
+      "choices": {
+        "A": "job_id = (副問い合わせ)",
+        "B": "job_id IN (副問い合わせ)",
+        "C": "job_id = NULL",
+        "D": "job_id ALL (副問い合わせ)"
+      },
+      "correctChoice": "B",
+      "correctText": "job_id IN (副問い合わせ)",
+      "explanation": "正解：B\n\n複数の値のいずれかに一致するかを判定する場合は `IN` を使用します。`=` は1つの値との比較に使用するため、副問い合わせが複数行を返すケースには適しません。",
+      "topic": "INと複数行副問い合わせ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q003",
+      "chapter": 16,
+      "question": "次の条件を評価する。副問い合わせの結果がNULL 1行だった場合、検索結果について正しいものはどれか。\n\nWHERE commission_pct = (SELECT ...)",
+      "choices": {
+        "A": "NULL同士なら一致するため行が返る",
+        "B": "条件は真にならないため該当行は返らない",
+        "C": "副問い合わせがNULLを返すと必ず構文エラーになる",
+        "D": "自動的にIS NULLへ変換される"
+      },
+      "correctChoice": "B",
+      "correctText": "条件は真にならないため該当行は返らない",
+      "explanation": "正解：B\n\n副問い合わせが1行のNULLを返すこと自体はエラーではありません。ただし `= NULL` の比較では条件が真にならないため、WHERE条件を満たす行は返りません。",
+      "topic": "副問い合わせとNULL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q004",
+      "chapter": 16,
+      "question": "次のSQLで、副問い合わせが `(5000)` を返したとする。意味として正しいものはどれか。\n\nUPDATE employees\nSET salary = (SELECT max_salary FROM jobs WHERE job_id = 'IT_PROG')\nWHERE employee_id = 100;",
+      "choices": {
+        "A": "employee_id=100のsalaryに5000を設定できる",
+        "B": "UPDATEのSET句では副問い合わせを使用できない",
+        "C": "副問い合わせを使う場合はINが必須である",
+        "D": "副問い合わせが1行でもUPDATEではエラーになる"
+      },
+      "correctChoice": "A",
+      "correctText": "employee_id=100のsalaryに5000を設定できる",
+      "explanation": "正解：A\n\nSET句の右辺は1つの値を指定できる場所なので、1行1列を返すスカラー副問い合わせを使用できます。副問い合わせが複数行または複数列を返す場合はスカラー値として扱えません。",
+      "topic": "UPDATEとスカラー副問い合わせ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q005",
+      "chapter": 16,
+      "question": "スカラー副問い合わせとして利用できる結果を2つ選べ。",
+      "choices": {
+        "A": "1行1列",
+        "B": "0行または1行1列として扱われる結果",
+        "C": "1行2列",
+        "D": "2行1列"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "1行1列、0行または1行1列として扱われる結果",
+      "explanation": "正解：A、B\n\nスカラー副問い合わせは単独の値を返す用途で使用します。1行複数列や複数行1列は、1つのスカラー値ではありません。",
+      "topic": "スカラー副問い合わせ",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch16q006",
+      "chapter": 16,
+      "question": "次の条件で、副問い合わせが 1000, 2000, 3000 を返した。`salary > ANY (...)` を満たすsalaryとして適切なものを2つ選べ。",
+      "choices": {
+        "A": "500",
+        "B": "1500",
+        "C": "2500",
+        "D": "1000"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "1500、2500",
+      "explanation": "正解：B、C\n\n`> ANY` は、副問い合わせが返した値の少なくとも1つより大きければ条件を満たします。1500は1000より大きく、2500は1000・2000より大きいため真です。500と1000はどの値よりも大きくありません。",
+      "topic": "ANY",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch16q007",
+      "chapter": 16,
+      "question": "次の条件で、副問い合わせが 1000, 2000, 3000 を返した。`salary > ALL (...)` を満たすsalaryはどれか。",
+      "choices": {
+        "A": "1500",
+        "B": "2500",
+        "C": "3000",
+        "D": "3500"
+      },
+      "correctChoice": "D",
+      "correctText": "3500",
+      "explanation": "正解：D\n\n`> ALL` は返されたすべての値より大きい必要があります。最大値3000よりも大きい3500だけが条件を満たします。",
+      "topic": "ALL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q008",
+      "chapter": 16,
+      "question": "`> ANY` と `> ALL` の違いについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "> ANYは少なくとも1つの値に対して条件を満たせばよい",
+        "B": "> ALLはすべての値に対して条件を満たす必要がある",
+        "C": "> ANYは副問い合わせが1行のとき使用できない",
+        "D": "> ALLはINと常に同じ意味になる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "> ANYは少なくとも1つの値に対して条件を満たせばよい、> ALLはすべての値に対して条件を満たす必要がある",
+      "explanation": "正解：A、B\n\nANYはOR的、ALLはAND的に複数値と比較する考え方です。副問い合わせの行数が1行であっても比較自体は可能です。",
+      "topic": "ANYとALL",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch16q009",
+      "chapter": 16,
+      "question": "次の検索条件を満たすには、副問い合わせはどの形で値を返す必要があるか。\n\nWHERE (department_id, job_id) = (SELECT department_id, job_id FROM employees WHERE employee_id = 100)",
+      "choices": {
+        "A": "1行2列",
+        "B": "2行1列",
+        "C": "任意の行数・任意の列数",
+        "D": "必ず1行1列"
+      },
+      "correctChoice": "A",
+      "correctText": "1行2列",
+      "explanation": "正解：A\n\n左辺が2列の組で比較されているため、右辺の副問い合わせも対応する2列を1行として返す必要があります。",
+      "topic": "複数列副問い合わせ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q010",
+      "chapter": 16,
+      "question": "次のうち、1つの値を指定できる場所でスカラー副問い合わせを利用する例として適切なものを3つ選べ。",
+      "choices": {
+        "A": "UPDATE文のSET句の右辺",
+        "B": "WHERE句の比較値",
+        "C": "INSERT文で単独の値を指定する箇所",
+        "D": "複数行を要求するINの左辺そのもの"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "UPDATE文のSET句の右辺、WHERE句の比較値、INSERT文で単独の値を指定する箇所",
+      "explanation": "正解：A、B、C\n\nスカラー副問い合わせは単独の値を置ける場所で利用できます。UPDATEのSET句、WHEREの比較値、INSERTで値を指定する位置などが該当します。",
+      "topic": "スカラー副問い合わせの利用箇所",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch16q011",
+      "chapter": 16,
+      "question": "次のSQLについて、副問い合わせが2行返る場合の説明として正しいものはどれか。\n\nDELETE FROM employees\nWHERE department_id = (SELECT department_id FROM departments WHERE location_id = 1700);",
+      "choices": {
+        "A": "DELETEは副問い合わせを使用できないため常にエラー",
+        "B": "`=` が1つの値を期待するためエラー",
+        "C": "2つのdepartment_idの両方が自動的に対象になる",
+        "D": "1行目のdepartment_idだけが利用される"
+      },
+      "correctChoice": "B",
+      "correctText": "`=` が1つの値を期待するためエラー",
+      "explanation": "正解：B\n\nDELETEのWHERE句でも副問い合わせは利用できますが、`=` の右辺は1つの値を期待します。副問い合わせが複数行を返すとスカラー値として扱えません。",
+      "topic": "DELETEと副問い合わせ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q012",
+      "chapter": 16,
+      "question": "次の要件を満たす条件として最も適切なものはどれか。\n\n「副問い合わせが返した複数の給与額のうち、少なくとも1つより高い給与の従業員を検索する」",
+      "choices": {
+        "A": "salary > ANY (副問い合わせ)",
+        "B": "salary > ALL (副問い合わせ)",
+        "C": "salary = (副問い合わせ)",
+        "D": "salary IS NULL (副問い合わせ)"
+      },
+      "correctChoice": "A",
+      "correctText": "salary > ANY (副問い合わせ)",
+      "explanation": "正解：A\n\n「少なくとも1つ」を満たせばよい比較にはANYを使用します。ALLではすべての値より高いことが必要になります。",
+      "topic": "ANYの意味",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q013",
+      "chapter": 16,
+      "question": "次の要件を満たす条件として最も適切なものはどれか。\n\n「副問い合わせが返したすべての給与額より高い給与の従業員を検索する」",
+      "choices": {
+        "A": "salary > ANY (副問い合わせ)",
+        "B": "salary > ALL (副問い合わせ)",
+        "C": "salary IN (副問い合わせ)",
+        "D": "salary = NULL"
+      },
+      "correctChoice": "B",
+      "correctText": "salary > ALL (副問い合わせ)",
+      "explanation": "正解：B\n\nすべての値に対して比較条件を満たす必要があるためALLを使用します。",
+      "topic": "ALLの意味",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q014",
+      "chapter": 16,
+      "question": "副問い合わせの戻り値と受け側の条件の組み合わせとして、エラーになり得るものを2つ選べ。",
+      "choices": {
+        "A": "`=` に対して副問い合わせが2行1列を返す",
+        "B": "1つの値を期待する位置で副問い合わせが1行2列を返す",
+        "C": "`IN` に対して副問い合わせが複数行1列を返す",
+        "D": "2列比較の右辺で副問い合わせが1行2列を返す"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "`=` に対して副問い合わせが2行1列を返す、1つの値を期待する位置で副問い合わせが1行2列を返す",
+      "explanation": "正解：A、B\n\n1つのスカラー値を期待する場所では、複数行や複数列の結果は扱えません。INは複数行1列を扱え、2列比較では1行2列の組を比較できます。",
+      "topic": "副問い合わせの形状",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch16q015",
+      "chapter": 16,
+      "question": "次のSQLについて正しいものはどれか。\n\nSELECT employee_id\nFROM employees\nWHERE (department_id, job_id) =\n      (SELECT department_id, job_id\n       FROM employees\n       WHERE employee_id = 100);",
+      "choices": {
+        "A": "employee_id=100の行とdepartment_idとjob_idの両方が一致する行を検索する",
+        "B": "department_idかjob_idのどちらか一方が一致すればよい",
+        "C": "副問い合わせが2列を返すため必ずエラー",
+        "D": "複数列比較ではINしか使用できない"
+      },
+      "correctChoice": "A",
+      "correctText": "employee_id=100の行とdepartment_idとjob_idの両方が一致する行を検索する",
+      "explanation": "正解：A\n\n左辺と右辺で2列の組を比較しているため、department_idとjob_idの両方が対応して一致する行が対象になります。",
+      "topic": "複数列比較",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q016",
+      "chapter": 16,
+      "question": "`salary > ANY (1000,2000,3000)` と同じ考え方として最も近いものはどれか。",
+      "choices": {
+        "A": "salary > 1000 OR salary > 2000 OR salary > 3000",
+        "B": "salary > 1000 AND salary > 2000 AND salary > 3000",
+        "C": "salary = 1000 AND salary = 2000 AND salary = 3000",
+        "D": "salary IN (1000,2000,3000) のみ"
+      },
+      "correctChoice": "A",
+      "correctText": "salary > 1000 OR salary > 2000 OR salary > 3000",
+      "explanation": "正解：A\n\nANYは、複数の比較のうちいずれか1つでも成立すれば真になるため、ORで結んだ比較に相当する考え方です。",
+      "topic": "ANYの論理",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q017",
+      "chapter": 16,
+      "question": "`salary > ALL (1000,2000,3000)` と同じ考え方として最も近いものはどれか。",
+      "choices": {
+        "A": "salary > 1000 OR salary > 2000 OR salary > 3000",
+        "B": "salary > 1000 AND salary > 2000 AND salary > 3000",
+        "C": "salary IN (1000,2000,3000)",
+        "D": "salary = 3000"
+      },
+      "correctChoice": "B",
+      "correctText": "salary > 1000 AND salary > 2000 AND salary > 3000",
+      "explanation": "正解：B\n\nALLはすべての比較を満たす必要があるため、ANDで結んだ比較に相当する考え方です。",
+      "topic": "ALLの論理",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch16q018",
+      "chapter": 16,
+      "question": "副問い合わせの利用について正しいものを3つ選べ。",
+      "choices": {
+        "A": "スカラー副問い合わせは1つの値を指定できる場所で利用できる",
+        "B": "`IN` は複数行1列の結果を扱える",
+        "C": "複数列の組を比較することもできる",
+        "D": "副問い合わせがNULLを返すと必ずSQL文全体がエラーになる"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "スカラー副問い合わせは1つの値を指定できる場所で利用できる、`IN` は複数行1列の結果を扱える、複数列の組を比較することもできる",
+      "explanation": "正解：A、B、C\n\nスカラー値、複数行の値集合、複数列の組というように、受け側の構文に応じた副問い合わせを使い分けます。NULLを返しただけで必ずエラーになるわけではありません。",
+      "topic": "副問い合わせ総合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch17q001",
+      "chapter": 17,
+      "question": "T1に `A,B,B`、T2に `B,C` が格納されている。1列だけを問い合わせる次のSQLで、重複を含む和集合を返す演算子はどれか。",
+      "choices": {
+        "A": "UNION ALL",
+        "B": "UNION",
+        "C": "INTERSECT",
+        "D": "MINUS"
+      },
+      "correctChoice": "A",
+      "correctText": "UNION ALL",
+      "explanation": "正解：A\n\nUNION ALLは両方の問い合わせ結果を結合し、重複行もそのまま含めます。UNIONは重複を除外します。",
+      "topic": "UNION ALL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q002",
+      "chapter": 17,
+      "question": "T1とT2の両方に存在する行だけを取得したい。使用する集合演算子はどれか。",
+      "choices": {
+        "A": "UNION ALL",
+        "B": "UNION",
+        "C": "INTERSECT",
+        "D": "MINUS"
+      },
+      "correctChoice": "C",
+      "correctText": "INTERSECT",
+      "explanation": "正解：C\n\nINTERSECTは2つの問い合わせ結果に共通する行を返す積集合です。",
+      "topic": "INTERSECT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q003",
+      "chapter": 17,
+      "question": "T1にだけ存在し、T2には存在しない行を取得したい。SQLの形として適切なものはどれか。",
+      "choices": {
+        "A": "SELECT c FROM t1 MINUS SELECT c FROM t2",
+        "B": "SELECT c FROM t2 MINUS SELECT c FROM t1",
+        "C": "SELECT c FROM t1 INTERSECT SELECT c FROM t2",
+        "D": "SELECT c FROM t1 UNION ALL SELECT c FROM t2"
+      },
+      "correctChoice": "A",
+      "correctText": "SELECT c FROM t1 MINUS SELECT c FROM t2",
+      "explanation": "正解：A\n\nMINUSは1つ目の問い合わせ結果から2つ目にも存在する行を除き、1つ目にだけ存在する行を返します。順序を逆にすると結果も変わります。",
+      "topic": "MINUS",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q004",
+      "chapter": 17,
+      "question": "集合演算を行う2つのSELECTについて必要な条件を2つ選べ。",
+      "choices": {
+        "A": "SELECTリストの列数を一致させる",
+        "B": "対応する列のデータ型を一致させる",
+        "C": "列名を完全に同じにする",
+        "D": "両方の問い合わせで同じ表を使う"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "SELECTリストの列数を一致させる、対応する列のデータ型を一致させる",
+      "explanation": "正解：A、B\n\n集合演算では各問い合わせの列数と対応するデータ型を一致させます。列名そのものは異なっていても構いません。",
+      "topic": "集合演算の互換性",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch17q005",
+      "chapter": 17,
+      "question": "1つ目のSELECTが2列、2つ目のSELECTが1列である。2つ目に対応する列が存在しない場合の対処として示されているものはどれか。",
+      "choices": {
+        "A": "不足側のSELECTリストにNULLを追加する",
+        "B": "UNION ALLなら列数が異なっていてもよい",
+        "C": "ORDER BYで列を補う",
+        "D": "1つ目の列を削除する以外に方法はない"
+      },
+      "correctChoice": "A",
+      "correctText": "不足側のSELECTリストにNULLを追加する",
+      "explanation": "正解：A\n\n列数を一致させるため、値が存在しない側にNULLを指定して対応する列を補う方法があります。",
+      "topic": "列数の調整",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q006",
+      "chapter": 17,
+      "question": "次の複合問い合わせで、実行結果の列名に使用されるものはどれか。\n\nSELECT employee_id AS id FROM employees\nUNION\nSELECT department_id AS dept FROM departments;",
+      "choices": {
+        "A": "id",
+        "B": "dept",
+        "C": "両方を連結した名前",
+        "D": "必ずシステム生成名"
+      },
+      "correctChoice": "A",
+      "correctText": "id",
+      "explanation": "正解：A\n\n集合演算後の結果列名には、最初の問い合わせの列名または列別名が使用されます。",
+      "topic": "結果列名",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q007",
+      "chapter": 17,
+      "question": "集合演算を含む文でORDER BY句を指定する位置として正しいものはどれか。",
+      "choices": {
+        "A": "各SELECTの直後に個別に指定する",
+        "B": "複合問い合わせ全体の最後に1回だけ指定する",
+        "C": "最初のSELECTより前に指定する",
+        "D": "集合演算ではORDER BYを使用できない"
+      },
+      "correctChoice": "B",
+      "correctText": "複合問い合わせ全体の最後に1回だけ指定する",
+      "explanation": "正解：B\n\nORDER BY句は複合問い合わせ全体の最後に指定します。",
+      "topic": "ORDER BYの位置",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q008",
+      "chapter": 17,
+      "question": "複合問い合わせ全体のORDER BYで指定できるものを3つ選べ。",
+      "choices": {
+        "A": "最初の問い合わせの列名",
+        "B": "最初の問い合わせの列別名",
+        "C": "列位置を示す数値",
+        "D": "2つ目の問い合わせだけに存在する列別名を必ず使用する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "最初の問い合わせの列名、最初の問い合わせの列別名、列位置を示す数値",
+      "explanation": "正解：A、B、C\n\nORDER BYでは最初の問い合わせの列名・列別名・列位置を使用できます。結果列の基準は最初の問い合わせ側です。",
+      "topic": "集合演算とORDER BY",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch17q009",
+      "chapter": 17,
+      "question": "次のSQLの評価順序として示されているものはどれか。\n\nSELECT c FROM t1\nUNION\nSELECT c FROM t2\nMINUS\nSELECT c FROM t3;",
+      "choices": {
+        "A": "(t1 UNION t2) MINUS t3",
+        "B": "t1 UNION (t2 MINUS t3)",
+        "C": "t1 MINUS (t2 UNION t3)",
+        "D": "MINUSが常に最優先"
+      },
+      "correctChoice": "A",
+      "correctText": "(t1 UNION t2) MINUS t3",
+      "explanation": "正解：A\n\n集合演算子は左から順に評価されるため、まずt1とt2のUNION、その結果からt3をMINUSします。",
+      "topic": "集合演算子の評価順序",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q010",
+      "chapter": 17,
+      "question": "次のSQLのカッコの効果として正しいものはどれか。\n\nSELECT c FROM t1\nUNION\n(SELECT c FROM t2 MINUS SELECT c FROM t3);",
+      "choices": {
+        "A": "先にt2 MINUS t3を求め、その結果とt1をUNIONする",
+        "B": "カッコは集合演算では無視される",
+        "C": "先にt1 UNION t2を求める",
+        "D": "必ず構文エラーになる"
+      },
+      "correctChoice": "A",
+      "correctText": "先にt2 MINUS t3を求め、その結果とt1をUNIONする",
+      "explanation": "正解：A\n\nカッコを使うことで、通常の左からの評価順序を変更し、t2とt3の差集合を先に求めます。",
+      "topic": "カッコによる優先順位変更",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q011",
+      "chapter": 17,
+      "question": "UNIONとUNION ALLの違いとして正しいものを2つ選べ。",
+      "choices": {
+        "A": "UNIONは重複行を除外する",
+        "B": "UNION ALLは重複行を保持する",
+        "C": "UNION ALLは列数が違っても実行できる",
+        "D": "UNIONではデータ型を一致させる必要がない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "UNIONは重複行を除外する、UNION ALLは重複行を保持する",
+      "explanation": "正解：A、B\n\n両者の主な違いは重複行を除外するか保持するかです。列数とデータ型の整合性はどちらでも必要です。",
+      "topic": "UNIONとUNION ALL",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch17q012",
+      "chapter": 17,
+      "question": "集合演算の重複判定におけるNULLについて正しいものはどれか。",
+      "choices": {
+        "A": "NULLは重複判定から常に除外される",
+        "B": "NULLも通常の値のように重複判定の対象として扱われる",
+        "C": "NULLを含むと集合演算は実行できない",
+        "D": "UNION ALLだけNULLを使用できる"
+      },
+      "correctChoice": "B",
+      "correctText": "NULLも通常の値のように重複判定の対象として扱われる",
+      "explanation": "正解：B\n\n集合演算の重複チェックでは、NULLも値が存在する場合と同様に重複判定の対象として扱われます。",
+      "topic": "集合演算とNULL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q013",
+      "chapter": 17,
+      "question": "次のうち、列名が異なっていても実行できる組み合わせはどれか。1つ目が `employee_id`、2つ目が `department_id` で、列数とデータ型は一致している。",
+      "choices": {
+        "A": "集合演算を実行できる",
+        "B": "列名が異なるため必ずエラー",
+        "C": "UNION ALLだけ実行できない",
+        "D": "MINUSだけ列名一致が必須"
+      },
+      "correctChoice": "A",
+      "correctText": "集合演算を実行できる",
+      "explanation": "正解：A\n\n集合演算で必要なのは列数と対応するデータ型の整合性であり、列名そのものは一致していなくても構いません。",
+      "topic": "列名の相違",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q014",
+      "chapter": 17,
+      "question": "次の複合問い合わせについて、正しいものを2つ選べ。\n\nSELECT employee_id AS x FROM employees\nUNION\nSELECT department_id AS y FROM departments\nORDER BY 1;",
+      "choices": {
+        "A": "ORDER BY 1は結果の1列目で並べる指定である",
+        "B": "結果列名は最初の問い合わせの別名xになる",
+        "C": "結果列名は2つ目の別名yになる",
+        "D": "ORDER BYはUNIONより前に書く必要がある"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ORDER BY 1は結果の1列目で並べる指定である、結果列名は最初の問い合わせの別名xになる",
+      "explanation": "正解：A、B\n\n複合問い合わせ全体の最後で列位置を指定してソートできます。また結果列名は最初の問い合わせ側が基準になります。",
+      "topic": "ORDER BYと結果列名",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch17q015",
+      "chapter": 17,
+      "question": "集合演算で暗黙的な型変換について正しいものはどれか。",
+      "choices": {
+        "A": "対応列の型が異なっていても常に自動変換される",
+        "B": "対応する列のデータ型を一致させる必要があり、暗黙変換には依存しない",
+        "C": "UNIONだけ自動変換される",
+        "D": "MINUSだけ自動変換される"
+      },
+      "correctChoice": "B",
+      "correctText": "対応する列のデータ型を一致させる必要があり、暗黙変換には依存しない",
+      "explanation": "正解：B\n\n集合演算では対応するSELECTリストのデータ型を一致させる必要があります。",
+      "topic": "集合演算とデータ型",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q016",
+      "chapter": 17,
+      "question": "`UNION ALL` が他の集合演算と異なる点として正しいものはどれか。",
+      "choices": {
+        "A": "重複する行をそのまま含める",
+        "B": "列数が異なっていてもよい",
+        "C": "ORDER BYを各SELECTに書ける",
+        "D": "データ型が異なっていてもよい"
+      },
+      "correctChoice": "A",
+      "correctText": "重複する行をそのまま含める",
+      "explanation": "正解：A\n\nUNION ALLは重複排除を行わず、両問い合わせの結果をそのまま合わせます。列数やデータ型の条件は必要です。",
+      "topic": "UNION ALLの特徴",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q017",
+      "chapter": 17,
+      "question": "次の要件と集合演算子の組み合わせで正しいものを3つ選べ。",
+      "choices": {
+        "A": "重複を残した和集合 → UNION ALL",
+        "B": "重複を除く和集合 → UNION",
+        "C": "共通行だけ → INTERSECT",
+        "D": "1つ目にしかない行 → UNION"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "重複を残した和集合 → UNION ALL、重複を除く和集合 → UNION、共通行だけ → INTERSECT",
+      "explanation": "正解：A、B、C\n\n1つ目にしかない行を求めるのはMINUSです。",
+      "topic": "集合演算子の使い分け",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch17q018",
+      "chapter": 17,
+      "question": "T1の結果が `A, NULL`、T2の結果も `A, NULL` である。UNIONを使う場合の考え方として適切なものはどれか。",
+      "choices": {
+        "A": "AだけでなくNULLも重複として扱われ、重複排除の対象になる",
+        "B": "NULLは必ず2行とも残る",
+        "C": "NULLがあるためUNIONはエラー",
+        "D": "NULLは自動的に空文字へ変換される"
+      },
+      "correctChoice": "A",
+      "correctText": "AだけでなくNULLも重複として扱われ、重複排除の対象になる",
+      "explanation": "正解：A\n\nUNIONの重複判定ではNULLも通常の値のように扱われるため、同じ位置のNULLは重複判定の対象になります。",
+      "topic": "UNIONとNULL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q019",
+      "chapter": 17,
+      "question": "次のSQLで、最初の問い合わせの列別名 `emp_no` を結果の並び替えに利用したい。適切な記述はどれか。\n\nSELECT employee_id AS emp_no FROM employees\nUNION\nSELECT department_id FROM departments\n...",
+      "choices": {
+        "A": "最後に ORDER BY emp_no",
+        "B": "各SELECTの直後に ORDER BY emp_no",
+        "C": "2つ目のSELECTだけに ORDER BY emp_no",
+        "D": "集合演算では列別名を使用できない"
+      },
+      "correctChoice": "A",
+      "correctText": "最後に ORDER BY emp_no",
+      "explanation": "正解：A\n\nORDER BYは複合問い合わせ全体の最後に置き、最初の問い合わせの列別名を指定できます。",
+      "topic": "ORDER BYと列別名",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch17q020",
+      "chapter": 17,
+      "question": "集合演算について正しいものを3つ選べ。",
+      "choices": {
+        "A": "MINUSは問い合わせの順序によって結果が変わり得る",
+        "B": "複合問い合わせではORDER BYは最後に指定する",
+        "C": "カッコで集合演算の評価順序を変更できる",
+        "D": "すべての集合演算で重複行が必ず保持される"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "MINUSは問い合わせの順序によって結果が変わり得る、複合問い合わせではORDER BYは最後に指定する、カッコで集合演算の評価順序を変更できる",
+      "explanation": "正解：A、B、C\n\nMINUSは差集合なので左右の順序が重要です。ORDER BYは最後に置き、カッコにより評価順序を変えられます。重複を保持するのはUNION ALLです。",
+      "topic": "集合演算総合",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q001",
+      "chapter": 18,
+      "question": "次のINSERTで、列リストに指定されていない列について正しいものはどれか。\n\nINSERT INTO employees(employee_id, last_name) VALUES(200, 'Sato');",
+      "choices": {
+        "A": "指定されていない列にはNULLまたはデフォルト値が設定される",
+        "B": "全列を列リストに指定しないと必ずエラー",
+        "C": "指定されていない列には直前行の値が入る",
+        "D": "指定されていない列は表から削除される"
+      },
+      "correctChoice": "A",
+      "correctText": "指定されていない列にはNULLまたはデフォルト値が設定される",
+      "explanation": "正解：A\n\n列リストを指定するINSERTでは、指定しなかった列にはNULLまたは定義済みのデフォルト値が設定されます。ただし制約に違反する値になる場合は別途エラーとなり得ます。",
+      "topic": "INSERTの列リスト",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q002",
+      "chapter": 18,
+      "question": "列リストを省略した次のINSERTについて正しいものはどれか。\n\nINSERT INTO employees VALUES (...);",
+      "choices": {
+        "A": "表のすべての列に対応する値を指定する必要がある",
+        "B": "1列だけ指定して残りは自動的にNULLになる",
+        "C": "列順は任意でよい",
+        "D": "VALUES句は省略する必要がある"
+      },
+      "correctChoice": "A",
+      "correctText": "表のすべての列に対応する値を指定する必要がある",
+      "explanation": "正解：A\n\n列リストを省略する場合は、表のすべての列に対応する値を指定する必要があります。",
+      "topic": "INSERT列リスト省略",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q003",
+      "chapter": 18,
+      "question": "INSERT実行時にエラー要因となるものを3つ選べ。",
+      "choices": {
+        "A": "列数と値の数が一致しない",
+        "B": "列のデータ型に合わない値を指定する",
+        "C": "NOT NULL列にNULLを指定する",
+        "D": "列リストを使用する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "列数と値の数が一致しない、列のデータ型に合わない値を指定する、NOT NULL列にNULLを指定する",
+      "explanation": "正解：A、B、C\n\n列数不一致、型不一致、NOT NULL制約違反などはINSERTのエラー要因です。列リストの利用自体は正しい構文です。",
+      "topic": "INSERTエラー",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q004",
+      "chapter": 18,
+      "question": "主キーが `employee_id` の表に、既存行と同じemployee_idをINSERTしようとした。結果として最も適切なものはどれか。",
+      "choices": {
+        "A": "主キー制約違反でエラーになる",
+        "B": "既存行が自動的にUPDATEされる",
+        "C": "重複行がそのまま追加される",
+        "D": "NULLに変換されて追加される"
+      },
+      "correctChoice": "A",
+      "correctText": "主キー制約違反でエラーになる",
+      "explanation": "正解：A\n\n主キー制約に違反する値をINSERTするとエラーになります。",
+      "topic": "主キー制約とINSERT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q005",
+      "chapter": 18,
+      "question": "UPDATE文のSET句について正しいものを2つ選べ。",
+      "choices": {
+        "A": "右辺に計算式を指定できる",
+        "B": "右辺に1つの値を返す副問い合わせを指定できる",
+        "C": "SET句では列を1つしか変更できない",
+        "D": "WHERE句は必ず省略しなければならない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "右辺に計算式を指定できる、右辺に1つの値を返す副問い合わせを指定できる",
+      "explanation": "正解：A、B\n\nSET句では計算式やスカラー副問い合わせを利用できます。また複数列を更新することもできます。",
+      "topic": "UPDATE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q006",
+      "chapter": 18,
+      "question": "DELETE文について正しいものを2つ選べ。",
+      "choices": {
+        "A": "WHERE句で削除対象行を絞り込める",
+        "B": "FROMキーワードは省略可能",
+        "C": "必ず全行が削除される",
+        "D": "DDLに分類される"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "WHERE句で削除対象行を絞り込める、FROMキーワードは省略可能",
+      "explanation": "正解：A、B\n\nDELETEはDMLであり、WHERE句により対象を絞り込めます。FROMは省略可能とされています。全行削除しかできないのはTRUNCATEです。",
+      "topic": "DELETE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q007",
+      "chapter": 18,
+      "question": "UPDATE文で2列を、1行2列を返す副問い合わせの結果で同時に設定したい。利用できる考え方として適切なものはどれか。",
+      "choices": {
+        "A": "SET句の右辺で複数列に対応する副問い合わせを使用する",
+        "B": "UPDATEでは副問い合わせを使用できない",
+        "C": "必ず2つの別トランザクションに分ける",
+        "D": "TRUNCATEを先に実行する"
+      },
+      "correctChoice": "A",
+      "correctText": "SET句の右辺で複数列に対応する副問い合わせを使用する",
+      "explanation": "正解：A\n\nUPDATEのSET句では、1行で複数列の値を返す副問い合わせを利用して複数列を設定できます。",
+      "topic": "UPDATEと複数列副問い合わせ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q008",
+      "chapter": 18,
+      "question": "TRUNCATE TABLEについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "表内のすべての行を削除する",
+        "B": "DDLに分類される",
+        "C": "ROLLBACKで削除前に戻せない",
+        "D": "WHERE句で一部の行だけを削除できる"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "表内のすべての行を削除する、DDLに分類される、ROLLBACKで削除前に戻せない",
+      "explanation": "正解：A、B、C\n\nTRUNCATEは表の全行を削除するDDLで、ロールバック対象外です。WHERE句で対象行を指定することはできません。",
+      "topic": "TRUNCATE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q009",
+      "chapter": 18,
+      "question": "大量の行をすべて削除し、削除後にROLLBACKで元へ戻す必要もない。要件に合う文として最も適切なものはどれか。",
+      "choices": {
+        "A": "TRUNCATE TABLE",
+        "B": "DELETE ... WHEREで必ず1行ずつ指定",
+        "C": "SELECT FOR UPDATE",
+        "D": "SAVEPOINT"
+      },
+      "correctChoice": "A",
+      "correctText": "TRUNCATE TABLE",
+      "explanation": "正解：A\n\nTRUNCATEは表の全行を高速に削除する用途に適し、DDLのためROLLBACKで元に戻せません。",
+      "topic": "TRUNCATEとDELETE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q010",
+      "chapter": 18,
+      "question": "DMLを複数実行した後、変更を確定してトランザクションを終了したい。実行する文はどれか。",
+      "choices": {
+        "A": "COMMIT",
+        "B": "ROLLBACK",
+        "C": "SAVEPOINT",
+        "D": "TRUNCATE"
+      },
+      "correctChoice": "A",
+      "correctText": "COMMIT",
+      "explanation": "正解：A\n\nCOMMITを実行すると、そのトランザクションの変更が確定し、トランザクションが終了します。",
+      "topic": "COMMIT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q011",
+      "chapter": 18,
+      "question": "実行中のトランザクション全体の変更を取り消したい。使用する文はどれか。",
+      "choices": {
+        "A": "ROLLBACK",
+        "B": "COMMIT",
+        "C": "SAVEPOINTだけを実行する",
+        "D": "SELECT"
+      },
+      "correctChoice": "A",
+      "correctText": "ROLLBACK",
+      "explanation": "正解：A\n\nROLLBACKは未確定のトランザクション変更を取り消します。",
+      "topic": "ROLLBACK",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q012",
+      "chapter": 18,
+      "question": "トランザクションが開始される契機として正しいものを3つ選べ。",
+      "choices": {
+        "A": "DMLが実行されたとき",
+        "B": "SELECT ... FOR UPDATEが発行されたとき",
+        "C": "SET TRANSACTION文を実行したとき",
+        "D": "通常のSELECTを1回実行しただけで必ず開始される"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "DMLが実行されたとき、SELECT ... FOR UPDATEが発行されたとき、SET TRANSACTION文を実行したとき",
+      "explanation": "正解：A、B、C\n\nDML、SELECT FOR UPDATE、SET TRANSACTIONはトランザクション開始の契機として示されています。",
+      "topic": "トランザクション開始",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q013",
+      "chapter": 18,
+      "question": "未コミットのDMLがある状態でDDLを発行した。トランザクションについて正しいものはどれか。",
+      "choices": {
+        "A": "DDLの発行によりトランザクションは暗黙的に確定し終了する",
+        "B": "DDLは新しいトランザクションを開始するだけで前のDMLは未確定のまま",
+        "C": "DDLは必ずROLLBACKを発生させる",
+        "D": "DDLとDMLはトランザクションに影響し合わない"
+      },
+      "correctChoice": "A",
+      "correctText": "DDLの発行によりトランザクションは暗黙的に確定し終了する",
+      "explanation": "正解：A\n\nDDLが発行されると、それまでのトランザクションは暗黙的に確定して終了します。",
+      "topic": "DDLと暗黙COMMIT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q014",
+      "chapter": 18,
+      "question": "SQL*Plusで未コミットのDMLを実行した後、EXITで正常に接続を終了した。変更について正しいものはどれか。",
+      "choices": {
+        "A": "正常終了によりトランザクションが終了し、変更はコミットされる",
+        "B": "必ずROLLBACKされる",
+        "C": "EXITではトランザクション状態は変わらない",
+        "D": "次回接続時にCOMMITするまで保留される"
+      },
+      "correctChoice": "A",
+      "correctText": "正常終了によりトランザクションが終了し、変更はコミットされる",
+      "explanation": "正解：A\n\n接続を正常に終了した場合、トランザクションは終了し、未コミットの変更は自動的にコミットされます。",
+      "topic": "接続終了とトランザクション",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q015",
+      "chapter": 18,
+      "question": "トランザクション途中に `SAVEPOINT s1` を実行した。正しい説明を2つ選べ。",
+      "choices": {
+        "A": "その時点に戻るための位置を定義する",
+        "B": "SAVEPOINTを実行しただけではトランザクションはCOMMITされない",
+        "C": "SAVEPOINTを実行するとトランザクションが終了する",
+        "D": "1つのトランザクションで複数のSAVEPOINTは定義できない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "その時点に戻るための位置を定義する、SAVEPOINTを実行しただけではトランザクションはCOMMITされない",
+      "explanation": "正解：A、B\n\nSAVEPOINTはトランザクション途中の戻り位置を定義するもので、定義しただけではコミットされません。複数のセーブポイントも定義できます。",
+      "topic": "SAVEPOINT",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q016",
+      "chapter": 18,
+      "question": "`ROLLBACK TO s1` を実行した後の状態として正しいものはどれか。",
+      "choices": {
+        "A": "s1の状態まで戻り、同じトランザクションで処理を継続できる",
+        "B": "必ずトランザクション全体が終了する",
+        "C": "自動的にCOMMITされる",
+        "D": "s1より前の変更もすべて失われる"
+      },
+      "correctChoice": "A",
+      "correctText": "s1の状態まで戻り、同じトランザクションで処理を継続できる",
+      "explanation": "正解：A\n\n指定したセーブポイントまで変更を戻した後も、トランザクション自体は継続できます。その後さらにDMLを行い、COMMITで確定することもできます。",
+      "topic": "ROLLBACK TO SAVEPOINT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q017",
+      "chapter": 18,
+      "question": "COMMIT後のSAVEPOINTについて正しいものはどれか。",
+      "choices": {
+        "A": "そのトランザクション内で定義したSAVEPOINTは無効になる",
+        "B": "次のトランザクションでもそのまま利用できる",
+        "C": "データベースを再起動するまで有効",
+        "D": "ROLLBACKを実行するまで必ず残る"
+      },
+      "correctChoice": "A",
+      "correctText": "そのトランザクション内で定義したSAVEPOINTは無効になる",
+      "explanation": "正解：A\n\nトランザクションが確定すると、そのトランザクション内で定義したセーブポイントは無効になります。",
+      "topic": "SAVEPOINTの有効期間",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q018",
+      "chapter": 18,
+      "question": "セッションAがUPDATEを実行したがまだCOMMITしていない。同じセッションAから変更後の値をSELECTした場合と、別セッションBからSELECTした場合について正しいものを2つ選べ。",
+      "choices": {
+        "A": "セッションAでは自分の未コミット変更を確認できる",
+        "B": "セッションBからはその未コミット変更を確認できない",
+        "C": "セッションAでもCOMMIT前は変更後の値を確認できない",
+        "D": "セッションBは必ず未コミット値を参照する"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "セッションAでは自分の未コミット変更を確認できる、セッションBからはその未コミット変更を確認できない",
+      "explanation": "正解：A、B\n\n変更を実行したセッション自身はCOMMIT前でも変更内容を確認できますが、他のセッションからは未コミット変更は見えません。",
+      "topic": "未コミット変更の可視性",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q019",
+      "chapter": 18,
+      "question": "セッションAが長いSELECTを開始した後、セッションBが対象行を更新してCOMMITした。セッションAのそのSELECT結果について正しいものはどれか。",
+      "choices": {
+        "A": "SELECT開始時点の一貫したデータを基準とし、途中でCOMMITされた変更はそのSELECT結果に含まれない",
+        "B": "セッションBのCOMMIT直後からSELECT途中の行だけ新しい値になる",
+        "C": "必ずエラーになる",
+        "D": "SELECTは自動的に最初から再実行される"
+      },
+      "correctChoice": "A",
+      "correctText": "SELECT開始時点の一貫したデータを基準とし、途中でCOMMITされた変更はそのSELECT結果に含まれない",
+      "explanation": "正解：A\n\n文レベルの読み取り一貫性により、SELECTは読み取り開始時点で一貫したデータを参照します。SELECT開始後に別セッションでコミットされた変更は、そのSELECTの結果には反映されません。",
+      "topic": "文レベル読み取り一貫性",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q020",
+      "chapter": 18,
+      "question": "別セッションの変更がCOMMITされた後に、新たにSELECTを発行した。結果について正しいものはどれか。",
+      "choices": {
+        "A": "コミット済みの変更を含む結果を取得できる",
+        "B": "以前のSELECTと永久に同じ結果しか返らない",
+        "C": "COMMIT済みでも別セッションの変更は参照できない",
+        "D": "必ずSELECT FOR UPDATEが必要"
+      },
+      "correctChoice": "A",
+      "correctText": "コミット済みの変更を含む結果を取得できる",
+      "explanation": "正解：A\n\nCOMMIT後に新たに開始したSELECTでは、コミット済みの変更を含むデータが読み取り対象になります。",
+      "topic": "読み取り一貫性とCOMMIT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q021",
+      "chapter": 18,
+      "question": "複数回のSELECTで同じ基準の結果を維持する方法として示されているものを3つ選べ。",
+      "choices": {
+        "A": "SELECT ... FOR UPDATEを使用する",
+        "B": "SET TRANSACTION READ ONLYを使用する",
+        "C": "SET TRANSACTION ISOLATION LEVEL SERIALIZABLEを使用する",
+        "D": "各SELECTの間にTRUNCATEを実行する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "SELECT ... FOR UPDATEを使用する、SET TRANSACTION READ ONLYを使用する、SET TRANSACTION ISOLATION LEVEL SERIALIZABLEを使用する",
+      "explanation": "正解：A、B、C\n\n対象行をロックする方法、読み取り専用トランザクション、シリアライズ可能トランザクションが挙げられています。",
+      "topic": "複数SELECTの一貫性",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q022",
+      "chapter": 18,
+      "question": "`SET TRANSACTION READ ONLY` で開始したトランザクションについて正しいものはどれか。",
+      "choices": {
+        "A": "そのトランザクション内では変更処理を実行できない",
+        "B": "INSERTだけは実行できる",
+        "C": "UPDATEだけは実行できる",
+        "D": "TRUNCATEだけは必ず実行できる"
+      },
+      "correctChoice": "A",
+      "correctText": "そのトランザクション内では変更処理を実行できない",
+      "explanation": "正解：A\n\nREAD ONLYトランザクションは読み取り専用であり、その中で変更処理を実行できません。",
+      "topic": "READ ONLYトランザクション",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q023",
+      "chapter": 18,
+      "question": "次の処理を順に実行した。\n1. UPDATE A\n2. SAVEPOINT s1\n3. UPDATE B\n4. ROLLBACK TO s1\n5. COMMIT\n\n最終的な状態として適切なものはどれか。",
+      "choices": {
+        "A": "UPDATE Aは確定し、UPDATE Bは取り消される",
+        "B": "UPDATE AもUPDATE Bも取り消される",
+        "C": "UPDATE Bだけ確定する",
+        "D": "SAVEPOINTを使ったためCOMMITできない"
+      },
+      "correctChoice": "A",
+      "correctText": "UPDATE Aは確定し、UPDATE Bは取り消される",
+      "explanation": "正解：A\n\nROLLBACK TO s1でs1以降のUPDATE Bを取り消し、s1より前のUPDATE Aは残ります。その状態でCOMMITするためUPDATE Aが確定します。",
+      "topic": "SAVEPOINT実践",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q024",
+      "chapter": 18,
+      "question": "次の処理を順に実行した。\n1. UPDATE employees ...\n2. CREATE TABLE temp_table(...);\n3. ROLLBACK;\n\n1のUPDATEについて正しいものはどれか。",
+      "choices": {
+        "A": "DDL発行時に暗黙的に確定しているため、3のROLLBACKでは取り消せない",
+        "B": "3のROLLBACKで必ず取り消される",
+        "C": "CREATE TABLEはトランザクションに影響しない",
+        "D": "UPDATEはDDLなので最初からROLLBACK不可"
+      },
+      "correctChoice": "A",
+      "correctText": "DDL発行時に暗黙的に確定しているため、3のROLLBACKでは取り消せない",
+      "explanation": "正解：A\n\nDDLが発行された時点で、それまでの未確定トランザクションは暗黙的にコミットされます。その後のROLLBACKでは、既に確定済みのUPDATEは戻せません。",
+      "topic": "DDLとトランザクション",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q025",
+      "chapter": 18,
+      "question": "TRUNCATEとDELETEの違いとして正しいものを3つ選べ。",
+      "choices": {
+        "A": "TRUNCATEは常に全行を対象とする",
+        "B": "DELETEはWHERE句で対象を絞り込める",
+        "C": "TRUNCATEはROLLBACK対象外である",
+        "D": "DELETEはDDLである"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "TRUNCATEは常に全行を対象とする、DELETEはWHERE句で対象を絞り込める、TRUNCATEはROLLBACK対象外である",
+      "explanation": "正解：A、B、C\n\nTRUNCATEはDDLで全行削除・ロールバック不可、DELETEはDMLでWHEREによる対象行指定が可能です。",
+      "topic": "TRUNCATEとDELETE比較",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch18q026",
+      "chapter": 18,
+      "question": "トランザクションのAtomicity（原子性）を最もよく表す状況はどれか。",
+      "choices": {
+        "A": "途中で失敗した場合に中途半端な状態を残さず、処理全体が実行されたか全く実行されなかったかの状態にする",
+        "B": "同時実行トランザクション同士が互いに干渉しない",
+        "C": "コミット済み変更が失われない",
+        "D": "データの整合性が実行前後で維持される"
+      },
+      "correctChoice": "A",
+      "correctText": "途中で失敗した場合に中途半端な状態を残さず、処理全体が実行されたか全く実行されなかったかの状態にする",
+      "explanation": "正解：A\n\nAtomicityは「ALL or NOTHING」の性質で、トランザクションが途中までだけ反映された状態を残さないことを表します。",
+      "topic": "ACID: Atomicity",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q027",
+      "chapter": 18,
+      "question": "トランザクションのIsolation（隔離性）を最もよく表すものはどれか。",
+      "choices": {
+        "A": "同時に実行されるトランザクション同士が相互に干渉しないようにする性質",
+        "B": "すべてのDMLを必ず1文で書く性質",
+        "C": "コミットしたデータを永続的に保持する性質",
+        "D": "エラー時に表をTRUNCATEする性質"
+      },
+      "correctChoice": "A",
+      "correctText": "同時に実行されるトランザクション同士が相互に干渉しないようにする性質",
+      "explanation": "正解：A\n\nIsolationは、同時実行されるトランザクションを互いに干渉しないよう隔離された状態として扱う性質です。",
+      "topic": "ACID: Isolation",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q028",
+      "chapter": 18,
+      "question": "トランザクションのDurability（持続性）を最もよく表すものはどれか。",
+      "choices": {
+        "A": "コミットされた変更が適切に保存され、容易に失われない性質",
+        "B": "未コミットの変更を他セッションにも公開する性質",
+        "C": "すべての副問い合わせを1行にする性質",
+        "D": "複数行を必ず同時に更新する性質"
+      },
+      "correctChoice": "A",
+      "correctText": "コミットされた変更が適切に保存され、容易に失われない性質",
+      "explanation": "正解：A\n\nDurabilityはコミット済みのトランザクション結果が保存され、失われないことを示す性質です。",
+      "topic": "ACID: Durability",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q029",
+      "chapter": 18,
+      "question": "トランザクションのConsistency（一貫性）について正しい説明はどれか。",
+      "choices": {
+        "A": "トランザクション実行前に整合性が保たれていれば、実行後も整合性を維持するという性質",
+        "B": "複数トランザクションを必ず同時実行する性質",
+        "C": "COMMIT前でも他セッションから変更を見せる性質",
+        "D": "すべてのDMLをROLLBACK不可にする性質"
+      },
+      "correctChoice": "A",
+      "correctText": "トランザクション実行前に整合性が保たれていれば、実行後も整合性を維持するという性質",
+      "explanation": "正解：A\n\nConsistencyは、トランザクションの前後でデータベースの整合性を維持する性質です。",
+      "topic": "ACID: Consistency",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch18q030",
+      "chapter": 18,
+      "question": "次の説明とACID特性の対応として正しいものを3つ選べ。",
+      "choices": {
+        "A": "処理を途中状態で残さない → Atomicity",
+        "B": "同時トランザクションの干渉を抑える → Isolation",
+        "C": "コミット済み結果を保持する → Durability",
+        "D": "データ整合性を維持する → Atomicityだけを意味する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "処理を途中状態で残さない → Atomicity、同時トランザクションの干渉を抑える → Isolation、コミット済み結果を保持する → Durability",
+      "explanation": "正解：A、B、C\n\nAtomicityはALL or NOTHING、Isolationは同時実行の隔離、Durabilityはコミット済み結果の保持です。データ整合性の維持はConsistencyに対応します。",
+      "topic": "ACID総合",
+      "difficulty": "hard",
+      "multiple": true
+    }
+  ]
+}
