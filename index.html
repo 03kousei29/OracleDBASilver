@@ -88,7 +88,10 @@ button.secondary{background:rgba(255,224,138,.07);color:var(--text);border:1px s
   gap:12px;
   align-items:flex-start;
 }
-.choice:hover{border-color:rgba(255,224,138,.62);background:rgba(212,175,55,.10)}
+@media (hover: hover) and (pointer: fine){
+  .choice:hover{border-color:rgba(255,224,138,.62);background:rgba(212,175,55,.10)}
+  .choice.selected:hover{border-color:rgba(255,224,138,.75);background:rgba(212,175,55,.16)}
+}
 .choice[disabled]{cursor:default}
 .choice-key{width:30px;min-width:30px;height:30px;border-radius:999px;background:rgba(255,255,255,.08);display:inline-flex;align-items:center;justify-content:center;font-weight:700}
 .choice.selected{border-color:rgba(255,224,138,.75);background:rgba(212,175,55,.16)}
@@ -261,12 +264,6 @@ button, .choice, .linkbtn {
   max-width: 100%;
   -webkit-overflow-scrolling: touch;
   tab-size: 2;
-}
-@media (hover: none) {
-  .choice:hover{
-    border-color: var(--border);
-    background: rgba(255,255,255,.04);
-  }
 }
 @media (max-width: 640px){
   body{
@@ -1483,13 +1480,16 @@ function renderQuestion(index) {
       if (correctList.includes(key)) btn.classList.add("correct");
       if (selectedList.includes(key) && !correctList.includes(key)) btn.classList.add("incorrect");
     } else if (isMultipleChoiceQuestion(q)) {
+      btn.setAttribute("aria-pressed", "false");
       btn.addEventListener("click", () => {
         if (pendingSelections.has(key)) {
           pendingSelections.delete(key);
           btn.classList.remove("selected");
+          btn.setAttribute("aria-pressed", "false");
         } else {
           pendingSelections.add(key);
           btn.classList.add("selected");
+          btn.setAttribute("aria-pressed", "true");
         }
         updateNextButton(q, state.currentIndex);
       });
