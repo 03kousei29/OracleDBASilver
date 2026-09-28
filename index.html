@@ -1154,8 +1154,8 @@ function startMode(chapters, options = {}) {
 }
 function startAllChaptersMode() {
   const maxCount = maxBalancedAllChapterQuestionCount();
-  const defaultCount = Math.min(80, maxCount);
   const n = GOLD_CHAPTERS.length;
+  const defaultCount = Math.max(n, Math.floor(Math.min(80, maxCount) / n) * n);
   const input = prompt(`全章から出題する問題数を入力してください。\n${n}章から均等に出題するため、${n}の倍数で指定してください。\n指定可能範囲: ${n}〜${maxCount}問`, String(defaultCount));
   if (input === null) return;
 
