@@ -522,6 +522,35 @@ button, .choice, .linkbtn {
   .save-actions button{width:100%}
 }
 
+
+/* ===== chapter-filtered bookmark review ===== */
+.review-filter-card{
+  margin:0 0 14px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+}
+.review-filter-title{font-weight:800;margin-bottom:6px}
+.review-filter-desc{color:var(--muted);font-size:.86rem;line-height:1.55;margin-bottom:10px}
+.review-filter-controls{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.review-filter-select{
+  flex:1 1 240px;
+  min-width:0;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+  font:inherit;
+}
+.review-filter-count{margin-top:8px;color:var(--muted);font-size:.8rem}
+@media (max-width:640px){
+  .review-filter-controls{display:block}
+  .review-filter-select{width:100%;margin-bottom:10px}
+  .review-filter-controls button{width:100%}
+}
+
 /* ===== review bookmark checkbox ===== */
 .bookmark-box{
   margin:10px 0 14px;
@@ -747,6 +776,7 @@ const state = {
   selectedChapters: [],
   allChapterQuestionCount: null,
   bookmarkIds: [],
+  bookmarkChapterFilter: null,
   timerSeconds: 90,
   timerId: null,
   timerStopped: false,
@@ -854,15 +884,27 @@ function setBookmarked(actualIndex, checked) {
   updateBookmarkBox(actualIndex);
 }
 
-function getBookmarkQuestionIndexes() {
+function getBookmarkQuestionIndexes(chapter = null) {
   const bookmarked = new Set(state.bookmarkIds);
   return QUESTIONS
-    .map((q, i) => bookmarked.has(String(q.id)) ? i : null)
+    .map((q, i) => {
+      if (!bookmarked.has(String(q.id))) return null;
+      if (Number.isFinite(chapter) && q.chapter !== chapter) return null;
+      return i;
+    })
     .filter(i => i !== null);
 }
 
 function isBookmarkModeSelected() {
-  return state.selectedChapters.length === 1 && state.selectedChapters[0] === 0;
+  return state.selectedChapters.length === 1 && state.selectedChapters[0] === 0 && !Number.isFinite(state.bookmarkChapterFilter);
+}
+
+function isBookmarkChapterModeSelected() {
+  return Number.isFinite(state.bookmarkChapterFilter);
+}
+
+function isAnyBookmarkModeSelected() {
+  return isBookmarkModeSelected() || isBookmarkChapterModeSelected();
 }
 
 function updateBookmarkBox(actualIndex) {
@@ -903,7 +945,8 @@ function saveStudyProgress(view = "quiz") {
       baseOrderBeforeWrongReview: state.baseOrderBeforeWrongReview,
       reviewAnswers: state.reviewAnswers,
       selectedChapters: state.selectedChapters,
-      allChapterQuestionCount: state.allChapterQuestionCount
+      allChapterQuestionCount: state.allChapterQuestionCount,
+      bookmarkChapterFilter: state.bookmarkChapterFilter
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     updateSavedProgressBox();
@@ -959,6 +1002,7 @@ function restoreStudyProgress() {
   state.reviewAnswers = saved.reviewAnswers || {};
   state.selectedChapters = Array.isArray(saved.selectedChapters) && saved.selectedChapters.length > 0 ? saved.selectedChapters : (GOLD_CHAPTERS.length ? [GOLD_CHAPTERS[GOLD_CHAPTERS.length - 1]] : []);
   state.allChapterQuestionCount = Number.isInteger(saved.allChapterQuestionCount) ? saved.allChapterQuestionCount : null;
+  state.bookmarkChapterFilter = Number.isFinite(saved.bookmarkChapterFilter) ? saved.bookmarkChapterFilter : null;
   updateShuffleButton();
   renderQuestion(state.currentIndex);
 }
@@ -978,6 +1022,7 @@ function shuffledArray(arr) {
   return copy;
 }
 function isAllGoldChaptersSelected() {
+  if (isBookmarkChapterModeSelected()) return false;
   return state.selectedChapters.length === GOLD_CHAPTERS.length
     && GOLD_CHAPTERS.every(n => state.selectedChapters.includes(n));
 }
@@ -1000,6 +1045,14 @@ function buildBalancedAllChapterOrder(totalCount) {
   return shuffledArray(order);
 }
 function resetOrder() {
+  if (isBookmarkChapterModeSelected()) {
+    state.order = getBookmarkQuestionIndexes(state.bookmarkChapterFilter);
+    if (state.shuffle) {
+      state.order = shuffledArray(state.order);
+    }
+    return;
+  }
+
   if (isBookmarkModeSelected()) {
     state.order = getBookmarkQuestionIndexes();
     if (state.shuffle) {
@@ -1114,6 +1167,9 @@ function chapterLabel(chapter) {
   return title ? `第${chapter}章：${title}` : `第${chapter}章`;
 }
 function currentModeTitle() {
+  if (isBookmarkChapterModeSelected()) {
+    return `あとで復習（第${state.bookmarkChapterFilter}章）`;
+  }
   if (isAllGoldChaptersSelected()) {
     return state.allChapterQuestionCount ? `全章（${state.allChapterQuestionCount}問）` : "全章";
   }
@@ -1136,6 +1192,7 @@ function showMenu() {
 function startMode(chapters, options = {}) {
   state.selectedChapters = [...chapters];
   state.allChapterQuestionCount = Number.isInteger(options.allChapterQuestionCount) ? options.allChapterQuestionCount : null;
+  state.bookmarkChapterFilter = Number.isFinite(options.bookmarkChapterFilter) ? options.bookmarkChapterFilter : null;
   state.answers = Array(QUESTIONS.length).fill(null);
   state.currentIndex = 0;
   state.reviewOnlyWrong = false;
@@ -1144,7 +1201,13 @@ function startMode(chapters, options = {}) {
   state.reviewAnswers = {};
   resetOrder();
   if (state.order.length === 0) {
-    alert(isBookmarkModeSelected() ? "あとで復習する問題がまだ登録されていません。各問題画面でチェックを付けてください。" : "この出題範囲にはまだ問題が登録されていません。");
+    if (isBookmarkChapterModeSelected()) {
+      alert(`第${state.bookmarkChapterFilter}章には「あとで復習」に登録された問題がありません。`);
+    } else if (isBookmarkModeSelected()) {
+      alert("あとで復習する問題がまだ登録されていません。各問題画面でチェックを付けてください。");
+    } else {
+      alert("この出題範囲にはまだ問題が登録されていません。");
+    }
     showMenu();
     return;
   }
@@ -1152,6 +1215,15 @@ function startMode(chapters, options = {}) {
   renderQuestion(0);
   saveStudyProgress("quiz");
 }
+function startBookmarkChapterMode(chapter) {
+  const targetChapter = Number(chapter);
+  if (!Number.isFinite(targetChapter) || !GOLD_CHAPTERS.includes(targetChapter)) {
+    alert("復習する章を選択してください。");
+    return;
+  }
+  startMode([targetChapter], { bookmarkChapterFilter: targetChapter });
+}
+
 function startAllChaptersMode() {
   const maxCount = maxBalancedAllChapterQuestionCount();
   const n = GOLD_CHAPTERS.length;
@@ -1181,6 +1253,60 @@ function buildMenu() {
   ];
 
   menuButtons.innerHTML = "";
+
+  const reviewCard = document.createElement("div");
+  reviewCard.className = "review-filter-card";
+
+  const title = document.createElement("div");
+  title.className = "review-filter-title";
+  title.textContent = "あとで復習（章指定）";
+
+  const desc = document.createElement("div");
+  desc.className = "review-filter-desc";
+  desc.textContent = "章を選び、その章で「あとで復習」にチェックした問題だけを出題します。";
+
+  const controls = document.createElement("div");
+  controls.className = "review-filter-controls";
+
+  const select = document.createElement("select");
+  select.className = "review-filter-select";
+  select.setAttribute("aria-label", "あとで復習する章");
+  GOLD_CHAPTERS.forEach(chapter => {
+    const option = document.createElement("option");
+    option.value = String(chapter);
+    option.textContent = chapterLabel(chapter);
+    select.appendChild(option);
+  });
+
+  const preferredChapter = Number.isFinite(state.bookmarkChapterFilter) && GOLD_CHAPTERS.includes(state.bookmarkChapterFilter)
+    ? state.bookmarkChapterFilter
+    : GOLD_CHAPTERS[0];
+  if (Number.isFinite(preferredChapter)) select.value = String(preferredChapter);
+
+  const startBtn = document.createElement("button");
+  startBtn.type = "button";
+  startBtn.className = "primary";
+  startBtn.textContent = "この章を復習";
+
+  const countText = document.createElement("div");
+  countText.className = "review-filter-count";
+  const refreshCount = () => {
+    const chapter = Number(select.value);
+    const count = Number.isFinite(chapter) ? getBookmarkQuestionIndexes(chapter).length : 0;
+    countText.textContent = Number.isFinite(chapter) ? `第${chapter}章：${count}問登録中` : "章を選択してください";
+  };
+  select.addEventListener("change", refreshCount);
+  startBtn.addEventListener("click", () => startBookmarkChapterMode(select.value));
+  refreshCount();
+
+  controls.appendChild(select);
+  controls.appendChild(startBtn);
+  reviewCard.appendChild(title);
+  reviewCard.appendChild(desc);
+  reviewCard.appendChild(controls);
+  reviewCard.appendChild(countText);
+  menuButtons.appendChild(reviewCard);
+
   items.forEach(item => {
     const btn = document.createElement("button");
     btn.type = "button";
