@@ -114,6 +114,11 @@
       "chapter": 23,
       "title": "タイムゾーン・期間データ型",
       "description": "日時型とタイムゾーン、CURRENT/SYS系日時ファンクション、INTERVAL"
+    },
+    {
+      "chapter": 24,
+      "title": "練習問題",
+      "description": "全23章を横断した最終確認。複数論点を組み合わせた本番レベル＋αの問題"
     }
   ],
   "questions": [
@@ -11340,6 +11345,2607 @@
         "D": "SESSIONTIMEZONEは常に地域名だけを返す。"
       },
       "explanation": "正解：A、B\n\nA：正しい。UTCとの差分です。\nB：正しい。日本は+9:00です。\nC：誤り。DATEはタイムゾーン情報を持ちません。\nD：誤り。設定に応じて地域名またはオフセット形式になり得ます。"
+    },
+    {
+      "id": "ch24q001",
+      "chapter": 24,
+      "question": "シングルインスタンス構成のDBサーバー上にDB1とDB2が存在する。DB1を担当するインスタンスI1を停止した。正しい説明を2つ選べ。",
+      "choices": {
+        "A": "I1に対応するSGAとバックグラウンドプロセスは存在しない状態になる",
+        "B": "DB2が別インスタンスで稼働していれば、DB2まで停止するとは限らない",
+        "C": "DB1を構成するデータベースファイルまでOS上から削除される",
+        "D": "I1は停止後もメモリー上に存在し続け、接続だけを拒否する"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "I1に対応するSGAとバックグラウンドプロセスは存在しない状態になる、DB2が別インスタンスで稼働していれば、DB2まで停止するとは限らない",
+      "explanation": "正解：A、B\n\nA：正しい。インスタンス停止時はSGAとバックグラウンドプロセスが稼働していません。\nB：正しい。同一サーバーに複数のシングルインスタンスDBを構成できます。\nC：誤り。インスタンス停止とデータベースファイルの削除は別です。\nD：誤り。停止状態ではインスタンスは稼働していません。",
+      "topic": "シングルインスタンス構成",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q002",
+      "chapter": 24,
+      "question": "RAC構成とシングルインスタンス構成の対応関係について正しいものを2つ選べ。",
+      "choices": {
+        "A": "RACのインスタンスは、そのRACデータベースに対応するインスタンスとして扱われる",
+        "B": "RACでは各インスタンスがそれぞれ別のデータベースファイル一式を持つ必要がある",
+        "C": "RACでは別々のサーバー上の複数インスタンスが共有された1つのデータベースに関連付けられる",
+        "D": "シングルインスタンス構成では1つのインスタンスを複数のデータベースで共有できる"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "RACのインスタンスは、そのRACデータベースに対応するインスタンスとして扱われる、RACでは別々のサーバー上の複数インスタンスが共有された1つのデータベースに関連付けられる",
+      "explanation": "正解：A、C\n\nA：正しい。RACでもインスタンスは特定のデータベースに対応します。\nB：誤り。RACでは共有ストレージ上の1組のデータベースファイルを共有します。\nC：正しい。RACは複数インスタンスで共有データベースを管理します。\nD：誤り。シングル構成ではインスタンスとデータベースは1対1です。",
+      "topic": "RAC",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q003",
+      "chapter": 24,
+      "question": "バックグラウンドプロセスの役割として正しい組合せはどれか。",
+      "choices": {
+        "A": "SMON：インスタンスリカバリ、PMON：異常終了したプロセスの後処理",
+        "B": "SMON：REDO書込み、PMON：データファイル書込み",
+        "C": "SMON：異常終了したプロセスのリソース解放、PMON：インスタンスリカバリ",
+        "D": "SMON：性能統計収集、PMON：リスナーへのサービス登録"
+      },
+      "correctChoice": "A",
+      "correctText": "SMON：インスタンスリカバリ、PMON：異常終了したプロセスの後処理",
+      "explanation": "正解：A\n\nA：正しい。SMONはインスタンス回復、PMONは異常終了プロセスのリソース後処理を担います。\nB：誤り。REDO書込みはLGWR、変更済みブロックの書込みはDBWnです。\nC：誤り。SMONとPMONの役割が逆です。\nD：誤り。性能統計はMMON、サービス登録はLREGです。",
+      "topic": "SMON・PMON",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q004",
+      "chapter": 24,
+      "question": "メモリー領域とプロセスの説明として正しいものを3つ選べ。",
+      "choices": {
+        "A": "SGAは複数プロセスで共有されるデータを置くメモリー領域である",
+        "B": "PGAは各プロセス固有のデータを置くメモリー領域である",
+        "C": "サーバープロセスはSQL処理に伴うREDO情報をREDOログバッファへ生成する側となる",
+        "D": "バックグラウンドプロセスとサーバープロセスは同じプロセスを用途別に呼び分けたものである"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "SGAは複数プロセスで共有されるデータを置くメモリー領域である、PGAは各プロセス固有のデータを置くメモリー領域である、サーバープロセスはSQL処理に伴うREDO情報をREDOログバッファへ生成する側となる",
+      "explanation": "正解：A、B、C\n\nA：正しい。SGAはインスタンス内で共有されるメモリー領域です。\nB：正しい。PGAはプロセス単位の専用メモリーです。\nC：正しい。変更処理に伴うREDOはサーバープロセスによってREDOログバッファへ生成されます。\nD：誤り。データベース全体の処理を担うバックグラウンドプロセスと接続処理を担うサーバープロセスは別です。",
+      "topic": "SGA・PGA・プロセス",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q005",
+      "chapter": 24,
+      "question": "記憶域の包含関係について正しいものを2つ選べ。",
+      "choices": {
+        "A": "1つのセグメントが同一表領域内の複数データファイルにまたがることがある",
+        "B": "1つのデータファイルが複数の表領域に所属することがある",
+        "C": "1つのエクステントが複数のデータファイルにまたがることがある",
+        "D": "1つのセグメントは1つの表領域に属する"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "1つのセグメントが同一表領域内の複数データファイルにまたがることがある、1つのセグメントは1つの表領域に属する",
+      "explanation": "正解：A、D\n\nA：正しい。セグメントは複数エクステントから構成され、表領域内の複数データファイルを利用し得ます。\nB：誤り。1つのデータファイルが複数表領域にまたがることはありません。\nC：誤り。エクステントは1つのデータファイル内の連続ブロックで構成されます。\nD：正しい。セグメントは特定の1つの表領域に作成されます。",
+      "topic": "表領域・セグメント・エクステント",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q006",
+      "chapter": 24,
+      "question": "あるデータベースの標準ブロックサイズを、データベース作成後に8KBから16KBへ変更したい。適切な説明はどれか。",
+      "choices": {
+        "A": "PCTFREEを変更するとブロックサイズも連動して変更される",
+        "B": "標準ブロックサイズそのものは作成後に変更できない",
+        "C": "DB_BLOCK_SIZEを動的変更すればよい",
+        "D": "表領域をOFFLINEにすれば変更できる"
+      },
+      "correctChoice": "B",
+      "correctText": "標準ブロックサイズそのものは作成後に変更できない",
+      "explanation": "正解：B\n\nA：誤り。PCTFREEはブロック内に残す空き領域の割合です。\nB：正しい。標準ブロックサイズはデータベース作成後には変更不可です。\nC：誤り。標準ブロックサイズは作成後に変更できません。\nD：誤り。表領域のオンライン状態では解決しません。",
+      "topic": "標準ブロックサイズ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q007",
+      "chapter": 24,
+      "question": "同一ユーザーAPPが2つのクライアントから同時に接続している。正しいものを2つ選べ。",
+      "choices": {
+        "A": "同一ユーザー名ではトランザクションも必ず1つに共有される",
+        "B": "同じユーザー名でも複数セッションを同時に確立できる",
+        "C": "専用サーバー接続では各セッションに対応するサーバープロセスが割り当てられる",
+        "D": "セッション数が増えても専用サーバープロセス数には影響しない"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "同じユーザー名でも複数セッションを同時に確立できる、専用サーバー接続では各セッションに対応するサーバープロセスが割り当てられる",
+      "explanation": "正解：B、C\n\nA：誤り。セッションごとに独立してトランザクションを実行できます。\nB：正しい。Oracleでは同一ユーザーによる複数セッションを確立できます。\nC：正しい。専用サーバー接続ではセッションごとに専用サーバープロセスが割り当てられます。\nD：誤り。専用サーバー構成では接続に応じてサーバープロセスが必要です。",
+      "topic": "セッション・専用サーバー",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q008",
+      "chapter": 24,
+      "question": "性能統計の定期収集とリスナーへのサービス登録を担当する組合せとして正しいものはどれか。",
+      "choices": {
+        "A": "DBWnとLGWR",
+        "B": "CKPTとARCn",
+        "C": "MMONとLREG",
+        "D": "PMONとSMON"
+      },
+      "correctChoice": "C",
+      "correctText": "MMONとLREG",
+      "explanation": "正解：C\n\nA：誤り。DBWnとLGWRは書込み系のバックグラウンドプロセスです。\nB：誤り。CKPTはチェックポイント、ARCnはアーカイブ処理を担当します。\nC：正しい。MMONは性能統計、LREGはリスナーへの登録を担当します。\nD：誤り。PMONはプロセス後処理、SMONはインスタンス回復などを担当します。",
+      "topic": "MMON・LREG",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q009",
+      "chapter": 24,
+      "question": "既存データベースに対してDBCAで実行できるものを2つ選べ。",
+      "choices": {
+        "A": "既存データベースのキャラクタセットを変更する",
+        "B": "専用サーバー構成と共有サーバー構成の変更",
+        "C": "既存データベースをARCHIVELOGモードへ切り替える",
+        "D": "既存データベースを基にテンプレートを作成する"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "専用サーバー構成と共有サーバー構成の変更、既存データベースを基にテンプレートを作成する",
+      "explanation": "正解：B、D\n\nA：誤り。このノートでは既存DBのキャラクタセット変更はDBCAでは不可とされています。\nB：正しい。DBCAでは既存DBの接続モード変更を扱えます。\nC：誤り。このノートでは既存DBのARCHIVELOG切替はDBCAでは不可とされています。\nD：正しい。DBCAでは既存DBからテンプレートを作成できます。",
+      "topic": "DBCA既存DB",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q010",
+      "chapter": 24,
+      "question": "DBCAについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "フラッシュバックデータベースを既存DBに対して有効化できる",
+        "B": "増分バックアップの構成を行える",
+        "C": "Cloud Controlが既に構成されていれば、作成DBを管理対象へ登録する設定ができる",
+        "D": "既存データベースをテンプレートの元となるシードデータベースとして利用できる"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "Cloud Controlが既に構成されていれば、作成DBを管理対象へ登録する設定ができる、既存データベースをテンプレートの元となるシードデータベースとして利用できる",
+      "explanation": "正解：C、D\n\nA：誤り。ノートではフラッシュバックデータベースはDBCAから実行できないとされています。\nB：誤り。ノートではDBCAで増分バックアップの構成はできないとされています。\nC：正しい。必要なOMS/Agent等が構成済みなら管理対象登録を指定できます。\nD：正しい。既存DBを含むテンプレートを作成でき、その元DBをシードデータベースと呼びます。",
+      "topic": "DBCA機能",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q011",
+      "chapter": 24,
+      "question": "EM Expressで実行できない管理作業を3つ選べ。",
+      "choices": {
+        "A": "バックアップ取得とリカバリ",
+        "B": "リスナーの起動と停止",
+        "C": "パフォーマンス情報の確認",
+        "D": "インスタンスの起動と停止"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "D"
+      ],
+      "correctText": "バックアップ取得とリカバリ、リスナーの起動と停止、インスタンスの起動と停止",
+      "explanation": "正解：A、B、D\n\nA：正しい。EM Expressではバックアップ/リカバリを実行できません。\nB：正しい。リスナー制御はEM Expressの対象外です。\nC：誤り。EM Expressはパフォーマンス監視・診断に利用できます。\nD：正しい。EM ExpressはDB内部で動作するためインスタンス起動停止には使用できません。",
+      "topic": "EM Express",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q012",
+      "chapter": 24,
+      "question": "Cloud Controlの説明として正しいものを3つ選べ。",
+      "choices": {
+        "A": "Oracle Net Servicesの設定を管理できる",
+        "B": "対象データベース内に組み込まれているため、対象DBがOPENしていないと利用できない",
+        "C": "複数サーバー上の複数データベースを一元管理できる",
+        "D": "インスタンスの起動と停止を実行できる"
+      },
+      "correctChoice": [
+        "A",
+        "C",
+        "D"
+      ],
+      "correctText": "Oracle Net Servicesの設定を管理できる、複数サーバー上の複数データベースを一元管理できる、インスタンスの起動と停止を実行できる",
+      "explanation": "正解：A、C、D\n\nA：正しい。Oracle Net Servicesの設定を含む管理作業を行えます。\nB：誤り。これはEM Express側の性質で、Cloud Controlは独立した製品です。\nC：正しい。Cloud Controlは統合管理ツールです。\nD：正しい。Cloud Controlでは起動停止を含む管理が可能です。",
+      "topic": "Cloud Control",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q013",
+      "chapter": 24,
+      "question": "SQL Developerとリスナー/インスタンス管理について正しい組合せはどれか。",
+      "choices": {
+        "A": "リスナーの起動停止もインスタンスの起動停止もできる",
+        "B": "リスナーの起動停止はできるが、インスタンスの起動停止はできない",
+        "C": "どちらもできない",
+        "D": "リスナーの起動停止はできないが、インスタンスの起動停止はできる"
+      },
+      "correctChoice": "D",
+      "correctText": "リスナーの起動停止はできないが、インスタンスの起動停止はできる",
+      "explanation": "正解：D\n\nA：誤り。ノートではリスナー制御は不可です。\nB：誤り。逆です。\nC：誤り。インスタンスの起動停止は可能とされています。\nD：正しい。ノートではこの組合せです。",
+      "topic": "SQL Developer管理機能",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q014",
+      "chapter": 24,
+      "question": "EM ExpressとCloud Controlを比較した説明として正しいものを2つ選べ。",
+      "choices": {
+        "A": "Cloud ControlはOracle Databaseとは別に構成される独立製品である",
+        "B": "EM Expressは対象データベース内部で動作するため、対象DBが利用可能な状態である必要がある",
+        "C": "Cloud Controlではバックアップやリカバリを実行できない",
+        "D": "EM Expressは複数サーバー上のDBを一元管理することを主目的とする"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "Cloud ControlはOracle Databaseとは別に構成される独立製品である、EM Expressは対象データベース内部で動作するため、対象DBが利用可能な状態である必要がある",
+      "explanation": "正解：A、B\n\nA：正しい。Cloud Controlは独立した統合管理製品です。\nB：正しい。EM ExpressはDBに組み込まれた管理機能です。\nC：誤り。Cloud Controlではこれらを含む広範な管理が可能です。\nD：誤り。複数対象の統合管理はCloud Controlです。",
+      "topic": "管理ツール比較",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q015",
+      "chapter": 24,
+      "question": "SQL*Plusで実行するCOMMITとROLLBACKについて正しい説明はどれか。",
+      "choices": {
+        "A": "両方ともSQLコマンドに分類される",
+        "B": "両方ともOSコマンドとして実行される",
+        "C": "どちらもSQL*Plus専用コマンドでありSQLではない",
+        "D": "COMMITだけがSQLで、ROLLBACKはSQL*Plusコマンドである"
+      },
+      "correctChoice": "A",
+      "correctText": "両方ともSQLコマンドに分類される",
+      "explanation": "正解：A\n\nA：正しい。COMMITとROLLBACKはSQLコマンドです。\nB：誤り。OSコマンドではありません。\nC：誤り。ノートではCOMMIT/ROLLBACKはSQLコマンドに分類されています。\nD：誤り。両方ともSQLとして扱われます。",
+      "topic": "COMMIT・ROLLBACK分類",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q016",
+      "chapter": 24,
+      "question": "STARTUP NOMOUNTを実行した直後の状態について正しいものを2つ選べ。",
+      "choices": {
+        "A": "バックグラウンドプロセスが起動している",
+        "B": "通常ユーザーが表データへアクセスできる",
+        "C": "SGAが割り当てられている",
+        "D": "データファイルとREDOログファイルはすでにオープンされている"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "バックグラウンドプロセスが起動している、SGAが割り当てられている",
+      "explanation": "正解：A、C\n\nA：正しい。インスタンス起動に伴いバックグラウンドプロセスが起動します。\nB：誤り。通常ユーザーのDBアクセスにはOPEN状態が必要です。\nC：正しい。NOMOUNTではインスタンスが起動しSGAが確保されています。\nD：誤り。これらはOPENへの遷移でオープンされます。",
+      "topic": "NOMOUNT",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q017",
+      "chapter": 24,
+      "question": "データベースがMOUNT状態で、インスタンスは起動している。確認できる可能性がある情報を2つ選べ。",
+      "choices": {
+        "A": "制御ファイルを元にする動的パフォーマンスビューの情報",
+        "B": "SYSTEM表領域上のデータディクショナリビューの全情報",
+        "C": "インスタンス停止中と同じく制御ファイルには一切アクセスできない",
+        "D": "SGAを元にする動的パフォーマンスビューの情報"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "制御ファイルを元にする動的パフォーマンスビューの情報、SGAを元にする動的パフォーマンスビューの情報",
+      "explanation": "正解：A、D\n\nA：正しい。MOUNTでは制御ファイルが利用可能です。\nB：誤り。データディクショナリの元データはデータファイルにあり、OPEN前は通常参照できません。\nC：誤り。MOUNTでは制御ファイルをオープンしています。\nD：正しい。インスタンスが起動しているためSGA情報を参照できます。",
+      "topic": "動的パフォーマンスビュー",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q018",
+      "chapter": 24,
+      "question": "OPEN状態のデータベースで管理情報の格納先と所有者を整理している。データディクショナリビューについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "インスタンスが完全停止していても通常どおり問い合わせできる",
+        "B": "元となる管理情報はSYSTEM表領域に格納される",
+        "C": "所有者はSYSユーザーである",
+        "D": "V$から始まる名前だけを持つ"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "元となる管理情報はSYSTEM表領域に格納される、所有者はSYSユーザーである",
+      "explanation": "正解：B、C\n\nA：誤り。インスタンス停止中はSQLを実行できません。\nB：正しい。SYSTEM表領域内のデータディクショナリ情報を基にします。\nC：正しい。データディクショナリビューはSYSが所有します。\nD：誤り。V$は動的パフォーマンスビューです。",
+      "topic": "データディクショナリ",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q019",
+      "chapter": 24,
+      "question": "SHUTDOWN IMMEDIATEで正常に停止した場合について正しいものを2つ選べ。",
+      "choices": {
+        "A": "次回起動時には必ずインスタンスリカバリが必要になる",
+        "B": "実行中処理を取り消し、必要なロールバックを行う",
+        "C": "接続中セッションがすべて自発的に終了するまで待機する",
+        "D": "停止前にチェックポイントが行われ、変更済みブロックがデータファイルへ書き込まれる"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "実行中処理を取り消し、必要なロールバックを行う、停止前にチェックポイントが行われ、変更済みブロックがデータファイルへ書き込まれる",
+      "explanation": "正解：B、D\n\nA：誤り。正常なIMMEDIATE停止後は通常インスタンスリカバリ不要です。\nB：正しい。IMMEDIATEは実行中処理を取り消して停止します。\nC：誤り。それはNORMALに近い動作です。\nD：正しい。整合性の取れた停止のためチェックポイントが行われます。",
+      "topic": "SHUTDOWN IMMEDIATE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q020",
+      "chapter": 24,
+      "question": "ADRについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "ADRはSYSTEM表領域内の表としてのみ保持される",
+        "B": "ADRベースはDIAGNOSTIC_DESTの値を基準に決まる",
+        "C": "DIAGNOSTIC_DEST未設定時はORACLE_BASEなどがADRベース決定に使われ得る",
+        "D": "ログや診断ファイルをディレクトリ構造で集中管理する仕組みである"
+      },
+      "correctChoice": [
+        "B",
+        "C",
+        "D"
+      ],
+      "correctText": "ADRベースはDIAGNOSTIC_DESTの値を基準に決まる、DIAGNOSTIC_DEST未設定時はORACLE_BASEなどがADRベース決定に使われ得る、ログや診断ファイルをディレクトリ構造で集中管理する仕組みである",
+      "explanation": "正解：B、C、D\n\nA：誤り。ADRはファイルシステム上のディレクトリ/ファイル群です。\nB：正しい。DIAGNOSTIC_DESTでADRベースを指定します。\nC：正しい。未設定時にはORACLE_BASEまたはORACLE_HOME/logが使われます。\nD：正しい。ADRは診断情報をファイルシステム上に集約します。",
+      "topic": "ADR",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q021",
+      "chapter": 24,
+      "question": "アラートログに通常記録されないものはどれか。",
+      "choices": {
+        "A": "管理コマンドの実行情報",
+        "B": "単純なSQL構文エラー",
+        "C": "インスタンス起動・停止に関する情報",
+        "D": "重大な内部エラー"
+      },
+      "correctChoice": "B",
+      "correctText": "単純なSQL構文エラー",
+      "explanation": "正解：B\n\nA：誤り。主要な管理コマンドはアラートログへ記録されます。\nB：正しい。SQL構文エラーのような一時的・非致命的エラーは通常記録されません。\nC：誤り。起動停止はアラートログの代表的な記録対象です。\nD：誤り。重大エラーは記録対象です。",
+      "topic": "アラートログ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q022",
+      "chapter": 24,
+      "question": "プロセストレースファイルとインシデントダンプについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "プロセストレースファイルはADRホームのtraceディレクトリに出力される",
+        "B": "インシデントごとにインシデントIDが付与される",
+        "C": "インシデントダンプは対応するincdir_インシデント番号配下へ出力される",
+        "D": "重大エラーが発生していない限りプロセストレースファイルは絶対に生成されない"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "プロセストレースファイルはADRホームのtraceディレクトリに出力される、インシデントごとにインシデントIDが付与される、インシデントダンプは対応するincdir_インシデント番号配下へ出力される",
+      "explanation": "正解：A、B、C\n\nA：正しい。通常のプロセストレースはtrace配下です。\nB：正しい。各インシデントはIDで識別されます。\nC：正しい。インシデント固有のディレクトリへ保存されます。\nD：誤り。インスタンス起動時など重大エラーなしでも生成されることがあります。",
+      "topic": "トレース・インシデント",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q023",
+      "chapter": 24,
+      "question": "SPFILEについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "テキストエディタで直接編集することを前提としたテキストファイルである",
+        "B": "インスタンス起動時には参照されない",
+        "C": "動的初期化パラメータと静的初期化パラメータの設定値を保持し得る",
+        "D": "ALTER SYSTEM SETで設定変更に利用できる"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "動的初期化パラメータと静的初期化パラメータの設定値を保持し得る、ALTER SYSTEM SETで設定変更に利用できる",
+      "explanation": "正解：C、D\n\nA：誤り。SPFILEはバイナリ形式で直接編集しません。\nB：誤り。初期化パラメータファイルとして起動時に読み込まれます。\nC：正しい。SPFILEには双方の設定が含まれます。\nD：正しい。SPFILE利用時はALTER SYSTEM SETで永続設定を変更できます。",
+      "topic": "SPFILE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q024",
+      "chapter": 24,
+      "question": "SPFILE使用中に動的パラメータPを変更する。現行インスタンスだけ変更し、再起動後は元に戻したい。適切なSCOPEはどれか。",
+      "choices": {
+        "A": "SCOPE句は使用できない",
+        "B": "SPFILE",
+        "C": "MEMORY",
+        "D": "BOTH"
+      },
+      "correctChoice": "C",
+      "correctText": "MEMORY",
+      "explanation": "正解：C\n\nA：誤り。ALTER SYSTEM SETではSCOPEを指定できます。\nB：誤り。SPFILEはファイルだけを変更し現行インスタンスには反映しません。\nC：正しい。MEMORYは現行インスタンスだけに反映し、再起動で失われます。\nD：誤り。BOTHは現行インスタンスとSPFILE双方を変更します。",
+      "topic": "SCOPE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q025",
+      "chapter": 24,
+      "question": "PFILEを使用しているインスタンスで、再起動後も静的初期化パラメータの変更を残したい。適切な対応はどれか。",
+      "choices": {
+        "A": "ALTER SYSTEM SET ... SCOPE=BOTHだけを実行する",
+        "B": "ALTER SESSION SETで変更する",
+        "C": "CONTROL_FILESだけを編集する",
+        "D": "PFILEを直接編集し、必要に応じてインスタンスを再起動する"
+      },
+      "correctChoice": "D",
+      "correctText": "PFILEを直接編集し、必要に応じてインスタンスを再起動する",
+      "explanation": "正解：D\n\nA：誤り。PFILEにはBOTHで永続変更できません。\nB：誤り。セッション変更はインスタンス再起動後には残りません。\nC：誤り。対象パラメータがCONTROL_FILESとは限りません。\nD：正しい。PFILEはテキスト編集し、静的変更は再起動時に反映します。",
+      "topic": "PFILE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q026",
+      "chapter": 24,
+      "question": "tnsping NET1を実行してOKが返った。これだけから確実に言えることを2つ選べ。",
+      "choices": {
+        "A": "接続記述子のホスト/ポートにあるリスナーへ到達できた",
+        "B": "NET1の名前解決により接続記述子を得られた",
+        "C": "リスナーが要求サービスをDBインスタンスへ中継できることまで確認した",
+        "D": "データベースへのユーザー認証まで成功した"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "接続記述子のホスト/ポートにあるリスナーへ到達できた、NET1の名前解決により接続記述子を得られた",
+      "explanation": "正解：A、B\n\nA：正しい。tnspingはリスナーへの接続可否を確認します。\nB：正しい。tnspingはまず接続識別子を名前解決します。\nC：誤り。tnspingだけではサービス中継の成否までは確認しません。\nD：誤り。tnspingはDBユーザー認証を行いません。",
+      "topic": "tnsping",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q027",
+      "chapter": 24,
+      "question": "ローカルネーミングの説明として正しいものはどれか。",
+      "choices": {
+        "A": "接続先情報をクライアントのtnsnames.oraに登録し、接続識別子から接続記述子を得る",
+        "B": "接続時にホスト:ポート/サービス名を直接書く方式である",
+        "C": "接続先情報をlistener.oraだけに登録し、クライアント設定は不要である",
+        "D": "LDAPサーバーに接続情報を登録する方式である"
+      },
+      "correctChoice": "A",
+      "correctText": "接続先情報をクライアントのtnsnames.oraに登録し、接続識別子から接続記述子を得る",
+      "explanation": "正解：A\n\nA：正しい。ローカルネーミングはtnsnames.oraを使用します。\nB：誤り。それは簡易接続ネーミングです。\nC：誤り。listener.oraは主にサーバー側リスナー設定です。\nD：誤り。それはディレクトリネーミングです。",
+      "topic": "ローカルネーミング",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q028",
+      "chapter": 24,
+      "question": "静的サービス登録について正しいものを2つ選べ。",
+      "choices": {
+        "A": "lsnrctl statusでUNKNOWNと表示されることがある",
+        "B": "インスタンス停止中は登録情報も必ず消える",
+        "C": "listener.oraのSID_LIST_リスナー名にサービス情報を設定する",
+        "D": "LREGが稼働中インスタンスの情報を定期的に登録する方式である"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "lsnrctl statusでUNKNOWNと表示されることがある、listener.oraのSID_LIST_リスナー名にサービス情報を設定する",
+      "explanation": "正解：A、C\n\nA：正しい。静的登録ではリスナーがインスタンス稼働状態を把握できずUNKNOWNとなります。\nB：誤り。静的登録はインスタンス状態と独立して残ります。\nC：正しい。静的登録はlistener.oraへ記述します。\nD：誤り。それは動的サービス登録です。",
+      "topic": "静的サービス登録",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q029",
+      "chapter": 24,
+      "question": "デフォルト1521以外のポートで待ち受けるリスナーへ動的サービス登録させたい。最も直接関係する初期化パラメータはどれか。",
+      "choices": {
+        "A": "DB_CREATE_FILE_DEST",
+        "B": "LOCAL_LISTENER",
+        "C": "REMOTE_LOGIN_PASSWORDFILE",
+        "D": "UNDO_TABLESPACE"
+      },
+      "correctChoice": "B",
+      "correctText": "LOCAL_LISTENER",
+      "explanation": "正解：B\n\nA：誤り。OMFのファイル配置先です。\nB：正しい。LREGが動的登録するリスナーのアドレスをLOCAL_LISTENERで指定できます。\nC：誤り。管理権限ユーザーのパスワードファイル認証設定です。\nD：誤り。UNDO表領域の指定です。",
+      "topic": "動的サービス登録",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q030",
+      "chapter": 24,
+      "question": "デフォルトリスナーについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "既定ポートは1521である",
+        "B": "名前は必ずデータベースサービス名と同一でなければならない",
+        "C": "インスタンスをSTARTUPすると必ず同時に起動する",
+        "D": "デフォルト値で起動する場合、listener.oraファイル自体がなくても起動できる"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "既定ポートは1521である、デフォルト値で起動する場合、listener.oraファイル自体がなくても起動できる",
+      "explanation": "正解：A、D\n\nA：正しい。デフォルトのTCPポートは1521です。\nB：誤り。デフォルトリスナー名はLISTENERです。\nC：誤り。リスナーはインスタンスとは独立したプロセスです。\nD：正しい。デフォルトリスナーは設定ファイルなしでも既定値で起動できます。",
+      "topic": "デフォルトリスナー",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q031",
+      "chapter": 24,
+      "question": "tnsnames.oraのADDRESS_LISTに2つのリスナーを記述している。LOAD_BALANCE=OFF、FAILOVER=ONである。期待される動作はどれか。",
+      "choices": {
+        "A": "毎回ランダムに1つを選び、失敗しても別アドレスは試さない",
+        "B": "2つへ同時接続してトランザクションを二重化する",
+        "C": "記述順に接続を試し、最初の接続に失敗した場合は次のアドレスを試す",
+        "D": "リスナーを使用せずローカル接続へ切り替える"
+      },
+      "correctChoice": "C",
+      "correctText": "記述順に接続を試し、最初の接続に失敗した場合は次のアドレスを試す",
+      "explanation": "正解：C\n\nA：誤り。LOAD_BALANCE=OFFではランダム化せず、FAILOVER=ONなら失敗時に次へ進みます。\nB：誤り。接続時フェイルオーバーはトランザクション複製機能ではありません。\nC：正しい。負荷分散OFF・フェイルオーバーONの組合せです。\nD：誤り。失敗時は次の指定アドレスへ接続を試みます。",
+      "topic": "接続時フェイルオーバー",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q032",
+      "chapter": 24,
+      "question": "ネーミングメソッドと情報格納場所の組合せとして正しいものを3つ選べ。",
+      "choices": {
+        "A": "ディレクトリネーミング：ディレクトリサーバー",
+        "B": "外部ネーミング：外部ネーミングサービス",
+        "C": "簡易接続ネーミング：必ずtnsnames.oraに接続記述子を登録",
+        "D": "ローカルネーミング：クライアントのtnsnames.ora"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "D"
+      ],
+      "correctText": "ディレクトリネーミング：ディレクトリサーバー、外部ネーミング：外部ネーミングサービス、ローカルネーミング：クライアントのtnsnames.ora",
+      "explanation": "正解：A、B、D\n\nA：正しい。LDAP等のディレクトリサービスに対応関係を保持します。\nB：正しい。外部サービスに接続識別子と接続記述子の対応を保持します。\nC：誤り。簡易接続は接続先情報を接続文字列へ直接指定します。\nD：正しい。ローカルネーミングはtnsnames.oraを参照します。",
+      "topic": "ネーミングメソッド",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q033",
+      "chapter": 24,
+      "question": "Oracle Netの構成について正しいものを2つ選べ。",
+      "choices": {
+        "A": "接続識別子とデータベースインスタンスは常に1対1でなければならない",
+        "B": "同じデータベースへ異なる複数の接続識別子を定義することは可能である",
+        "C": "1つの接続識別子に複数アドレスを持たせる構成は可能である",
+        "D": "接続時ロードバランシングは簡易接続ネーミングでは絶対に使えない"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "同じデータベースへ異なる複数の接続識別子を定義することは可能である、1つの接続識別子に複数アドレスを持たせる構成は可能である",
+      "explanation": "正解：B、C\n\nA：誤り。複数アドレス/サービス構成が可能です。\nB：正しい。接続識別子はクライアント側の名前なので複数定義できます。\nC：正しい。フェイルオーバーやロードバランシングで複数アドレスを指定できます。\nD：誤り。ノートではネーミングメソッドにかかわらず利用可能とされています。",
+      "topic": "接続識別子",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q034",
+      "chapter": 24,
+      "question": "共有サーバー接続と専用サーバー接続について正しいものを2つ選べ。",
+      "choices": {
+        "A": "共有サーバー接続では各セッション専用のサーバープロセスを必ず新規起動する",
+        "B": "専用サーバー接続では1セッションに専用サーバープロセスが対応する",
+        "C": "専用サーバー接続ではセッション終了後も専用サーバープロセスが常駐し続ける",
+        "D": "共有サーバー接続ではリクエストキューとレスポンスキューを使用する"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "専用サーバー接続では1セッションに専用サーバープロセスが対応する、共有サーバー接続ではリクエストキューとレスポンスキューを使用する",
+      "explanation": "正解：B、D\n\nA：誤り。共有サーバー群で処理を共有します。\nB：正しい。専用構成はセッションとサーバープロセスが1対1です。\nC：誤り。専用サーバープロセスは対応セッション終了に伴って終了します。\nD：正しい。ディスパッチャと共有サーバー間でキューを用います。",
+      "topic": "共有・専用サーバー",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q035",
+      "chapter": 24,
+      "question": "データベースリンクの接続ユーザータイプについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "固定ユーザータイプでも必ずローカルと同名同パスワードのリモートユーザーが必要である",
+        "B": "どちらのタイプでもOracle Database Gatewayが必須である",
+        "C": "接続ユーザータイプではローカル接続ユーザーの資格情報に対応するリモート側ユーザーが必要になる",
+        "D": "固定ユーザータイプではCREATE DATABASE LINK時に指定したユーザー情報を使用する"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "接続ユーザータイプではローカル接続ユーザーの資格情報に対応するリモート側ユーザーが必要になる、固定ユーザータイプではCREATE DATABASE LINK時に指定したユーザー情報を使用する",
+      "explanation": "正解：C、D\n\nA：誤り。固定ユーザータイプではリンクに指定した資格情報を使います。\nB：誤り。Oracle同士のデータベースリンクにGatewayは必須ではありません。\nC：正しい。接続ユーザータイプでは接続元ユーザーとしてリモートへ接続します。\nD：正しい。固定ユーザータイプはリンク定義に資格情報を保持します。",
+      "topic": "データベースリンク",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q036",
+      "chapter": 24,
+      "question": "Oracle Database Gatewayの用途として最も適切なものはどれか。",
+      "choices": {
+        "A": "リスナーを使わずOracle Databaseへローカル接続する",
+        "B": "Oracle Database同士で同じ表領域を共有する",
+        "C": "同一DB内の別スキーマにシノニムを作る",
+        "D": "Oracle DatabaseとOracle以外のDBMSを連携させる"
+      },
+      "correctChoice": "D",
+      "correctText": "Oracle DatabaseとOracle以外のDBMSを連携させる",
+      "explanation": "正解：D\n\nA：誤り。ローカル接続機能ではありません。\nB：誤り。Gatewayは共有表領域の仕組みではありません。\nC：誤り。シノニム機能とは別です。\nD：正しい。異機種間サービスとして利用します。",
+      "topic": "Database Gateway",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q037",
+      "chapter": 24,
+      "question": "遅延セグメント作成が無効なユーザーUが、永続表領域TBSに表を作成する。UにTBSのクオータがない。適切な説明はどれか。",
+      "choices": {
+        "A": "CREATE TABLE時点でセグメント作成のためクオータ不足が問題になる",
+        "B": "表は必ず作成でき、INSERT時だけクオータが評価される",
+        "C": "一時表領域のクオータを付与すれば解決する",
+        "D": "CREATE SESSION権限だけで表領域を無制限に使用できる"
+      },
+      "correctChoice": "A",
+      "correctText": "CREATE TABLE時点でセグメント作成のためクオータ不足が問題になる",
+      "explanation": "正解：A\n\nA：正しい。遅延セグメント無効では表作成時にセグメントが必要です。\nB：誤り。これは遅延セグメント有効時の典型的な挙動です。\nC：誤り。対象は永続表領域TBSのクオータです。\nD：誤り。記憶域利用にはクオータまたはUNLIMITED TABLESPACE等が必要です。",
+      "topic": "クオータ・遅延セグメント",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q038",
+      "chapter": 24,
+      "question": "ユーザーに付与済みのロールRを、ログイン直後は無効にし必要時だけ有効化したい。正しいものを2つ選べ。",
+      "choices": {
+        "A": "パスワード保護ロールにしてSET ROLEで有効化する方法がある",
+        "B": "Rをデフォルトロールから外し、必要時にSET ROLEを実行する方法がある",
+        "C": "ロールは一度GRANTすると無効化できない",
+        "D": "SET ROLEで有効化すると以後すべてのセッションで永続的に有効になる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "パスワード保護ロールにしてSET ROLEで有効化する方法がある、Rをデフォルトロールから外し、必要時にSET ROLEを実行する方法がある",
+      "explanation": "正解：A、B\n\nA：正しい。パスワード付きロールも必要時にSET ROLEで有効化できます。\nB：正しい。デフォルトロールとSET ROLEを組み合わせられます。\nC：誤り。デフォルトロールやSET ROLEで有効状態を制御できます。\nD：誤り。SET ROLEによる有効化はそのセッション単位です。",
+      "topic": "ロール有効化",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q039",
+      "chapter": 24,
+      "question": "DBMS_PRIVILEGE_CAPTUREによる権限分析について正しいものを3つ選べ。",
+      "choices": {
+        "A": "コンテキスト条件に合致するユーザーを対象にできる",
+        "B": "SYSユーザー自身の権限使用状況も同じ方式で分析できる",
+        "C": "SYS以外の全データベースを対象にする指定がある",
+        "D": "特定ロールを付与されたユーザーを対象にできる"
+      },
+      "correctChoice": [
+        "A",
+        "C",
+        "D"
+      ],
+      "correctText": "コンテキスト条件に合致するユーザーを対象にできる、SYS以外の全データベースを対象にする指定がある、特定ロールを付与されたユーザーを対象にできる",
+      "explanation": "正解：A、C、D\n\nA：正しい。コンテキストやロール＋コンテキストを利用できます。\nB：誤り。ノートではSYSは分析対象外です。\nC：正しい。全DB対象ではSYSを除くユーザーを分析できます。\nD：正しい。ロールを基準に対象を指定できます。",
+      "topic": "権限分析",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q040",
+      "chapter": 24,
+      "question": "一般ユーザーと管理権限ユーザーの認証について正しいものを2つ選べ。",
+      "choices": {
+        "A": "パスワードファイル認証は主に管理権限ユーザーの認証に使用される",
+        "B": "一般ユーザーのデータベース認証には必ずパスワードファイルを使用する",
+        "C": "一般ユーザーでもIDENTIFIED EXTERNALLYによるOS認証を構成できる",
+        "D": "OS認証はSYSDBAユーザーにしか利用できない"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "パスワードファイル認証は主に管理権限ユーザーの認証に使用される、一般ユーザーでもIDENTIFIED EXTERNALLYによるOS認証を構成できる",
+      "explanation": "正解：A、C\n\nA：正しい。管理権限を持つユーザーの認証方式として用います。\nB：誤り。一般ユーザーのDB認証情報はデータディクショナリにあります。\nC：正しい。一般ユーザーにもOS認証を利用できます。\nD：誤り。一般ユーザーのOS認証もあります。",
+      "topic": "認証方式",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q041",
+      "chapter": 24,
+      "question": "スキーマ限定アカウントの説明として最も適切なものはどれか。",
+      "choices": {
+        "A": "SYSDBA権限だけを持つ管理アカウントである",
+        "B": "ログイン機能を持たず、オブジェクト所有を目的とする",
+        "C": "OS認証でのみログインできる一般ユーザーである",
+        "D": "ログインはできるがオブジェクトを所有できない"
+      },
+      "correctChoice": "B",
+      "correctText": "ログイン機能を持たず、オブジェクト所有を目的とする",
+      "explanation": "正解：B\n\nA：誤り。管理権限アカウントではありません。\nB：正しい。スキーマ限定アカウントは認証資格を持たず所有用に使います。\nC：誤り。そもそもログイン機能を持ちません。\nD：誤り。性質が逆です。",
+      "topic": "スキーマ限定アカウント",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q042",
+      "chapter": 24,
+      "question": "管理権限ユーザーのOS認証について正しいものを2つ選べ。",
+      "choices": {
+        "A": "管理権限ユーザーはデータベースがOPENしていなくてもOS認証で接続できる必要がある",
+        "B": "OS認証では必ずパスワードファイルを参照する",
+        "C": "一般ユーザーのOS認証でも必ずOSDBAグループ所属が必要である",
+        "D": "SYSDBAとしてOS認証する場合、OSユーザーがOSDBAグループに所属していることが重要になる"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "管理権限ユーザーはデータベースがOPENしていなくてもOS認証で接続できる必要がある、SYSDBAとしてOS認証する場合、OSユーザーがOSDBAグループに所属していることが重要になる",
+      "explanation": "正解：A、D\n\nA：正しい。起動操作のためOPEN前でも認証可能である必要があります。\nB：誤り。OS認証はOS側の認証情報を利用します。\nC：誤り。一般ユーザーのOS認証はOS_AUTHENT_PREFIX等の仕組みで、OSDBA所属とは別です。\nD：正しい。管理権限のOS認証はOSグループ所属で判定します。",
+      "topic": "管理権限OS認証",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q043",
+      "chapter": 24,
+      "question": "REMOTE_LOGIN_PASSWORDFILE初期化パラメータの役割として最も適切なものはどれか。",
+      "choices": {
+        "A": "一般ユーザーのプロファイルを指定する",
+        "B": "OS認証用のOSDBAグループ名を指定する",
+        "C": "管理権限ユーザーのパスワードファイル認証を使用するかを制御する",
+        "D": "表領域クオータの上限を設定する"
+      },
+      "correctChoice": "C",
+      "correctText": "管理権限ユーザーのパスワードファイル認証を使用するかを制御する",
+      "explanation": "正解：C\n\nA：誤り。プロファイル設定ではありません。\nB：誤り。OSグループ名の指定ではありません。\nC：正しい。管理権限ユーザーのパスワードファイル認証に関係します。\nD：誤り。クオータとは無関係です。",
+      "topic": "REMOTE_LOGIN_PASSWORDFILE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q044",
+      "chapter": 24,
+      "question": "UNLIMITED TABLESPACEシステム権限について正しいものを3つ選べ。",
+      "choices": {
+        "A": "この権限があればCREATE TABLE権限がなくても表を作成できる",
+        "B": "ユーザーのデフォルト表領域だけでなく、対象となる表領域全般で無制限割当てが可能になる",
+        "C": "ロール経由では付与できず、ユーザーへ直接付与する",
+        "D": "付与されたユーザーは永続表領域に対する個別クオータ制限より優先して領域を利用できる"
+      },
+      "correctChoice": [
+        "B",
+        "C",
+        "D"
+      ],
+      "correctText": "ユーザーのデフォルト表領域だけでなく、対象となる表領域全般で無制限割当てが可能になる、ロール経由では付与できず、ユーザーへ直接付与する、付与されたユーザーは永続表領域に対する個別クオータ制限より優先して領域を利用できる",
+      "explanation": "正解：B、C、D\n\nA：誤り。領域割当てとオブジェクト作成権限は別です。\nB：正しい。特定の1表領域だけの権限ではありません。\nC：正しい。ノートではロールに付与できないとされています。\nD：正しい。この権限があれば個別クオータによる制限を受けません。",
+      "topic": "UNLIMITED TABLESPACE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q045",
+      "chapter": 24,
+      "question": "パスワードの複雑性をユーザーごとに強制したい。中心となる仕組みはどれか。",
+      "choices": {
+        "A": "DB_CREATE_FILE_DEST",
+        "B": "PCTFREE",
+        "C": "LOCAL_LISTENER",
+        "D": "プロファイルのパスワード管理ポリシー"
+      },
+      "correctChoice": "D",
+      "correctText": "プロファイルのパスワード管理ポリシー",
+      "explanation": "正解：D\n\nA：誤り。OMFの配置先です。\nB：誤り。ブロック空き領域の設定です。\nC：誤り。リスナー動的登録の設定です。\nD：正しい。プロファイルでパスワード管理ポリシーを設定できます。",
+      "topic": "プロファイル",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q046",
+      "chapter": 24,
+      "question": "O7_DICTIONARY_ACCESSIBILITY初期化パラメータが関係する事項として最も適切なものはどれか。",
+      "choices": {
+        "A": "SELECT ANY TABLE権限を持つユーザーによるデータディクショナリアクセス",
+        "B": "SYSDBAのOS認証",
+        "C": "UNDO保存期間",
+        "D": "共有サーバープロセス数"
+      },
+      "correctChoice": "A",
+      "correctText": "SELECT ANY TABLE権限を持つユーザーによるデータディクショナリアクセス",
+      "explanation": "正解：A\n\nA：正しい。ノートではこの権限による辞書アクセス可否に関係するとされています。\nB：誤り。OS認証の設定ではありません。\nC：誤り。UNDO_RETENTIONの領域です。\nD：誤り。SHARED_SERVERS等の領域です。",
+      "topic": "O7_DICTIONARY_ACCESSIBILITY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q047",
+      "chapter": 24,
+      "question": "表領域の管理方式に関する説明として正しいものを3つ選べ。",
+      "choices": {
+        "A": "UNIFORMはエクステントサイズを均一にする",
+        "B": "AUTOALLOCATEはOracleがエクステントサイズを自動決定する",
+        "C": "EXTENT MANAGEMENT DICTIONARYはディクショナリ管理表領域の指定に用いる",
+        "D": "SEGMENT SPACE MANAGEMENT AUTOはエクステントをディクショナリで管理する指定である"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "UNIFORMはエクステントサイズを均一にする、AUTOALLOCATEはOracleがエクステントサイズを自動決定する、EXTENT MANAGEMENT DICTIONARYはディクショナリ管理表領域の指定に用いる",
+      "explanation": "正解：A、B、C\n\nA：正しい。固定サイズのエクステントを使用します。\nB：正しい。自動割当て方式です。\nC：正しい。ディクショナリ管理方式を指定する句です。\nD：誤り。SEGMENT SPACE MANAGEMENTはブロック空き領域管理方式の指定です。",
+      "topic": "表領域管理方式",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q048",
+      "chapter": 24,
+      "question": "bigfile表領域とsmallfile表領域について正しいものを2つ選べ。",
+      "choices": {
+        "A": "smallfile表領域ではAUTOALLOCATEを使用できない",
+        "B": "smallfile表領域は複数データファイルで構成できる",
+        "C": "bigfile表領域は1つのデータファイルで構成される",
+        "D": "bigfile表領域にはデータファイルを追加して複数ファイルにできる"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "smallfile表領域は複数データファイルで構成できる、bigfile表領域は1つのデータファイルで構成される",
+      "explanation": "正解：B、C\n\nA：誤り。smallfileでもローカル管理のAUTOALLOCATEを使用できます。\nB：正しい。smallfileは複数データファイルを持てます。\nC：正しい。bigfile表領域は単一の大きなデータファイルを使用します。\nD：誤り。bigfileは1ファイル構成です。",
+      "topic": "bigfile・smallfile",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q049",
+      "chapter": 24,
+      "question": "表領域/データファイル情報を調査する。適切なビューを2つ選べ。",
+      "choices": {
+        "A": "データファイルの情報を確認する：USER_TABLES",
+        "B": "表領域の空き領域を確認する：DBA_FREE_SPACE",
+        "C": "空き領域を確認する：V$SESSION",
+        "D": "データベースに存在する表領域を確認する：V$TABLESPACE"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "表領域の空き領域を確認する：DBA_FREE_SPACE、データベースに存在する表領域を確認する：V$TABLESPACE",
+      "explanation": "正解：B、D\n\nA：誤り。USER_TABLESはユーザー所有表の情報です。\nB：正しい。DBA_FREE_SPACEで空き領域を確認します。\nC：誤り。V$SESSIONはセッション情報です。\nD：正しい。V$TABLESPACEは制御ファイル由来の表領域情報を示します。",
+      "topic": "表領域ビュー",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q050",
+      "chapter": 24,
+      "question": "オンラインでデータファイルを別パスへ移動したい。正しいものを2つ選べ。",
+      "choices": {
+        "A": "必ず表領域をOFFLINEにし、OSコマンドで移動してから制御ファイルを書き換える",
+        "B": "移動中はデータベース全体をSHUTDOWNする必要がある",
+        "C": "移動先に同名ファイルがあり上書きが必要な場合はREUSEが関係する",
+        "D": "OracleのALTER DATABASE MOVE DATAFILE系操作で移動でき、OSのmvを別途実行する必要はない"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "移動先に同名ファイルがあり上書きが必要な場合はREUSEが関係する、OracleのALTER DATABASE MOVE DATAFILE系操作で移動でき、OSのmvを別途実行する必要はない",
+      "explanation": "正解：C、D\n\nA：誤り。それはオフライン移動の考え方です。\nB：誤り。オンライン移動ではデータベース稼働中に実行できます。\nC：正しい。既存ファイルを再利用/上書きする場合にREUSEを指定します。\nD：正しい。オンライン移動はOracle側がファイル移動を実行します。",
+      "topic": "データファイルオンライン移動",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q051",
+      "chapter": 24,
+      "question": "OMFでデータファイル/一時ファイルを管理するための中心的な初期化パラメータはどれか。",
+      "choices": {
+        "A": "LOCAL_LISTENER",
+        "B": "DB_CREATE_FILE_DEST",
+        "C": "CONTROL_FILES",
+        "D": "UNDO_RETENTION"
+      },
+      "correctChoice": "B",
+      "correctText": "DB_CREATE_FILE_DEST",
+      "explanation": "正解：B\n\nA：誤り。動的サービス登録先です。\nB：正しい。データファイルや一時ファイルのOMF配置先を指定します。\nC：誤り。制御ファイル名の一覧です。\nD：誤り。UNDO保存期間です。",
+      "topic": "OMF",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q052",
+      "chapter": 24,
+      "question": "OMF管理の表領域TBS1に表が格納されている。TBS1をデータファイルごと削除したい。正しい説明を2つ選べ。",
+      "choices": {
+        "A": "OMF管理のデータファイルは表領域削除に伴って自動削除される",
+        "B": "オブジェクトが格納されているためINCLUDING CONTENTSが必要になる",
+        "C": "INCLUDING CONTENTSを付けると制御ファイルの表領域情報だけが残る",
+        "D": "OMFでは表領域削除後もデータファイルは必ずOS上に残る"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "OMF管理のデータファイルは表領域削除に伴って自動削除される、オブジェクトが格納されているためINCLUDING CONTENTSが必要になる",
+      "explanation": "正解：A、B\n\nA：正しい。OMFではファイルの削除もOracleが管理します。\nB：正しい。内容を含めて削除する指定が必要です。\nC：誤り。表領域情報も削除されます。\nD：誤り。OMF管理ファイルは表領域削除に伴い削除されます。",
+      "topic": "OMF削除",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q053",
+      "chapter": 24,
+      "question": "ローカル管理表領域で利用できる機能・性質として正しいものを3つ選べ。",
+      "choices": {
+        "A": "自動セグメント領域管理",
+        "B": "遅延セグメント作成やセグメント縮小などの機能",
+        "C": "OMFはディクショナリ管理表領域でしか使用できない",
+        "D": "エクステント割当ての自動化"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "D"
+      ],
+      "correctText": "自動セグメント領域管理、遅延セグメント作成やセグメント縮小などの機能、エクステント割当ての自動化",
+      "explanation": "正解：A、B、D\n\nA：正しい。ASSMを組み合わせられます。\nB：正しい。ノートではローカル管理表領域の機能として挙げられています。\nC：誤り。OMFは管理方式とは別のファイル管理機能です。\nD：正しい。ローカル管理ではAUTOALLOCATE等を利用できます。",
+      "topic": "ローカル管理表領域",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q054",
+      "chapter": 24,
+      "question": "再開可能領域割り当てを有効にした処理が、表領域不足で一時停止した。待機時間内に表領域を拡張した場合の説明として最も適切なものはどれか。",
+      "choices": {
+        "A": "停止した時点で自動COMMITされる",
+        "B": "必ず最初からSQLを再実行する必要がある",
+        "C": "一時停止位置から処理を再開できる",
+        "D": "表領域拡張後もタイムアウトまで必ず停止したままである"
+      },
+      "correctChoice": "C",
+      "correctText": "一時停止位置から処理を再開できる",
+      "explanation": "正解：C\n\nA：誤り。一時停止はコミットを意味しません。\nB：誤り。再開可能領域割り当ては再実行コストを避けるための機能です。\nC：正しい。原因が解消されれば再開可能文は継続できます。\nD：誤り。原因が解消されれば再開できます。",
+      "topic": "再開可能領域割り当て",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q055",
+      "chapter": 24,
+      "question": "ALTER TABLE T SHRINK SPACE関連の説明として正しいものを3つ選べ。",
+      "choices": {
+        "A": "通常のSHRINK SPACEではHWMを引き下げ、不要領域を解放する",
+        "B": "オンラインセグメント縮小後は必ず全索引を手動REBUILDしなければならない",
+        "C": "SHRINK SPACE COMPACTはデータ再編成だけを行い、HWMを引き下げない",
+        "D": "SHRINK SPACE CASCADEは表に関連する索引も縮小対象にする"
+      },
+      "correctChoice": [
+        "A",
+        "C",
+        "D"
+      ],
+      "correctText": "通常のSHRINK SPACEではHWMを引き下げ、不要領域を解放する、SHRINK SPACE COMPACTはデータ再編成だけを行い、HWMを引き下げない、SHRINK SPACE CASCADEは表に関連する索引も縮小対象にする",
+      "explanation": "正解：A、C、D\n\nA：正しい。通常の縮小では再編成後にHWMを下げて領域を解放します。\nB：誤り。ノートでは索引は自動的にメンテナンスされるとされています。\nC：正しい。COMPACTは第1段階のみです。\nD：正しい。CASCADEで索引も対象になります。",
+      "topic": "セグメント縮小",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q056",
+      "chapter": 24,
+      "question": "一時セグメントについて正しい説明はどれか。",
+      "choices": {
+        "A": "一時セグメントには必ず永続表オブジェクトが1対1で対応する",
+        "B": "一時セグメントはREDOログファイル内に作成される",
+        "C": "一時セグメントは例外なく一時表領域にしか作成されない",
+        "D": "永続セグメント作成処理の途中で、永続表領域に一時セグメントが作成される場合がある"
+      },
+      "correctChoice": "D",
+      "correctText": "永続セグメント作成処理の途中で、永続表領域に一時セグメントが作成される場合がある",
+      "explanation": "正解：D\n\nA：誤り。作業用に一時的に使用されるセグメントです。\nB：誤り。REDOログは表領域セグメントではありません。\nC：誤り。永続セグメント作成中に永続表領域へ一時セグメントが作成される場合があります。\nD：正しい。ノートに示された例外です。",
+      "topic": "一時セグメント",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q057",
+      "chapter": 24,
+      "question": "圧縮方式について正しいものを2つ選べ。",
+      "choices": {
+        "A": "ハイブリッド列圧縮は列形式を意識した圧縮である",
+        "B": "基本表圧縮は通常のINSERTを含むすべてのDMLを常に圧縮する",
+        "C": "基本表圧縮と高度な行圧縮は行優先形式の圧縮である",
+        "D": "高度な行圧縮は列形式に変換してから保存する"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "ハイブリッド列圧縮は列形式を意識した圧縮である、基本表圧縮と高度な行圧縮は行優先形式の圧縮である",
+      "explanation": "正解：A、C\n\nA：正しい。HCCは列方向の圧縮を利用します。\nB：誤り。基本表圧縮ではダイレクトパスロード等が主な圧縮契機です。\nC：正しい。両者は行形式の圧縮です。\nD：誤り。高度な行圧縮は行優先形式です。",
+      "topic": "表圧縮",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q058",
+      "chapter": 24,
+      "question": "領域解放に関する説明として正しいものを2つ選べ。",
+      "choices": {
+        "A": "ALTER INDEX ... UNUSABLEでは索引セグメントを削除して領域を解放できる",
+        "B": "TRUNCATE ... REUSE STORAGEでは表セグメント自体も必ず削除される",
+        "C": "セグメント縮小はセグメント自体をDROPして作り直す処理である",
+        "D": "TRUNCATE TABLE ... REUSE STORAGEでは既存エクステントを解放せず再利用する"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "ALTER INDEX ... UNUSABLEでは索引セグメントを削除して領域を解放できる、TRUNCATE TABLE ... REUSE STORAGEでは既存エクステントを解放せず再利用する",
+      "explanation": "正解：A、D\n\nA：正しい。UNUSABLEで索引セグメントを削除できます。\nB：誤り。セグメントとエクステントを保持して再利用します。\nC：誤り。縮小はセグメントを削除せず内部を再編成します。\nD：正しい。REUSE STORAGEは割当済み領域を保持します。",
+      "topic": "領域解放",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q059",
+      "chapter": 24,
+      "question": "遅延セグメント作成について正しいものを2つ選べ。",
+      "choices": {
+        "A": "遅延セグメント作成はOMFを使用している場合だけ利用できる",
+        "B": "DEFERRED_SEGMENT_CREATIONのデフォルトはTRUEとされる",
+        "C": "CTASで実データが作成時に格納される場合、セグメント作成は実質遅延されない",
+        "D": "遅延セグメント作成を有効にするとクオータは永久に不要になる"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "DEFERRED_SEGMENT_CREATIONのデフォルトはTRUEとされる、CTASで実データが作成時に格納される場合、セグメント作成は実質遅延されない",
+      "explanation": "正解：B、C\n\nA：誤り。OMFとは独立した機能です。\nB：正しい。ノートではデフォルトTRUEです。\nC：正しい。データ格納が発生するためセグメントが必要になります。\nD：誤り。初回データ格納時には記憶域割当てが必要です。",
+      "topic": "遅延セグメント",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q060",
+      "chapter": 24,
+      "question": "セグメントを持つ/持たないオブジェクトについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "REDOログは表領域内のセグメントとして管理される",
+        "B": "クラスタは関連する複数表のデータをまとめるセグメントを持ち得る",
+        "C": "UNDOはUNDO表領域内のUNDOセグメントとして記憶域を使用する",
+        "D": "データを保持しないオブジェクトには通常セグメントが作成されない"
+      },
+      "correctChoice": [
+        "B",
+        "C",
+        "D"
+      ],
+      "correctText": "クラスタは関連する複数表のデータをまとめるセグメントを持ち得る、UNDOはUNDO表領域内のUNDOセグメントとして記憶域を使用する、データを保持しないオブジェクトには通常セグメントが作成されない",
+      "explanation": "正解：B、C、D\n\nA：誤り。REDOはREDOログファイルでありセグメントではありません。\nB：正しい。表クラスタセグメントにデータを格納します。\nC：正しい。UNDOはセグメントとして表領域内に格納されます。\nD：正しい。ビューやシノニムなどはデータ実体を持ちません。",
+      "topic": "特殊セグメント",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q061",
+      "chapter": 24,
+      "question": "UNDOセグメントとトランザクションの対応について正しいものを2つ選べ。",
+      "choices": {
+        "A": "1つのトランザクションは複数のUNDOセグメントに同時にまたがって格納される",
+        "B": "1つのUNDOセグメントに複数トランザクションが割り当てられることがある",
+        "C": "各トランザクションごとに必ず新しいUNDO表領域を作成する",
+        "D": "1つのトランザクションに対応するUNDOセグメントは1つである"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "1つのUNDOセグメントに複数トランザクションが割り当てられることがある、1つのトランザクションに対応するUNDOセグメントは1つである",
+      "explanation": "正解：B、D\n\nA：誤り。1トランザクションは1つのUNDOセグメントに対応します。\nB：正しい。UNDOセグメントは複数トランザクションで共有され得ます。\nC：誤り。既存UNDO表領域のUNDOセグメントを利用します。\nD：正しい。ノートで示された対応関係です。",
+      "topic": "UNDOセグメント対応",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q062",
+      "chapter": 24,
+      "question": "UNDOセグメントのカレントエクステントが満杯で、次に再利用したいエクステントを使用中トランザクションが占有している。起こり得る動作はどれか。",
+      "choices": {
+        "A": "UNDOセグメントに新しいエクステントを追加して利用する",
+        "B": "新しいUNDOセグメントへ現在のトランザクションを移動する",
+        "C": "REDOログファイルをUNDO領域として代用する",
+        "D": "そのトランザクションのUNDOを強制的に上書きする"
+      },
+      "correctChoice": "A",
+      "correctText": "UNDOセグメントに新しいエクステントを追加して利用する",
+      "explanation": "正解：A\n\nA：正しい。再利用できなければ新規エクステントを割り当てます。\nB：誤り。実行中トランザクションが別UNDOセグメントへまたがる説明ではありません。\nC：誤り。REDOとUNDOは用途・格納先が別です。\nD：誤り。アクティブUNDOは上書きできません。",
+      "topic": "UNDOエクステント",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q063",
+      "chapter": 24,
+      "question": "自動UNDO管理で使用するUNDO表領域を新たに構成する際に関係するものを3つ選べ。",
+      "choices": {
+        "A": "UNDO_TABLESPACEで使用するUNDO表領域を指定する",
+        "B": "UNDO_MANAGEMENT=AUTO",
+        "C": "CREATE UNDO TABLESPACE",
+        "D": "SEGMENT SPACE MANAGEMENT MANUALを必須指定する"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "UNDO_TABLESPACEで使用するUNDO表領域を指定する、UNDO_MANAGEMENT=AUTO、CREATE UNDO TABLESPACE",
+      "explanation": "正解：A、B、C\n\nA：正しい。使用対象を初期化パラメータで指定します。\nB：正しい。自動UNDO管理を有効にします。\nC：正しい。UNDO表領域を作成します。\nD：誤り。UNDO構成の必須手順として挙げられていません。",
+      "topic": "UNDO表領域構成",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q064",
+      "chapter": 24,
+      "question": "UNDO_RETENTIONの役割として最も適切なものはどれか。",
+      "choices": {
+        "A": "REDOロググループの保持数を指定する",
+        "B": "トランザクション終了後のUNDOを保持したい期間の目安を秒単位で指定する",
+        "C": "1トランザクションが使用できるUNDOセグメント数を指定する",
+        "D": "一時表領域の自動拡張時間を指定する"
+      },
+      "correctChoice": "B",
+      "correctText": "トランザクション終了後のUNDOを保持したい期間の目安を秒単位で指定する",
+      "explanation": "正解：B\n\nA：誤り。REDO設定ではありません。\nB：正しい。UNDO保存期間を設定するパラメータです。\nC：誤り。トランザクションとUNDOセグメント数の指定ではありません。\nD：誤り。一時表領域設定ではありません。",
+      "topic": "UNDO_RETENTION",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q065",
+      "chapter": 24,
+      "question": "UNDO表領域はAUTOEXTEND OFF、RETENTION GUARANTEE有効である。期限内UNDOで空き領域がなくなった状態で新たな変更がUNDOを必要とした。最も起こり得る結果はどれか。",
+      "choices": {
+        "A": "自動的に別のUNDO表領域へ切り替わる",
+        "B": "REDOログファイルへUNDOを書き込んで継続する",
+        "C": "空き領域を確保できず、新しい変更処理がエラーになる可能性がある",
+        "D": "期限内UNDOを保証期間中でも上書きして処理を続行する"
+      },
+      "correctChoice": "C",
+      "correctText": "空き領域を確保できず、新しい変更処理がエラーになる可能性がある",
+      "explanation": "正解：C\n\nA：誤り。自動で任意の別UNDO表領域へ切り替わる説明ではありません。\nB：誤り。UNDOをREDOログへ代替格納はしません。\nC：正しい。保証を優先するため新規UNDOを確保できず処理失敗となり得ます。\nD：誤り。GUARANTEE有効では期限内UNDOを保護します。",
+      "topic": "RETENTION GUARANTEE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q066",
+      "chapter": 24,
+      "question": "自動UNDO管理でUNDOTBS1を使用中にUNDOTBS2も作成した。UNDO表領域の扱いとして正しいものを2つ選べ。",
+      "choices": {
+        "A": "UNDO表領域には通常のユーザー表を格納する",
+        "B": "UNDO表領域を2つ作成すると必ず同時に負荷分散して使用される",
+        "C": "同時に使用するUNDO表領域として指定されるのは1つである",
+        "D": "複数のUNDO表領域を作成することはできる"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "同時に使用するUNDO表領域として指定されるのは1つである、複数のUNDO表領域を作成することはできる",
+      "explanation": "正解：C、D\n\nA：誤り。UNDO専用の特殊表領域です。\nB：誤り。自動的に複数同時利用する説明ではありません。\nC：正しい。UNDO_TABLESPACEで使用対象を1つ指定します。\nD：正しい。データベース内に複数作成できます。",
+      "topic": "UNDO表領域",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q067",
+      "chapter": 24,
+      "question": "一時UNDOを有効にした場合の説明として正しいものを2つ選べ。",
+      "choices": {
+        "A": "一時表の変更に伴うUNDOを一時表領域へ置ける",
+        "B": "一時表の変更に伴うREDO生成を抑止でき、READ ONLYデータベースでの一時表DMLに利用できる",
+        "C": "通常の永続表に対するUNDOもすべて一時表領域へ移る",
+        "D": "ROLLBACKができなくなる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "一時表の変更に伴うUNDOを一時表領域へ置ける、一時表の変更に伴うREDO生成を抑止でき、READ ONLYデータベースでの一時表DMLに利用できる",
+      "explanation": "正解：A、B\n\nA：正しい。一時UNDOではUNDO出力先を一時表領域へ変更します。\nB：正しい。ノートではこの利点が示されています。\nC：誤り。対象は一時オブジェクトに対する一時UNDOです。\nD：誤り。一時表のトランザクションもロールバック可能です。",
+      "topic": "一時UNDO",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q068",
+      "chapter": 24,
+      "question": "DDLと未確定トランザクションについて正しいものはどれか。",
+      "choices": {
+        "A": "DDLを発行すると、それ以前のDMLは必ずROLLBACKされる",
+        "B": "DDLはトランザクションを開始するだけで終了させない",
+        "C": "DDLを発行してもそれ以前の未確定DMLには一切影響しない",
+        "D": "DDLを発行すると、それ以前の未確定トランザクションはコミットされる"
+      },
+      "correctChoice": "D",
+      "correctText": "DDLを発行すると、それ以前の未確定トランザクションはコミットされる",
+      "explanation": "正解：D\n\nA：誤り。暗黙的に確定されます。\nB：誤り。未確定トランザクションを確定させます。\nC：誤り。ノートではDDL発行時に未確定トランザクションが暗黙的に確定します。\nD：正しい。DDL発行時には暗黙COMMITが発生します。",
+      "topic": "DDLとCOMMIT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q069",
+      "chapter": 24,
+      "question": "SQL*Loaderを起動したがCONTROLパラメータも制御ファイルも指定していない。TABLEパラメータで表を指定している。この実行形態はどれか。",
+      "choices": {
+        "A": "SQL*Loaderエクスプレスモード",
+        "B": "従来パスロードでは必ずCONTROL不要",
+        "C": "Data Pumpインポート",
+        "D": "外部表のORACLE_DATAPUMPアンロード専用モード"
+      },
+      "correctChoice": "A",
+      "correctText": "SQL*Loaderエクスプレスモード",
+      "explanation": "正解：A\n\nA：正しい。制御ファイルなしでTABLEを指定するエクスプレスモードです。\nB：誤り。通常は制御ファイルを使用します。\nC：誤り。SQL*Loaderの実行です。\nD：誤り。別機能です。",
+      "topic": "SQL*Loaderエクスプレス",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q070",
+      "chapter": 24,
+      "question": "sqlldr TABLE=EMP を制御ファイルなしで実行する運用を検討している。SQL*Loaderエクスプレスモードについて正しいものを3つ選べ。",
+      "choices": {
+        "A": "TABLEパラメータでロード先表を指定する",
+        "B": "DATAを省略すると表名.datがデータファイル名として使われる",
+        "C": "外部表によるロードを試さず、常に従来パスロードだけを使う",
+        "D": "並列度はOracleにより自動設定される"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "D"
+      ],
+      "correctText": "TABLEパラメータでロード先表を指定する、DATAを省略すると表名.datがデータファイル名として使われる、並列度はOracleにより自動設定される",
+      "explanation": "正解：A、B、D\n\nA：正しい。エクスプレスモードではTABLE指定が必須です。\nB：正しい。既定のデータファイル名はTABLE名.datです。\nC：誤り。まず外部表ロードを試し、不可ならダイレクトパスロードへ移ります。\nD：正しい。エクスプレスモードでは並列度が自動設定されます。",
+      "topic": "SQL*Loaderエクスプレス",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q071",
+      "chapter": 24,
+      "question": "ORACLE_LOADERを使用する外部表について正しいものを2つ選べ。",
+      "choices": {
+        "A": "外部ファイルのデータをSELECTできる",
+        "B": "外部表上の行を直接UPDATEして外部ファイルを書き換えられる",
+        "C": "ORACLE_LOADERは外部ファイルからのロード用途に使えるがアンロードは行わない",
+        "D": "外部表データは作成時に必ず通常表へコピーされる"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "外部ファイルのデータをSELECTできる、ORACLE_LOADERは外部ファイルからのロード用途に使えるがアンロードは行わない",
+      "explanation": "正解：A、C\n\nA：正しい。外部表は外部ファイルを表のように参照できます。\nB：誤り。外部表のデータは読み取り専用です。\nC：正しい。ノートではORACLE_LOADERはアンロード不可です。\nD：誤り。データ実体は外部ファイルにあります。",
+      "topic": "ORACLE_LOADER・外部表",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q072",
+      "chapter": 24,
+      "question": "外部表に対する操作として可能なものはどれか。",
+      "choices": {
+        "A": "外部表をUPDATEしてCSVの列値を書き換える",
+        "B": "外部表をSELECTし、その結果を通常表へINSERTする",
+        "C": "外部表へ直接INSERTしてOSファイルへ追記する",
+        "D": "外部表に通常索引を作成して検索を高速化する"
+      },
+      "correctChoice": "B",
+      "correctText": "外部表をSELECTし、その結果を通常表へINSERTする",
+      "explanation": "正解：B\n\nA：誤り。外部表は読み取り専用です。\nB：正しい。外部表は読み取り元として利用できます。\nC：誤り。外部表自体へのDMLはできません。\nD：誤り。外部表には通常の索引を作成できません。",
+      "topic": "外部表",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q073",
+      "chapter": 24,
+      "question": "DESCRIBEコマンドの対象としてノート上で挙げられているものを3つ選べ。",
+      "choices": {
+        "A": "ビュー",
+        "B": "OSディレクトリそのもの",
+        "C": "シノニム",
+        "D": "プロシージャやパッケージ"
+      },
+      "correctChoice": [
+        "A",
+        "C",
+        "D"
+      ],
+      "correctText": "ビュー、シノニム、プロシージャやパッケージ",
+      "explanation": "正解：A、C、D\n\nA：正しい。DESCRIBEはビューにも使用可能とされています。\nB：誤り。OSディレクトリをDESCRIBEするコマンドではありません。\nC：正しい。シノニムも対象として挙げられています。\nD：正しい。PL/SQLオブジェクトも対象にできます。",
+      "topic": "DESCRIBE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q074",
+      "chapter": 24,
+      "question": "DUAL表について正しいものを2つ選べ。",
+      "choices": {
+        "A": "VARCHAR2列を持つ",
+        "B": "SELECTするには個別にオブジェクト権限を付与されなければならない",
+        "C": "利用するたびにユーザーがCREATE TABLEする必要がある",
+        "D": "1行のデータを持つ"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "VARCHAR2列を持つ、1行のデータを持つ",
+      "explanation": "正解：A、D\n\nA：正しい。DUALのダミー列は文字列型です。\nB：誤り。ノートではアクセス権限なしでSELECTできるとされています。\nC：誤り。Oracleが用意する表です。\nD：正しい。ノートではDUALは1行を持つとされています。",
+      "topic": "DUAL",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q075",
+      "chapter": 24,
+      "question": "SELECT句でDISTINCTと文字連結演算子を同時に使用することについて正しい説明はどれか。",
+      "choices": {
+        "A": "文字連結を行うとDISTINCTは自動的にUNIONへ変換される",
+        "B": "DISTINCTを指定したSELECTリストでは文字連結を一切使用できない",
+        "C": "文字連結式の結果に対してDISTINCTを適用することができる",
+        "D": "DISTINCTは数値列にしか使用できない"
+      },
+      "correctChoice": "C",
+      "correctText": "文字連結式の結果に対してDISTINCTを適用することができる",
+      "explanation": "正解：C\n\nA：誤り。そのような変換はありません。\nB：誤り。DISTINCTと文字連結は併用できます。\nC：正しい。連結結果をSELECT項目として重複排除できます。\nD：誤り。文字列を含むSELECT結果にも使用できます。",
+      "topic": "DISTINCT・文字連結",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q076",
+      "chapter": 24,
+      "question": "Oracleの日時演算について正しいものを2つ選べ。",
+      "choices": {
+        "A": "DATE - 数値は常にエラーになる",
+        "B": "DATE - DATEでは日数差を数値として得られる",
+        "C": "DATE + 数値では数値を日数として加算できる",
+        "D": "DATE + DATEで2つの日付を加算できる"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "DATE - DATEでは日数差を数値として得られる、DATE + 数値では数値を日数として加算できる",
+      "explanation": "正解：B、C\n\nA：誤り。数値分の日数を減算できます。\nB：正しい。日時差は日数の数値です。\nC：正しい。数値は日数として扱われます。\nD：誤り。日時同士の加算はできません。",
+      "topic": "日時演算",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q077",
+      "chapter": 24,
+      "question": "列別名SAL2をSELECTリストで定義したSQLについて、SAL2を同じSELECT文内で参照できる箇所としてノートのルールに合うものはどれか。",
+      "choices": {
+        "A": "WHERE句",
+        "B": "GROUP BY句では必ず利用できる",
+        "C": "同じSELECTリスト内の別式",
+        "D": "ORDER BY句"
+      },
+      "correctChoice": "D",
+      "correctText": "ORDER BY句",
+      "explanation": "正解：D\n\nA：誤り。WHERE句では列別名を利用しません。\nB：誤り。ノートではORDER BYだけが利用箇所として強調されています。\nC：誤り。列別名は同じSELECTリストの別式では通常利用しません。\nD：正しい。列別名はORDER BYで利用できます。",
+      "topic": "列別名",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q078",
+      "chapter": 24,
+      "question": "複数列の重複を排除したい。OracleのSELECT構文として適切な考え方はどれか。",
+      "choices": {
+        "A": "SELECT DISTINCT col1, col2 ... とSELECTリスト全体に対して指定する",
+        "B": "DISTINCTは1列にしか適用できない",
+        "C": "DISTINCT(col1,col2)と関数形式で囲む",
+        "D": "各列の前にそれぞれDISTINCTを付ける"
+      },
+      "correctChoice": "A",
+      "correctText": "SELECT DISTINCT col1, col2 ... とSELECTリスト全体に対して指定する",
+      "explanation": "正解：A\n\nA：正しい。複数列の組合せに重複排除が適用されます。\nB：誤り。複数列の組合せに適用できます。\nC：誤り。DISTINCTは関数ではありません。\nD：誤り。SELECT文でDISTINCTは1回指定します。",
+      "topic": "DISTINCT構文",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q079",
+      "chapter": 24,
+      "question": "ORDER BYでNULLの並び位置をNULLS FIRST/LASTで明示しない場合について正しいものはどれか。",
+      "choices": {
+        "A": "ASCではNULLが先頭、DESCでは末尾",
+        "B": "ASCではNULLが末尾、DESCでは先頭",
+        "C": "ASC/DESCに関係なく常に先頭",
+        "D": "ASC/DESCに関係なく常に末尾"
+      },
+      "correctChoice": "B",
+      "correctText": "ASCではNULLが末尾、DESCでは先頭",
+      "explanation": "正解：B\n\nA：誤り。ノートでは逆です。\nB：正しい。既定のNULL位置はこの組合せです。\nC：誤り。並び順で既定位置が変わります。\nD：誤り。DESCでは既定で先頭です。",
+      "topic": "NULLソート",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q080",
+      "chapter": 24,
+      "question": "日付関連ファンクションについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "NEXT_DAYは曜日番号しか受け付けず文字列曜日は使えない",
+        "B": "NEXT_DAYは日付と曜日指定からDATE型の日付を返す",
+        "C": "MONTH_BETWEENは必ずTIMESTAMP WITH TIME ZONEを返す",
+        "D": "2つの日付の差は日数の数値として扱える"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "NEXT_DAYは日付と曜日指定からDATE型の日付を返す、2つの日付の差は日数の数値として扱える",
+      "explanation": "正解：B、D\n\nA：誤り。曜日文字列を指定できます。\nB：正しい。NEXT_DAYは次の指定曜日の日付を返します。\nC：誤り。ノートでは日付間の月差を数値で返す関数として扱われています。\nD：正しい。DATE-DATEは日数差です。",
+      "topic": "日時ファンクション",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q081",
+      "chapter": 24,
+      "question": "TO_CHAR(数値, 書式モデル)で整数部の桁数が書式モデルの表示幅を超えた。ノートに沿う表示はどれか。",
+      "choices": {
+        "A": "暗黙的に書式モデルの幅が自動拡張される",
+        "B": "超過した上位桁だけ切り捨てる",
+        "C": "表示結果が#で埋まる",
+        "D": "必ずNULLを返す"
+      },
+      "correctChoice": "C",
+      "correctText": "表示結果が#で埋まる",
+      "explanation": "正解：C\n\nA：誤り。指定幅を超えた場合は#表示です。\nB：誤り。上位桁の切捨てではありません。\nC：正しい。桁あふれ時は#で示されます。\nD：誤り。NULLになる説明ではありません。",
+      "topic": "TO_CHAR数値書式",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q082",
+      "chapter": 24,
+      "question": "CONCAT(数値, DATE値)の実行について、ノートに沿う説明はどれか。",
+      "choices": {
+        "A": "同じデータ型でないため必ずコンパイルエラーになる",
+        "B": "DATEだけが数値へ変換され算術加算される",
+        "C": "数値だけがDATEへ変換され日付加算される",
+        "D": "数値とDATEは文字列へ変換され得るため連結できる"
+      },
+      "correctChoice": "D",
+      "correctText": "数値とDATEは文字列へ変換され得るため連結できる",
+      "explanation": "正解：D\n\nA：誤り。暗黙の文字列変換が働き得ます。\nB：誤り。CONCATは文字列連結です。\nC：誤り。日付演算ではありません。\nD：正しい。CONCATでは文字列変換を介して連結可能とされています。",
+      "topic": "CONCAT・暗黙変換",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q083",
+      "chapter": 24,
+      "question": "集計ファンクションを2レベルでネストしたSELECTについて、ノートの条件に合うものを2つ選べ。",
+      "choices": {
+        "A": "SELECTリストにグループ化されていない個別列を自由に追加できる",
+        "B": "ネストした集計はWHERE句でだけ使用できる",
+        "C": "GROUP BYが必要になる",
+        "D": "集計ファンクションは2レベルまでネスト可能とされる"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "GROUP BYが必要になる、集計ファンクションは2レベルまでネスト可能とされる",
+      "explanation": "正解：C、D\n\nA：誤り。集計との整合が必要で、個別列を自由には置けません。\nB：誤り。WHERE句に集計ファンクションは使用できません。\nC：正しい。2レベルの集計ネストではGROUP BYが必要とされています。\nD：正しい。ノートでは2レベルまでです。",
+      "topic": "集計ネスト",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q084",
+      "chapter": 24,
+      "question": "集計条件の記述について正しいものを2つ選べ。",
+      "choices": {
+        "A": "HAVING句ではSELECTリストにない集計条件を指定できる",
+        "B": "WHERE句にSUMやAVGなどの集計ファンクションを直接使ってグループ結果を絞り込むことはできない",
+        "C": "MINは文字列には使えてもDATEには使えない",
+        "D": "HAVING句で使用した集計ファンクションは必ずSELECTリストにも表示しなければならない"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "HAVING句ではSELECTリストにない集計条件を指定できる、WHERE句にSUMやAVGなどの集計ファンクションを直接使ってグループ結果を絞り込むことはできない",
+      "explanation": "正解：A、B\n\nA：正しい。表示しない集計値でグループを絞り込めます。\nB：正しい。集計後の条件はHAVINGを使用します。\nC：誤り。DATEにもMINを使用し、最古日付を求められます。\nD：誤り。HAVINGで使用してもSELECTへ出す必要はありません。",
+      "topic": "WHERE・HAVING・集計",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q085",
+      "chapter": 24,
+      "question": "最も古い日付を1件の集計値として求めたい。適切なファンクションはどれか。",
+      "choices": {
+        "A": "MIN(date_col)",
+        "B": "MAX(date_col)",
+        "C": "COUNT(date_col)",
+        "D": "SUM(date_col)"
+      },
+      "correctChoice": "A",
+      "correctText": "MIN(date_col)",
+      "explanation": "正解：A\n\nA：正しい。DATEにMINを使うと最小＝最も古い日時を得られます。\nB：誤り。MAXは最も大きい、つまり新しい側の日付です。\nC：誤り。件数を返します。\nD：誤り。DATE値を合計する用途ではありません。",
+      "topic": "MIN(日付)",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q086",
+      "chapter": 24,
+      "question": "ANSI結合構文とOracle独自結合構文について正しいものを2つ選べ。",
+      "choices": {
+        "A": "NATURAL JOINはANSI系の結合構文である",
+        "B": "FULL OUTER JOINはOracle独自の(+)記法でのみ表現できる",
+        "C": "ANSI構文にはFULL OUTER JOINがある",
+        "D": "Oracle独自の旧来結合構文にはNATURAL JOINという専用構文がある"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "NATURAL JOINはANSI系の結合構文である、ANSI構文にはFULL OUTER JOINがある",
+      "explanation": "正解：A、C\n\nA：正しい。自然結合はANSI構文側です。\nB：誤り。ANSI構文にFULL OUTER JOINがあります。\nC：正しい。ANSI結合構文では完全外部結合を明示できます。\nD：誤り。ノートでは自然結合の構文はないとされています。",
+      "topic": "結合構文",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q087",
+      "chapter": 24,
+      "question": "集合演算子による重複判定について正しい説明はどれか。",
+      "choices": {
+        "A": "集合演算ではNULLを含む行は必ず除外される",
+        "B": "集合演算の重複チェックではNULLも同値として扱われ得る",
+        "C": "NULLは常に別々の値として扱われ、重複にはならない",
+        "D": "UNION ALLだけが重複を除去する"
+      },
+      "correctChoice": "B",
+      "correctText": "集合演算の重複チェックではNULLも同値として扱われ得る",
+      "explanation": "正解：B\n\nA：誤り。NULL行が自動除外されるわけではありません。\nB：正しい。UNION等の重複判定ではNULLを同等に扱うとされています。\nC：誤り。ノートでは集合演算の重複チェックでNULLは通常値のように扱われます。\nD：誤り。UNION ALLは重複を保持します。",
+      "topic": "集合演算とNULL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q088",
+      "chapter": 24,
+      "question": "INSERT INTO T VALUES (...) のように列リストを省略したINSERTについて正しいものはどれか。",
+      "choices": {
+        "A": "NOT NULL列だけ値を指定すればよい",
+        "B": "デフォルト値のある列はVALUESから必ず省略する",
+        "C": "NULL許容列やデフォルト設定列を含め、表の全列に対応する値指定が必要である",
+        "D": "主キー列だけ指定すれば残りは自動NULLになる"
+      },
+      "correctChoice": "C",
+      "correctText": "NULL許容列やデフォルト設定列を含め、表の全列に対応する値指定が必要である",
+      "explanation": "正解：C\n\nA：誤り。列リスト省略時は全列分の値が必要です。\nB：誤り。列リストを省略した場合は位置対応で全列分を指定します。\nC：正しい。列指定省略時は全列分のVALUESが必要です。\nD：誤り。列リスト省略時には全列分が必要です。",
+      "topic": "INSERT列リスト省略",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q089",
+      "chapter": 24,
+      "question": "SAVEPOINTを定義するSQLについて正しい説明はどれか。",
+      "choices": {
+        "A": "SAVEPOINTを実行するとトランザクションが自動COMMITされる",
+        "B": "SAVEPOINTはDDLに分類されるためROLLBACKできない",
+        "C": "SAVEPOINTは名前を省略しても自動採番される",
+        "D": "SAVEPOINTには名前を指定する必要がある"
+      },
+      "correctChoice": "D",
+      "correctText": "SAVEPOINTには名前を指定する必要がある",
+      "explanation": "正解：D\n\nA：誤り。セーブポイント設定ではトランザクションを確定しません。\nB：誤り。トランザクション制御に用います。\nC：誤り。セーブポイント名は必須です。\nD：正しい。ROLLBACK TOで参照するため名前を指定します。",
+      "topic": "SAVEPOINT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q090",
+      "chapter": 24,
+      "question": "1表に定義できる列数の上限としてノートに記載されている値はどれか。",
+      "choices": {
+        "A": "1000",
+        "B": "4096",
+        "C": "255",
+        "D": "512"
+      },
+      "correctChoice": "A",
+      "correctText": "1000",
+      "explanation": "正解：A\n\nA：正しい。1表の最大列数は1000と記載されています。\nB：誤り。ノートの上限ではありません。\nC：誤り。ノートの上限ではありません。\nD：誤り。ノートの上限ではありません。",
+      "topic": "表の最大列数",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q091",
+      "chapter": 24,
+      "question": "ALTER TABLE ... SET UNUSEDで列を未使用化した直後について正しいものを2つ選べ。",
+      "choices": {
+        "A": "未使用化した列は通常のSELECTやDESCRIBEの対象から外れる",
+        "B": "未使用化を取り消して元の列へ戻せる",
+        "C": "同じ名前の新しい列を追加することはできない",
+        "D": "未使用化しただけでは、その列のストレージ領域が直ちにすべて解放されるとは限らない"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "未使用化した列は通常のSELECTやDESCRIBEの対象から外れる、未使用化しただけでは、その列のストレージ領域が直ちにすべて解放されるとは限らない",
+      "explanation": "正解：A、D\n\nA：正しい。論理的には利用できない列になります。\nB：誤り。未使用化した列は元に戻せません。\nC：誤り。未使用化後は同名の新列を追加可能です。\nD：正しい。領域解放はDROP UNUSED COLUMNS等で後から行います。",
+      "topic": "未使用列",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q092",
+      "chapter": 24,
+      "question": "DROP TABLE TをPURGEなしで実行した。Tには索引があり、別オブジェクトとしてビュー・シノニム・シーケンスがTを参照/利用している。正しいものを3つ選べ。",
+      "choices": {
+        "A": "Tの主キー値に使っていたシーケンスは必ず自動削除される",
+        "B": "Tを参照するビューそのものはDROP TABLEで自動削除されない",
+        "C": "TへのシノニムそのものもDROP TABLEで自動削除されない",
+        "D": "Tの索引は表とともにゴミ箱へ移動し得る"
+      },
+      "correctChoice": [
+        "B",
+        "C",
+        "D"
+      ],
+      "correctText": "Tを参照するビューそのものはDROP TABLEで自動削除されない、TへのシノニムそのものもDROP TABLEで自動削除されない、Tの索引は表とともにゴミ箱へ移動し得る",
+      "explanation": "正解：B、C、D\n\nA：誤り。シーケンスは表とは独立したオブジェクトです。\nB：正しい。ビューは残ります。\nC：正しい。シノニムは別オブジェクトとして残ります。\nD：正しい。表削除時に索引も表に伴ってゴミ箱へ移ります。",
+      "topic": "DROP TABLE依存オブジェクト",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q093",
+      "chapter": 24,
+      "question": "APPスキーマで複数種類のオブジェクトへ短い別名を付けたい。シノニムについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "シノニムをDROPすると参照先オブジェクトも必ずDROPされる",
+        "B": "表だけでなくビューやシーケンス、別のシノニムを参照先にできる",
+        "C": "シノニム自体はデータを保持しないためセグメントを持たない",
+        "D": "CREATE SYNONYMでは参照先を指定しない"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "表だけでなくビューやシーケンス、別のシノニムを参照先にできる、シノニム自体はデータを保持しないためセグメントを持たない",
+      "explanation": "正解：B、C\n\nA：誤り。シノニム削除は参照先を削除しません。\nB：正しい。シノニムはさまざまなオブジェクトの別名にできます。\nC：正しい。別名オブジェクトなのでデータ実体を持ちません。\nD：誤り。FOR 参照先オブジェクトを指定します。",
+      "topic": "シノニム",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q094",
+      "chapter": 24,
+      "question": "参照先表がまだ作成されていない段階でビュー定義だけ先に用意し、後から索引も検討している。正しいものを2つ選べ。",
+      "choices": {
+        "A": "FORCEビューは参照先がない場合でも常に問い合わせ成功する",
+        "B": "通常のビューに対して索引を直接作成することはできない",
+        "C": "ビュー経由でCREATE INDEXすると実表へ自動的に索引が作成される",
+        "D": "FORCEを指定すると参照先表が存在しない場合でもビュー定義を作成できる"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "通常のビューに対して索引を直接作成することはできない、FORCEを指定すると参照先表が存在しない場合でもビュー定義を作成できる",
+      "explanation": "正解：B、D\n\nA：誤り。定義は作れても参照先が利用できなければ問い合わせは成功しません。\nB：正しい。ビュー自体はデータ実体を持たないため通常索引を作成しません。\nC：誤り。ビュー経由で実表索引を作る仕組みではありません。\nD：正しい。FORCE VIEWは参照先がなくても作成を許容します。",
+      "topic": "FORCE VIEW・索引",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q095",
+      "chapter": 24,
+      "question": "UNIQUE制約とNOT NULL制約について正しいものを2つ選べ。",
+      "choices": {
+        "A": "NOT NULL制約は複数列制約として表レベルにだけ定義する",
+        "B": "1表にUNIQUE制約は1つしか定義できない",
+        "C": "UNIQUE制約だけではNULLを禁止しない",
+        "D": "UNIQUE制約列にはNULLを含む複数行を格納できる"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "UNIQUE制約だけではNULLを禁止しない、UNIQUE制約列にはNULLを含む複数行を格納できる",
+      "explanation": "正解：C、D\n\nA：誤り。NOT NULLは列レベルで指定します。\nB：誤り。UNIQUE制約は複数定義できます。\nC：正しい。UNIQUEは重複値を禁止しますがNULL自体は禁止しません。\nD：正しい。ノートではNULLは重複チェック対象外として複数行を許容します。",
+      "topic": "UNIQUE・NOT NULL",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q096",
+      "chapter": 24,
+      "question": "列Cに既存の非一意索引IDX_Cがある。Cへ主キー制約を追加したい。最初に必ず実施すべきこととして適切な説明はどれか。",
+      "choices": {
+        "A": "CへNULLを追加して一意性チェックを無効にする",
+        "B": "まず主キー制約に違反する重複/NULLデータがないか確認する",
+        "C": "非一意索引は主キーに絶対使えないため、必ずIDX_CをDROPする",
+        "D": "IDX_CをUNUSABLEにすれば重複データがあっても主キーを追加できる"
+      },
+      "correctChoice": "B",
+      "correctText": "まず主キー制約に違反する重複/NULLデータがないか確認する",
+      "explanation": "正解：B\n\nA：誤り。主キーはNULLも許容しません。\nB：正しい。制約追加には既存データが主キー条件を満たす必要があります。\nC：誤り。既存索引を利用できる場合があり、必ず削除とは限りません。\nD：誤り。索引状態を変えてもデータ違反は解消されません。",
+      "topic": "主キー・既存索引",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q097",
+      "chapter": 24,
+      "question": "外部キー制約のON DELETEオプションについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "ON DELETE CASCADEは外部キー制約の定義側で指定する",
+        "B": "ON DELETE SET NULLは親行削除時に参照する子行の外部キーをNULLにする",
+        "C": "ON DELETE CASCADEは主キー制約の定義側にのみ指定する",
+        "D": "ON DELETE SET NULLを指定すると親行の主キー値がNULLになる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ON DELETE CASCADEは外部キー制約の定義側で指定する、ON DELETE SET NULLは親行削除時に参照する子行の外部キーをNULLにする",
+      "explanation": "正解：A、B\n\nA：正しい。子表側の外部キー制約に指定します。\nB：正しい。子行を残して外部キー値をNULLにします。\nC：誤り。外部キー制約に指定します。\nD：誤り。NULLになるのは参照している子表の外部キーです。",
+      "topic": "ON DELETE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q098",
+      "chapter": 24,
+      "question": "グローバル一時表について正しいものを3つ選べ。",
+      "choices": {
+        "A": "格納した行データはそのセッションからだけ見える",
+        "B": "通常のトランザクションと同様にROLLBACKできる",
+        "C": "表定義はデータベース全体で共通し、他セッションからも定義を確認できる",
+        "D": "あるセッションがINSERTした行は同時接続中の全セッションで共有される"
+      },
+      "correctChoice": [
+        "A",
+        "B",
+        "C"
+      ],
+      "correctText": "格納した行データはそのセッションからだけ見える、通常のトランザクションと同様にROLLBACKできる、表定義はデータベース全体で共通し、他セッションからも定義を確認できる",
+      "explanation": "正解：A、B、C\n\nA：正しい。データはセッションごとに分離されます。\nB：正しい。一時表の変更もロールバック可能です。\nC：正しい。GTTの定義はデータディクショナリに永続化されます。\nD：誤り。行データはセッションごとに独立します。",
+      "topic": "グローバル一時表",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q099",
+      "chapter": 24,
+      "question": "TIMESTAMP WITH LOCAL TIME ZONE列に値を格納する際の説明として最も適切なものはどれか。",
+      "choices": {
+        "A": "DATE型へ自動変換してタイムゾーン情報を完全に無視する",
+        "B": "入力時のタイムゾーンリージョン名をそのまま列値に保存する",
+        "C": "データベース側の基準へ正規化して保存し、列値にはタイムゾーンオフセット/リージョンを保持しない",
+        "D": "入力時のタイムゾーンオフセットをそのまま列値に保存する"
+      },
+      "correctChoice": "C",
+      "correctText": "データベース側の基準へ正規化して保存し、列値にはタイムゾーンオフセット/リージョンを保持しない",
+      "explanation": "正解：C\n\nA：誤り。型としてはTIMESTAMP WITH LOCAL TIME ZONEのままです。\nB：誤り。LOCAL TIME ZONE型はリージョン名を列値として保持しません。\nC：正しい。LOCAL TIME ZONE型は正規化して保存されます。\nD：誤り。オフセット自体を保持する型ではありません。",
+      "topic": "TIMESTAMP WITH LOCAL TIME ZONE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q100",
+      "chapter": 24,
+      "question": "次のうち「データベースがOPENしていなくても利用できる可能性があるもの」を2つ選べ。",
+      "choices": {
+        "A": "管理権限ユーザーのOS認証による接続",
+        "B": "SYSTEM表領域上のDBA_TABLESを通常ユーザーが問い合わせる",
+        "C": "Cloud Controlからの管理操作",
+        "D": "EM Expressへのログインと管理"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "管理権限ユーザーのOS認証による接続、Cloud Controlからの管理操作",
+      "explanation": "正解：A、C\n\nA：正しい。インスタンス起動操作のためOPEN前でも管理権限認証が必要です。\nB：誤り。OPEN前はデータファイル上のデータディクショナリを通常参照できません。\nC：正しい。Cloud Controlは対象DB内部に依存しない独立管理基盤です。\nD：誤り。EM Expressは対象DB内で動作するためDB利用可能状態が必要です。",
+      "topic": "OPEN前の管理",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q101",
+      "chapter": 24,
+      "question": "ある管理者が「表領域の空き不足でDMLが停止したので、表領域を拡張してSQLを途中から続行させたい」と考えている。必要な考え方として正しいものを2つ選べ。",
+      "choices": {
+        "A": "再開可能領域割り当てを有効にしておく",
+        "B": "必ずSHUTDOWN ABORTしてインスタンスリカバリを実行する",
+        "C": "ALTER INDEX UNUSABLEを対象表の全索引へ実行することが必須である",
+        "D": "待機時間内に表領域不足の原因を解消する"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "再開可能領域割り当てを有効にしておく、待機時間内に表領域不足の原因を解消する",
+      "explanation": "正解：A、D\n\nA：正しい。領域不足時に即時失敗せず一時停止させるためです。\nB：誤り。領域不足対応にABORTは不要です。\nC：誤り。再開可能領域割り当ての必須条件ではありません。\nD：正しい。原因を解消すると処理を再開できます。",
+      "topic": "再開可能処理の運用",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q102",
+      "chapter": 24,
+      "question": "DBサーバーの負荷調査中、Oracle Net接続だけを確認したい。tnspingは成功するがアプリケーション接続はORA-12514で失敗する。この状況から考えやすいものはどれか。",
+      "choices": {
+        "A": "必ずSQL構文エラーでありアラートログに記録される",
+        "B": "名前解決もリスナー到達も失敗している",
+        "C": "必ずユーザーの表領域クオータ不足である",
+        "D": "リスナーへは到達できるが、要求サービスの登録/認識に問題がある可能性がある"
+      },
+      "correctChoice": "D",
+      "correctText": "リスナーへは到達できるが、要求サービスの登録/認識に問題がある可能性がある",
+      "explanation": "正解：D\n\nA：誤り。接続段階の問題でSQL構文とは無関係です。\nB：誤り。tnsping成功ならその範囲は成功しています。\nC：誤り。接続サービス認識のエラーとクオータは別です。\nD：正しい。tnsping成功で名前解決とリスナー到達は確認できるため、残る候補としてサービス登録/認識の問題を切り分けます。",
+      "topic": "Oracle Net障害切り分け",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q103",
+      "chapter": 24,
+      "question": "大量ロード前に索引をUNUSABLEにして領域を解放した。ロード中のDMLと索引について正しいものを2つ選べ。",
+      "choices": {
+        "A": "UNUSABLEにしても索引セグメントと索引データはそのまま完全保持される",
+        "B": "UNUSABLE化で索引セグメントは削除され得る",
+        "C": "UNUSABLE中はDMLに伴う索引エントリの通常メンテナンスは行われない",
+        "D": "再利用するには表をDROPして作り直すしかない"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "UNUSABLE化で索引セグメントは削除され得る、UNUSABLE中はDMLに伴う索引エントリの通常メンテナンスは行われない",
+      "explanation": "正解：B、C\n\nA：誤り。領域解放のため索引セグメントを削除します。\nB：正しい。ノートではUNUSABLEで索引セグメントを削除して領域解放します。\nC：正しい。索引データが存在しないため通常の索引メンテナンス対象になりません。\nD：誤り。索引REBUILDで再構築できます。",
+      "topic": "UNUSABLE索引",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q104",
+      "chapter": 24,
+      "question": "基本表圧縮を設定した表へデータを追加する。圧縮対象になりやすい操作を2つ選べ。",
+      "choices": {
+        "A": "SELECTだけで未圧縮行が自動再圧縮される",
+        "B": "ALTER TABLE MOVE",
+        "C": "通常パスの単純な1行INSERTは常に圧縮される",
+        "D": "ダイレクトパスINSERT"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "ALTER TABLE MOVE、ダイレクトパスINSERT",
+      "explanation": "正解：B、D\n\nA：誤り。SELECTはデータ再格納処理ではありません。\nB：正しい。MOVE時にもデータを圧縮できます。\nC：誤り。基本表圧縮では通常DMLは圧縮対象になりません。\nD：正しい。基本表圧縮ではダイレクトパスロードが圧縮契機です。",
+      "topic": "基本表圧縮",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q105",
+      "chapter": 24,
+      "question": "表Tに対してDROP TABLEを行う前に、依存オブジェクトへの影響を確認している。正しいものを2つ選べ。",
+      "choices": {
+        "A": "Tを参照するビューは定義自体が自動DROPされる",
+        "B": "Tの主キー用シーケンスは表に従属するため必ず削除される",
+        "C": "T上の索引はTとともに削除対象になる",
+        "D": "Tへのシノニムは自動DROPされず残り得る"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "T上の索引はTとともに削除対象になる、Tへのシノニムは自動DROPされず残り得る",
+      "explanation": "正解：C、D\n\nA：誤り。ビュー自体は残ります。\nB：誤り。シーケンスは表とは独立しています。\nC：正しい。索引は表に従属して削除されます。\nD：正しい。シノニム定義は別オブジェクトとして残ります。",
+      "topic": "DROP TABLE影響",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q106",
+      "chapter": 24,
+      "question": "一時表を利用するセッションでCOMMIT/ROLLBACKの挙動を確認している。正しいものを2つ選べ。",
+      "choices": {
+        "A": "ON COMMIT DELETE ROWSのGTTではCOMMIT時にそのセッションの行が削除される",
+        "B": "一時表に対するDMLもトランザクションとしてROLLBACKできる",
+        "C": "一時表ではUNDOが一切生成されないためROLLBACK機能は存在しない",
+        "D": "GTTの表定義自体もCOMMITごとに削除される"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ON COMMIT DELETE ROWSのGTTではCOMMIT時にそのセッションの行が削除される、一時表に対するDMLもトランザクションとしてROLLBACKできる",
+      "explanation": "正解：A、B\n\nA：正しい。トランザクション終了時に行を消す定義です。\nB：正しい。一時表の変更もロールバック可能です。\nC：誤り。一時表でもUNDOを使用し、ロールバックできます。\nD：誤り。GTT定義は永続化されています。",
+      "topic": "一時表トランザクション",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q107",
+      "chapter": 24,
+      "question": "行連鎖について正しい説明はどれか。",
+      "choices": {
+        "A": "UPDATEによって行サイズや格納状態が変化した場合にも発生する可能性がある",
+        "B": "発生すると必ず表セグメントが削除される",
+        "C": "発生するとUNDO表領域へ表データ本体が移動する",
+        "D": "INSERT時にしか発生せず、UPDATEでは発生しない"
+      },
+      "correctChoice": "A",
+      "correctText": "UPDATEによって行サイズや格納状態が変化した場合にも発生する可能性がある",
+      "explanation": "正解：A\n\nA：正しい。行連鎖はUPDATEでも起こり得ます。\nB：誤り。行連鎖は行格納状態の問題で、セグメント削除を意味しません。\nC：誤り。UNDOは過去データ用で、表データ本体の移動先ではありません。\nD：誤り。ノートではUPDATEによっても行連鎖が起こる可能性があるとされています。",
+      "topic": "行連鎖",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q108",
+      "chapter": 24,
+      "question": "Oracle Netの構成作業と接続障害調査で複数ツールを使い分ける。ツールの役割として正しいものを2つ選べ。",
+      "choices": {
+        "A": "NetCAはNet Managerより設定範囲が限定され、DBCAから内部的に起動される場合もある",
+        "B": "tnspingはリスナーを起動・停止するユーティリティである",
+        "C": "Oracle Net Managerは比較的広範囲のOracle Net Services設定を行える",
+        "D": "lsnrctlはtnsnames.oraをGUI編集するためのツールである"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "NetCAはNet Managerより設定範囲が限定され、DBCAから内部的に起動される場合もある、Oracle Net Managerは比較的広範囲のOracle Net Services設定を行える",
+      "explanation": "正解：A、C\n\nA：正しい。NetCAは主要設定に絞ったGUIツールでDBCAから利用されることもあります。\nB：誤り。tnspingは名前解決とリスナー到達確認に使います。\nC：正しい。Net Managerは広い範囲のネットワーク設定を扱います。\nD：誤り。lsnrctlはリスナー制御用のコマンドラインユーティリティです。",
+      "topic": "Oracle Net設定ツール",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q109",
+      "chapter": 24,
+      "question": "読み取り一貫性の観点から、ノートに沿う説明を2つ選べ。",
+      "choices": {
+        "A": "データファイル上の情報を基にするデータディクショナリビューではUNDOを利用した読み取り一貫性が働く",
+        "B": "動的パフォーマンスビューは必ずSYSTEM表領域の実表だけを参照する",
+        "C": "データディクショナリビューはUNDOを一切使用しない",
+        "D": "SGAや制御ファイルの内部情報を直接示す動的パフォーマンスビューでは同じ意味の読み取り一貫性は保証されない"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "データファイル上の情報を基にするデータディクショナリビューではUNDOを利用した読み取り一貫性が働く、SGAや制御ファイルの内部情報を直接示す動的パフォーマンスビューでは同じ意味の読み取り一貫性は保証されない",
+      "explanation": "正解：A、D\n\nA：正しい。データファイル上のデータに対してUNDOによる一貫性が提供されます。\nB：誤り。SGAや制御ファイル由来の情報を表示します。\nC：誤り。データファイル上のデータに対する読み取り一貫性でUNDOが関係します。\nD：正しい。動的な内部状態を示すため通常表と同様の一貫性は保証されないとされています。",
+      "topic": "読み取り一貫性と管理ビュー",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q110",
+      "chapter": 24,
+      "question": "ローカルネーミングで指定した接続識別子がtnsnames.oraに見つからない。ポート番号以前の段階で失敗している。この障害として最も近いものはどれか。",
+      "choices": {
+        "A": "主キー制約違反",
+        "B": "名前解決の失敗",
+        "C": "セグメント領域管理方式の不一致",
+        "D": "UNDO表領域不足"
+      },
+      "correctChoice": "B",
+      "correctText": "名前解決の失敗",
+      "explanation": "正解：B\n\nA：誤り。DML実行前の接続段階の問題です。\nB：正しい。接続識別子から接続記述子を得られていないため名前解決の問題です。\nC：誤り。Oracle Netの名前解決とは無関係です。\nD：誤り。接続識別子の解決とは無関係です。",
+      "topic": "Oracle Net名前解決",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q111",
+      "chapter": 24,
+      "question": "ユーザーUへ表領域TBSの利用上限を事実上無制限にする方法としてノートに挙げられているものを2つ選べ。",
+      "choices": {
+        "A": "GRANT CREATE SESSION TO U",
+        "B": "ALTER USER U QUOTA UNLIMITED ON TBS",
+        "C": "GRANT UNLIMITED TABLESPACE TO U",
+        "D": "ALTER SYSTEM SET DB_BLOCK_SIZE=UNLIMITED"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "ALTER USER U QUOTA UNLIMITED ON TBS、GRANT UNLIMITED TABLESPACE TO U",
+      "explanation": "正解：B、C\n\nA：誤り。接続権限であり領域割当て上限は変更しません。\nB：正しい。特定表領域のクオータをUNLIMITEDにできます。\nC：正しい。全対象表領域に対する無制限割当て権限です。\nD：誤り。DB_BLOCK_SIZEはブロックサイズで、クオータ設定ではありません。",
+      "topic": "クオータ無制限",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q112",
+      "chapter": 24,
+      "question": "OMFと表領域のエクステント管理方式について正しい説明はどれか。",
+      "choices": {
+        "A": "OMFはローカル管理表領域でしか利用できない",
+        "B": "OMFを有効にすると表領域は自動的にbigfileへ変換される",
+        "C": "OMFはディクショナリ管理方式の表領域でも利用できる",
+        "D": "OMFを使用するとクオータが無効になる"
+      },
+      "correctChoice": "C",
+      "correctText": "OMFはディクショナリ管理方式の表領域でも利用できる",
+      "explanation": "正解：C\n\nA：誤り。ノートではディクショナリ管理方式でもOMFは利用可能とされています。\nB：誤り。OMFとbigfile/smallfileは別の概念です。\nC：正しい。OMFはファイル名や作成/削除の管理方式で、エクステント管理方式とは別です。\nD：誤り。OMFはユーザークオータを無効化しません。",
+      "topic": "OMFと管理方式",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q113",
+      "chapter": 24,
+      "question": "OLTPと一時表領域の利用について正しいものを2つ選べ。",
+      "choices": {
+        "A": "一時表領域を利用するにはユーザーごとに必ずクオータが必要である",
+        "B": "OLTPは少量の追加・更新・削除などをリアルタイムに処理する形態を指す",
+        "C": "OLTPではSELECT以外のDMLを実行しない",
+        "D": "メモリーに収まらない大規模ソートでは一時表領域を使用することがある"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "OLTPは少量の追加・更新・削除などをリアルタイムに処理する形態を指す、メモリーに収まらない大規模ソートでは一時表領域を使用することがある",
+      "explanation": "正解：B、D\n\nA：誤り。一時表領域利用にクオータは不要です。\nB：正しい。ノートではOLTPを日常的な小規模トランザクション処理として説明しています。\nC：誤り。追加・更新・削除などが中心です。\nD：正しい。大規模ソートの作業領域として一時表領域が利用されます。",
+      "topic": "OLTP・一時表領域",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q114",
+      "chapter": 24,
+      "question": "PASSWORD_CASE_SENSITIVEという名称について、ノートに沿う説明はどれか。",
+      "choices": {
+        "A": "プロファイルのパスワード管理属性であり、TRUE/FALSEを指定する",
+        "B": "RESOURCE_LIMIT初期化パラメータの別名である",
+        "C": "REMOTE_LOGIN_PASSWORDFILE初期化パラメータの別名である",
+        "D": "その名称のプロファイル属性は存在しない"
+      },
+      "correctChoice": "D",
+      "correctText": "その名称のプロファイル属性は存在しない",
+      "explanation": "正解：D\n\nA：誤り。ノートではPASSWORD_CASE_SENSITIVEというプロファイル属性は存在しないとされています。\nB：誤り。RESOURCE_LIMITはプロファイルによるリソース制限の有効化に関係する初期化パラメータです。\nC：誤り。REMOTE_LOGIN_PASSWORDFILEは管理権限ユーザーのパスワードファイル認証に関係します。\nD：正しい。ノートではPASSWORD_CASE_SENSITIVEという名称のプロファイル属性はないと整理されています。",
+      "topic": "プロファイル属性",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q115",
+      "chapter": 24,
+      "question": "置換変数を使用するSQLスクリプトを実行しており、置換前後の表示を抑止したい。ノートに沿う設定はどれか。",
+      "choices": {
+        "A": "SET VERIFY OFF",
+        "B": "SET ROLE OFF",
+        "C": "SET TRANSACTION READ ONLY",
+        "D": "ALTER SESSION SET VERIFY=FALSE"
+      },
+      "correctChoice": "A",
+      "correctText": "SET VERIFY OFF",
+      "explanation": "正解：A\n\nA：正しい。VERIFYをOFFにして置換前後の確認表示を抑止します。\nB：誤り。ロールの有効状態を扱うコマンドです。\nC：誤り。トランザクション特性の設定です。\nD：誤り。VERIFYはSQL*Plus系のSET設定です。",
+      "topic": "SET VERIFY",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q116",
+      "chapter": 24,
+      "question": "文字列リテラル内にシングルクォートを含めたい。ノートに沿う方法を2つ選べ。",
+      "choices": {
+        "A": "DISTINCTを付ければクォートのエスケープは不要になる",
+        "B": "文字列中のシングルクォートは必ず削除しなければならない",
+        "C": "代替引用記法で<>のような区切りを使用する",
+        "D": "通常の引用では文字列中のシングルクォートを2つ連続して表現する"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "代替引用記法で<>のような区切りを使用する、通常の引用では文字列中のシングルクォートを2つ連続して表現する",
+      "explanation": "正解：C、D\n\nA：誤り。DISTINCTは重複排除で文字列構文とは無関係です。\nB：誤り。エスケープや代替引用で表現できます。\nC：正しい。ノートでは代替引用の囲みとして<>も利用できるとされています。\nD：正しい。シングルクォートは重ねてエスケープできます。",
+      "topic": "文字列リテラル",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q117",
+      "chapter": 24,
+      "question": "シーケンスと他スキーマアクセスについて正しいものを2つ選べ。",
+      "choices": {
+        "A": "シーケンスの現在値などの管理情報はデータディクショナリで管理される",
+        "B": "他スキーマのシーケンスを利用するには対応するオブジェクト権限が必要になる",
+        "C": "シーケンス値は表セグメント内に行として格納される",
+        "D": "他スキーマのオブジェクトはPUBLICシノニムがあれば権限なしで必ず利用できる"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "シーケンスの現在値などの管理情報はデータディクショナリで管理される、他スキーマのシーケンスを利用するには対応するオブジェクト権限が必要になる",
+      "explanation": "正解：A、B\n\nA：正しい。シーケンスはスキーマオブジェクトで、その管理情報はディクショナリにあります。\nB：正しい。他スキーマオブジェクトへのアクセスには権限が必要です。\nC：誤り。シーケンスは表データを保持するセグメントではありません。\nD：誤り。名前解決とアクセス権限は別です。",
+      "topic": "シーケンス・権限",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q118",
+      "chapter": 24,
+      "question": "PURGEを指定せずDROP TABLEした表を復元したい。関連する説明として正しいものを2つ選べ。",
+      "choices": {
+        "A": "表に付属する索引も表に伴ってゴミ箱へ移動し得る",
+        "B": "PURGEを指定した表ほどゴミ箱から復元しやすい",
+        "C": "削除表はRECYCLE BINへ移動し得る",
+        "D": "FLASHBACK DROPはUNDO_RETENTIONだけを使って削除表を復元する機能である"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "表に付属する索引も表に伴ってゴミ箱へ移動し得る、削除表はRECYCLE BINへ移動し得る",
+      "explanation": "正解：A、C\n\nA：正しい。索引も表とともにゴミ箱へ移動します。\nB：誤り。PURGEするとゴミ箱を経由せず完全削除されます。\nC：正しい。PURGEなしではゴミ箱機能の対象になります。\nD：誤り。ゴミ箱内の削除済み表を戻す機能です。",
+      "topic": "RECYCLE BIN・フラッシュバックドロップ",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q119",
+      "chapter": 24,
+      "question": "GROUP BYで列DEPTNOごとに集計している。DEPTNOをSELECTリストに表示したくない。ノートに沿う説明はどれか。",
+      "choices": {
+        "A": "DEPTNOを表示しない場合はGROUP BY自体が無効になる",
+        "B": "GROUP BYにDEPTNOを指定していても、SELECTリストからDEPTNOを省略できる",
+        "C": "DEPTNOを省略するとWHERE句に集計関数を置く必要がある",
+        "D": "GROUP BYに指定した列は必ずSELECTリストにも指定しなければならない"
+      },
+      "correctChoice": "B",
+      "correctText": "GROUP BYにDEPTNOを指定していても、SELECTリストからDEPTNOを省略できる",
+      "explanation": "正解：B\n\nA：誤り。表示とグループ化は別です。\nB：正しい。グループ化に使用しても表示は必須ではありません。\nC：誤り。そのような必要はありません。\nD：誤り。ノートではGROUP BY列をSELECTに出さなくてもよいとされています。",
+      "topic": "GROUP BY列とSELECT",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q120",
+      "chapter": 24,
+      "question": "NetCAとDBCAの関係について正しい説明はどれか。",
+      "choices": {
+        "A": "DBCAとNetCAは同じ実行ファイルの別名で、機能差はない",
+        "B": "NetCAはData Pumpジョブを制御するためにDBCAから起動される",
+        "C": "DBCAのネットワーク構成処理でNetCAが内部的に利用される場合がある",
+        "D": "NetCAはUNDO表領域を作成するためのツールである"
+      },
+      "correctChoice": "C",
+      "correctText": "DBCAのネットワーク構成処理でNetCAが内部的に利用される場合がある",
+      "explanation": "正解：C\n\nA：誤り。用途の異なるツールです。\nB：誤り。Data Pump制御ツールではありません。\nC：正しい。DBCAから内部的にNetCAを起動してネットワーク設定を行う場合があります。\nD：誤り。Oracle Net Servicesの設定ツールです。",
+      "topic": "NetCA・DBCA",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q121",
+      "chapter": 24,
+      "question": "アラートログの記録内容を確認している。通常のユーザーがデータベースへログインし、その後正常にログアウトした。この事実について最も適切な説明はどれか。",
+      "choices": {
+        "A": "すべてのログインとログアウトが必ずアラートログへ1行ずつ記録される",
+        "B": "ログイン情報は必ずインシデントとしてincdir配下に保存される",
+        "C": "ログアウトすると必ずORA-エラー番号がアラートログに記録される",
+        "D": "通常のセッション確立・終了は、それだけではアラートログの代表的な記録対象ではない"
+      },
+      "correctChoice": "D",
+      "correctText": "通常のセッション確立・終了は、それだけではアラートログの代表的な記録対象ではない",
+      "explanation": "正解：D\n\nA：誤り。通常のセッション確立情報は記録対象ではありません。\nB：誤り。通常ログインはインシデントではありません。\nC：誤り。正常ログアウトでORAエラーが必ず出ることはありません。\nD：正しい。ノートではログイン/ログアウトのセッション確立情報はアラートログに記録されないとされています。",
+      "topic": "アラートログとセッション",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q122",
+      "chapter": 24,
+      "question": "通常の永続表に対するDMLで生成されるREDOについて、ノートに沿うものを2つ選べ。",
+      "choices": {
+        "A": "変更に伴うUNDOデータの生成・変更についてもREDOが生成される",
+        "B": "すべての一時表DMLでも通常表と同じ量のREDOが必ず生成され、一時UNDO設定では変化しない",
+        "C": "UNDOを生成するDMLではREDOは一切生成されない",
+        "D": "表データの変更そのものに伴ってREDOが生成される"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "変更に伴うUNDOデータの生成・変更についてもREDOが生成される、表データの変更そのものに伴ってREDOが生成される",
+      "explanation": "正解：A、D\n\nA：正しい。UNDO表領域への変更も保護対象となるため、その変更に伴うREDOが生成されます。\nB：誤り。一時UNDOを利用すると一時表変更のREDO生成を抑止できます。\nC：誤り。通常のDMLではデータ変更とUNDO側の変更に伴いREDOが生成されます。\nD：正しい。データ変更の履歴としてREDOが生成されます。",
+      "topic": "REDOとUNDO",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch24q123",
+      "chapter": 24,
+      "question": "複数サーバー上のOracle DatabaseをCloud Controlで一元管理する構成を準備している。Cloud Controlの主要構成要素と役割の組合せとして最も適切なものはどれか。",
+      "choices": {
+        "A": "OMSがWebベースの管理サービスを提供し、OMRが管理情報を保持するリポジトリDBとなり、OMAが各管理対象サーバーで情報収集・制御を行う",
+        "B": "OMAがWebベースの管理サービスを提供し、OMSが各管理対象サーバーに配置され、OMRがリスナー制御専用プロセスとなる",
+        "C": "OMRが各管理対象サーバーで情報収集し、OMAが管理情報用データベースとなり、OMSはデータベース作成時だけ使用される",
+        "D": "Cloud Controlは対象データベース内だけで完結するため、OMS・OMR・OMAのような独立した構成要素は不要である"
+      },
+      "correctChoice": "A",
+      "correctText": "OMSがWebベースの管理サービスを提供し、OMRが管理情報を保持するリポジトリDBとなり、OMAが各管理対象サーバーで情報収集・制御を行う",
+      "explanation": "正解：A\n\nA：正しい。OMSは管理コンソールを提供する管理サービス、OMRはCloud Controlの管理情報を保持するリポジトリデータベース、OMAは各管理対象サーバーで情報収集や制御を担当します。\nB：誤り。OMS・OMA・OMRの役割が入れ替わっています。OMAは管理対象サーバー側のエージェントです。\nC：誤り。OMRはリポジトリデータベースであり、管理対象サーバー上の収集エージェントではありません。\nD：誤り。Cloud ControlはOracle Databaseとは独立した管理製品で、OMS・OMR・OMAを組み合わせて構成します。",
+      "topic": "Cloud Controlアーキテクチャ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q124",
+      "chapter": 24,
+      "question": "次の表がある。\\n\\nCREATE TABLE ORDERS (\\n  ID NUMBER,\\n  STATUS VARCHAR2(10) DEFAULT 'NEW'\\n);\\n\\n続けて次の2文を実行した。\\n\\n① INSERT INTO ORDERS (ID) VALUES (1);\\n② INSERT INTO ORDERS (ID, STATUS) VALUES (2, NULL);\\n\\nID=1とID=2のSTATUSに格納される値の組合せとして正しいものはどれか。",
+      "choices": {
+        "A": "ID=1はNULL、ID=2は'NEW'",
+        "B": "ID=1は'NEW'、ID=2はNULL",
+        "C": "どちらも'NEW'",
+        "D": "どちらもNULL"
+      },
+      "correctChoice": "B",
+      "correctText": "ID=1は'NEW'、ID=2はNULL",
+      "explanation": "正解：B\n\nA：誤り。列をINSERT文の列リストから省略した場合はデフォルト値が使用されます。一方、NULLを明示指定した場合はNULLが格納されます。\nB：正しい。①ではSTATUSを省略しているためDEFAULTの'NEW'が使用され、②ではSTATUSにNULLを明示しているためNULLが格納されます。\nC：誤り。DEFAULTが定義されていても、NULLを明示的にINSERTした場合まで自動的にデフォルト値へ置き換わるわけではありません。\nD：誤り。①はSTATUS列を省略しているためDEFAULT値が適用されます。",
+      "topic": "DEFAULT値とNULL",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q125",
+      "chapter": 24,
+      "question": "EMP表にDEPTNOとSALが存在する。次のSQLを実行した。\\n\\nSELECT DEPTNO, MAX(AVG(SAL))\\nFROM EMP\\nGROUP BY DEPTNO;\\n\\nこのSQLについて最も適切な説明はどれか。",
+      "choices": {
+        "A": "部門ごとにAVG(SAL)と同じ値が返され、DEPTNOごとに複数行が返る",
+        "B": "全グループのAVG(SAL)の最大値を持つ部門だけが自動的に選ばれ、DEPTNOと最大平均給与の1行が返る",
+        "C": "集計ファンクションをネストした結果とGROUP BY列を同じSELECTリストに並べているため、そのままでは実行できない",
+        "D": "Oracleでは集計ファンクションをネストすること自体が禁止されているため、GROUP BYの有無にかかわらず実行できない"
+      },
+      "correctChoice": "C",
+      "correctText": "集計ファンクションをネストした結果とGROUP BY列を同じSELECTリストに並べているため、そのままでは実行できない",
+      "explanation": "正解：C\n\nA：誤り。MAX(AVG(SAL))は部門別平均をさらに集計する2レベルの集計であり、DEPTNOごとの平均をそのまま返す式ではありません。\nB：誤り。最大平均値だけを求めても、その値を持つDEPTNOが自動的に同時取得されるわけではありません。\nC：正しい。2レベルにネストした集計結果を求める問い合わせでは、GROUP BYに使用したDEPTNOを同じSELECTリストへ並べることはできません。\nD：誤り。Oracleでは集計ファンクションのネスト自体は可能で、2レベルの集計ではGROUP BYが関係します。",
+      "topic": "集計ファンクションのネスト",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q126",
+      "chapter": 24,
+      "question": "表Tに対して、①STATUS VARCHAR2(10)列を追加、②NAME列をVARCHAR2(100)へ変更、③OLD_COL列を削除、の3つを順に実施したい。3つの操作をすべて正しく表すSQLの組合せはどれか。",
+      "choices": {
+        "A": "ALTER TABLE T MODIFY (STATUS VARCHAR2(10)); / ALTER TABLE T ADD (NAME VARCHAR2(100)); / ALTER TABLE T DROP OLD_COL;",
+        "B": "ALTER TABLE T ADD (STATUS VARCHAR2(10)); / ALTER TABLE T CHANGE (NAME VARCHAR2(100)); / ALTER TABLE T DELETE COLUMN OLD_COL;",
+        "C": "ALTER TABLE T CREATE (STATUS VARCHAR2(10)); / ALTER TABLE T MODIFY (NAME VARCHAR2(100)); / DROP COLUMN OLD_COL FROM T;",
+        "D": "ALTER TABLE T ADD (STATUS VARCHAR2(10)); / ALTER TABLE T MODIFY (NAME VARCHAR2(100)); / ALTER TABLE T DROP COLUMN OLD_COL;"
+      },
+      "correctChoice": "D",
+      "correctText": "ALTER TABLE T ADD (STATUS VARCHAR2(10)); / ALTER TABLE T MODIFY (NAME VARCHAR2(100)); / ALTER TABLE T DROP COLUMN OLD_COL;",
+      "explanation": "正解：D\n\nA：誤り。列追加にMODIFY、既存列変更にADDを使用しており役割が逆です。また列削除ではDROP COLUMNを使用します。\nB：誤り。列追加のADDは正しいですが、Oracleの列定義変更はMODIFY、列削除はDROP COLUMNを使用します。\nC：誤り。列追加にCREATE句は使用せず、列削除もALTER TABLE文のDROP COLUMN句で行います。\nD：正しい。列追加はADD、既存列定義の変更はMODIFY、列削除はDROP COLUMNを使用します。",
+      "topic": "ALTER TABLE列操作",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch24q127",
+      "chapter": 24,
+      "question": "プロファイル属性 FAILED_LOGIN_ATTEMPTS が制御する内容として正しいものはどれか。",
+      "choices": {
+        "A": "アカウントがロックされた後、ロック状態が継続する日数",
+        "B": "ログインに連続して失敗できる回数。失敗回数が設定値を超えるとアカウントがロックされる",
+        "C": "ユーザーがログインしていない状態を許容する最大日数",
+        "D": "同じパスワードを継続して利用できる最大日数"
+      },
+      "correctChoice": "B",
+      "correctText": "ログインに連続して失敗できる回数。失敗回数が設定値を超えるとアカウントがロックされる",
+      "explanation": "正解：B\n\nA：誤り。アカウントのロック継続日数を指定するのは PASSWORD_LOCK_TIME です。\nB：正しい。FAILED_LOGIN_ATTEMPTS は連続ログイン失敗を許容する回数を指定し、設定値を超えるとアカウントがロックされます。単位は回数です。\nC：誤り。未使用ユーザーのロックまでの日数を指定するのは INACTIVE_ACCOUNT_TIME です。\nD：誤り。同じパスワードを利用できる最大日数を指定するのは PASSWORD_LIFE_TIME です。",
+      "topic": "プロファイル：FAILED_LOGIN_ATTEMPTS",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q128",
+      "chapter": 24,
+      "question": "プロファイル属性 PASSWORD_LOCK_TIME が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "パスワードの期限切れ後、パスワード変更まで許容される猶予日数",
+        "B": "ログインしていない期間が一定値を超えたユーザーをロックするまでの日数",
+        "C": "同じパスワードを再利用するまでに必要な最低日数",
+        "D": "連続ログイン失敗によってアカウントがロックされた場合に、そのロック状態が継続する日数"
+      },
+      "correctChoice": "D",
+      "correctText": "連続ログイン失敗によってアカウントがロックされた場合に、そのロック状態が継続する日数",
+      "explanation": "正解：D\n\nA：誤り。パスワード期限切れ後の猶予日数は PASSWORD_GRACE_TIME です。\nB：誤り。未使用ユーザーのロックに関する日数は INACTIVE_ACCOUNT_TIME です。\nC：誤り。パスワード再利用までの最低日数は PASSWORD_REUSE_TIME です。\nD：正しい。PASSWORD_LOCK_TIME はログイン失敗によってロックされたアカウントがロックされる日数を指定します。単位は日です。",
+      "topic": "プロファイル：PASSWORD_LOCK_TIME",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q129",
+      "chapter": 24,
+      "question": "プロファイル属性 INACTIVE_ACCOUNT_TIME が制御する内容として正しいものはどれか。",
+      "choices": {
+        "A": "ログインしていない期間が設定値を超えた場合にアカウントをロックするまでの日数",
+        "B": "連続ログイン失敗を許容する最大回数",
+        "C": "パスワード期限切れ後の猶予期間",
+        "D": "現在のパスワードを再利用できるようになるまでに必要な変更回数"
+      },
+      "correctChoice": "A",
+      "correctText": "ログインしていない期間が設定値を超えた場合にアカウントをロックするまでの日数",
+      "explanation": "正解：A\n\nA：正しい。INACTIVE_ACCOUNT_TIME は未使用ユーザーについて、ログインしていない期間が設定値を超えるとアカウントをロックする属性です。単位は日です。\nB：誤り。連続ログイン失敗回数は FAILED_LOGIN_ATTEMPTS です。\nC：誤り。パスワード期限切れ後の猶予期間は PASSWORD_GRACE_TIME です。\nD：誤り。再利用までに必要なパスワード変更回数は PASSWORD_REUSE_MAX です。",
+      "topic": "プロファイル：INACTIVE_ACCOUNT_TIME",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q130",
+      "chapter": 24,
+      "question": "プロファイル属性 PASSWORD_LIFE_TIME が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "アカウントロックが継続する日数",
+        "B": "現在のパスワードを再利用するまでに必要な最低日数",
+        "C": "同じパスワードを継続して利用できる最大日数",
+        "D": "パスワードの複雑さを検証するスクリプト名"
+      },
+      "correctChoice": "C",
+      "correctText": "同じパスワードを継続して利用できる最大日数",
+      "explanation": "正解：C\n\nA：誤り。アカウントロックの日数は PASSWORD_LOCK_TIME です。\nB：誤り。パスワード再利用までの最低日数は PASSWORD_REUSE_TIME です。\nC：正しい。PASSWORD_LIFE_TIME は同じパスワードを継続して利用できる最大日数を指定します。単位は日です。\nD：誤り。複雑さを検証するスクリプトを指定するのは PASSWORD_VERIFY_FUNCTION です。",
+      "topic": "プロファイル：PASSWORD_LIFE_TIME",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q131",
+      "chapter": 24,
+      "question": "プロファイル属性 PASSWORD_GRACE_TIME が制御する内容として正しいものはどれか。",
+      "choices": {
+        "A": "ログイン失敗によるアカウントロックの継続日数",
+        "B": "パスワード期限切れ後、最初にログインしてからパスワードを変更するまでの猶予日数",
+        "C": "同じパスワードを再利用するまでに必要な最低変更回数",
+        "D": "ユーザーがログインしない状態を許容する日数"
+      },
+      "correctChoice": "B",
+      "correctText": "パスワード期限切れ後、最初にログインしてからパスワードを変更するまでの猶予日数",
+      "explanation": "正解：B\n\nA：誤り。ログイン失敗後のロック日数は PASSWORD_LOCK_TIME です。\nB：正しい。PASSWORD_GRACE_TIME はパスワード期限切れ後、最初のログインからパスワードを変更するまでの猶予期間を指定します。猶予期間を過ぎると、パスワードを変更するまでログインできなくなります。単位は日です。\nC：誤り。再利用までの最低変更回数は PASSWORD_REUSE_MAX です。\nD：誤り。未使用期間に関する属性は INACTIVE_ACCOUNT_TIME です。",
+      "topic": "プロファイル：PASSWORD_GRACE_TIME",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q132",
+      "chapter": 24,
+      "question": "プロファイル属性 PASSWORD_REUSE_TIME が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "現在使用しているパスワードを再び使用するまでに最低限必要な日数",
+        "B": "現在使用しているパスワードを再び使用するまでに最低限必要なパスワード変更回数",
+        "C": "同じパスワードを継続利用できる最大日数",
+        "D": "パスワード期限切れ後にログインできる猶予日数"
+      },
+      "correctChoice": "A",
+      "correctText": "現在使用しているパスワードを再び使用するまでに最低限必要な日数",
+      "explanation": "正解：A\n\nA：正しい。PASSWORD_REUSE_TIME は現在のパスワードを再利用するまでに最低限必要な日数を指定します。\nB：誤り。再利用までに必要な変更回数は PASSWORD_REUSE_MAX です。\nC：誤り。同一パスワードの最大利用日数は PASSWORD_LIFE_TIME です。\nD：誤り。期限切れ後の猶予日数は PASSWORD_GRACE_TIME です。",
+      "topic": "プロファイル：PASSWORD_REUSE_TIME",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q133",
+      "chapter": 24,
+      "question": "プロファイル属性 PASSWORD_REUSE_MAX が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "連続してログインに失敗できる最大回数",
+        "B": "アカウントがロックされる日数",
+        "C": "現在のパスワードを再利用できるまでの最低日数",
+        "D": "現在のパスワードを再利用できるまでに最低限必要なパスワード変更回数"
+      },
+      "correctChoice": "D",
+      "correctText": "現在のパスワードを再利用できるまでに最低限必要なパスワード変更回数",
+      "explanation": "正解：D\n\nA：誤り。連続ログイン失敗回数は FAILED_LOGIN_ATTEMPTS です。\nB：誤り。ロック継続日数は PASSWORD_LOCK_TIME です。\nC：誤り。再利用までの日数は PASSWORD_REUSE_TIME です。\nD：正しい。PASSWORD_REUSE_MAX は現在のパスワードを再び利用するまでに最低限必要なパスワード変更回数を指定します。単位は回数です。",
+      "topic": "プロファイル：PASSWORD_REUSE_MAX",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q134",
+      "chapter": 24,
+      "question": "プロファイル属性 PASSWORD_VERIFY_FUNCTION が指定するものはどれか。",
+      "choices": {
+        "A": "ログイン失敗時にアカウントをロックする回数",
+        "B": "パスワードを再利用できるまでの期間",
+        "C": "パスワードの複雑さを検証するスクリプトの名前",
+        "D": "パスワードを継続利用できる最大日数"
+      },
+      "correctChoice": "C",
+      "correctText": "パスワードの複雑さを検証するスクリプトの名前",
+      "explanation": "正解：C\n\nA：誤り。ログイン失敗回数を指定するのは FAILED_LOGIN_ATTEMPTS です。\nB：誤り。再利用までの期間は PASSWORD_REUSE_TIME です。\nC：正しい。PASSWORD_VERIFY_FUNCTION はパスワードの複雑さを検証するスクリプトの名前を指定します。\nD：誤り。同じパスワードを継続利用できる最大日数は PASSWORD_LIFE_TIME です。",
+      "topic": "プロファイル：PASSWORD_VERIFY_FUNCTION",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q135",
+      "chapter": 24,
+      "question": "リソース制限パラメータ CPU_PER_SESSION が制限する対象として正しいものはどれか。",
+      "choices": {
+        "A": "個々のSQL実行で使用できるCPU時間",
+        "B": "セッションで接続できる総時間",
+        "C": "1セッションで使用できるCPU時間の合計",
+        "D": "1ユーザーが同時に接続できるセッション数"
+      },
+      "correctChoice": "C",
+      "correctText": "1セッションで使用できるCPU時間の合計",
+      "explanation": "正解：C\n\nA：誤り。個々のSQL実行で使用できるCPU時間を制限するのは CPU_PER_CALL です。\nB：誤り。接続時間を制限するのは CONNECT_TIME です。\nC：正しい。CPU_PER_SESSION はセッションで使用できるCPU時間の合計を制限し、超過するとセッションが切断されます。単位は1/100秒です。\nD：誤り。同時に接続できるセッション数は SESSIONS_PER_USER です。",
+      "topic": "プロファイル：CPU_PER_SESSION",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q136",
+      "chapter": 24,
+      "question": "リソース制限パラメータ CPU_PER_CALL が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "1セッション全体で使用できるCPU時間",
+        "B": "個々のSQL実行で使用できるCPU時間。超過するとSQL実行エラーになる",
+        "C": "セッションで許可されるアイドル時間",
+        "D": "セッションで使用できる論理I/Oブロックの合計数"
+      },
+      "correctChoice": "B",
+      "correctText": "個々のSQL実行で使用できるCPU時間。超過するとSQL実行エラーになる",
+      "explanation": "正解：B\n\nA：誤り。セッション全体のCPU時間は CPU_PER_SESSION です。\nB：正しい。CPU_PER_CALL は個々のSQL実行で使用できるCPU時間を制限し、超過するとSQL実行エラーになります。単位は1/100秒です。\nC：誤り。アイドル時間は IDLE_TIME です。\nD：誤り。セッション全体の論理I/Oブロック数は LOGICAL_READS_PER_SESSION です。",
+      "topic": "プロファイル：CPU_PER_CALL",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q137",
+      "chapter": 24,
+      "question": "リソース制限パラメータ CONNECT_TIME が制限するものはどれか。",
+      "choices": {
+        "A": "SQL1回あたりのCPU時間",
+        "B": "セッションがアイドル状態でいられる時間",
+        "C": "1ユーザーが同時に確立できるセッション数",
+        "D": "セッションの接続時間。設定値を超えるとセッションが切断される"
+      },
+      "correctChoice": "D",
+      "correctText": "セッションの接続時間。設定値を超えるとセッションが切断される",
+      "explanation": "正解：D\n\nA：誤り。SQL1回あたりのCPU時間は CPU_PER_CALL です。\nB：誤り。アイドル状態を許容する時間は IDLE_TIME です。\nC：誤り。同時セッション数は SESSIONS_PER_USER です。\nD：正しい。CONNECT_TIME は接続時間を制限し、超過するとセッションが切断されます。単位は分です。",
+      "topic": "プロファイル：CONNECT_TIME",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q138",
+      "chapter": 24,
+      "question": "リソース制限パラメータ IDLE_TIME が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "セッションでアイドル状態が許される時間。超過するとセッションが切断される",
+        "B": "セッションの総接続時間。超過するとセッションが切断される",
+        "C": "1セッションで使用できるCPU時間の合計",
+        "D": "共有サーバー接続時に使用できるUGA最大サイズ"
+      },
+      "correctChoice": "A",
+      "correctText": "セッションでアイドル状態が許される時間。超過するとセッションが切断される",
+      "explanation": "正解：A\n\nA：正しい。IDLE_TIME はセッションでアイドル状態が許される時間を制限し、超過するとセッションが切断されます。単位は分です。\nB：誤り。総接続時間を制限するのは CONNECT_TIME です。\nC：誤り。セッションのCPU時間合計は CPU_PER_SESSION です。\nD：誤り。共有サーバー接続時のUGA最大サイズは PRIVATE_SGA です。",
+      "topic": "プロファイル：IDLE_TIME",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q139",
+      "chapter": 24,
+      "question": "リソース制限パラメータ SESSIONS_PER_USER が制御する内容として正しいものはどれか。",
+      "choices": {
+        "A": "1回のSQLで読み取れる論理I/Oブロック数",
+        "B": "セッション全体で読み取れる論理I/Oブロック数",
+        "C": "共有サーバー接続時に使用できるSGA内のUGA最大サイズ",
+        "D": "同じアカウント名を使用して接続できるセッション数。設定値を超えると新規接続できない"
+      },
+      "correctChoice": "D",
+      "correctText": "同じアカウント名を使用して接続できるセッション数。設定値を超えると新規接続できない",
+      "explanation": "正解：D\n\nA：誤り。1回のSQLにおける論理I/Oブロック数は LOGICAL_READS_PER_CALL です。\nB：誤り。セッション全体の論理I/Oブロック数は LOGICAL_READS_PER_SESSION です。\nC：誤り。共有サーバー接続時のUGA最大サイズは PRIVATE_SGA です。\nD：正しい。SESSIONS_PER_USER は同じアカウント名で接続できるセッション数を制限し、上限を超える新規接続を禁止します。単位はセッション数です。",
+      "topic": "プロファイル：SESSIONS_PER_USER",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q140",
+      "chapter": 24,
+      "question": "リソース制限パラメータ PRIVATE_SGA が制限する対象として正しいものはどれか。",
+      "choices": {
+        "A": "共有サーバー接続時に使用できるSGA内のUGA最大サイズ",
+        "B": "セッション全体で使用できるCPU時間",
+        "C": "セッションの最大接続時間",
+        "D": "同一ユーザーが確立できる最大セッション数"
+      },
+      "correctChoice": "A",
+      "correctText": "共有サーバー接続時に使用できるSGA内のUGA最大サイズ",
+      "explanation": "正解：A\n\nA：正しい。PRIVATE_SGA は共有サーバー接続時に使用できるSGA内のUGA最大サイズを制限し、超過するとSQL実行エラーになります。単位はバイトです。\nB：誤り。セッションCPU時間は CPU_PER_SESSION です。\nC：誤り。接続時間は CONNECT_TIME です。\nD：誤り。同一ユーザーのセッション数は SESSIONS_PER_USER です。",
+      "topic": "プロファイル：PRIVATE_SGA",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q141",
+      "chapter": 24,
+      "question": "リソース制限パラメータ LOGICAL_READS_PER_SESSION が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "個々のSQL実行で使用できる論理I/Oブロック数",
+        "B": "個々のSQL実行で使用できるCPU時間",
+        "C": "セッションで使用できる論理I/Oブロックの合計数。超過するとセッションが切断される",
+        "D": "セッションで使用できるCPU時間の合計"
+      },
+      "correctChoice": "C",
+      "correctText": "セッションで使用できる論理I/Oブロックの合計数。超過するとセッションが切断される",
+      "explanation": "正解：C\n\nA：誤り。SQL1回ごとの論理I/Oブロック数は LOGICAL_READS_PER_CALL です。\nB：誤り。SQL1回ごとのCPU時間は CPU_PER_CALL です。\nC：正しい。LOGICAL_READS_PER_SESSION はセッションで使用できる論理I/Oブロック合計数を制限し、超過するとセッションが切断されます。単位はブロックです。\nD：誤り。セッションのCPU時間合計は CPU_PER_SESSION です。",
+      "topic": "プロファイル：LOGICAL_READS_PER_SESSION",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q142",
+      "chapter": 24,
+      "question": "リソース制限パラメータ LOGICAL_READS_PER_CALL が制限するものはどれか。",
+      "choices": {
+        "A": "セッション全体で使用できる論理I/Oブロック合計数",
+        "B": "個々のSQL実行で使用できる論理I/Oブロック合計数。超過するとSQL実行エラーになる",
+        "C": "セッションのアイドル時間",
+        "D": "セッションの接続時間"
+      },
+      "correctChoice": "B",
+      "correctText": "個々のSQL実行で使用できる論理I/Oブロック合計数。超過するとSQL実行エラーになる",
+      "explanation": "正解：B\n\nA：誤り。セッション全体の論理I/Oブロック合計数は LOGICAL_READS_PER_SESSION です。\nB：正しい。LOGICAL_READS_PER_CALL は個々のSQL実行で使用できる論理I/Oブロック合計数を制限し、超過するとSQL実行エラーになります。単位はブロックです。\nC：誤り。アイドル時間は IDLE_TIME です。\nD：誤り。接続時間は CONNECT_TIME です。",
+      "topic": "プロファイル：LOGICAL_READS_PER_CALL",
+      "difficulty": "medium"
+    },
+    {
+      "id": "ch24q143",
+      "chapter": 24,
+      "question": "リソース制限パラメータ COMPOSITE_LIMIT が表す内容として正しいものはどれか。",
+      "choices": {
+        "A": "CPU_PER_CALL と LOGICAL_READS_PER_CALL の合計実行回数を制限する値",
+        "B": "FAILED_LOGIN_ATTEMPTS と PASSWORD_LOCK_TIME から算出されるアカウントロック値",
+        "C": "同一ユーザーのセッション数とアイドル時間だけを合算した上限値",
+        "D": "CPU_PER_SESSION、LOGICAL_READS_PER_SESSION、CONNECT_TIME、PRIVATE_SGAをもとに算出されたコスト値による制限"
+      },
+      "correctChoice": "D",
+      "correctText": "CPU_PER_SESSION、LOGICAL_READS_PER_SESSION、CONNECT_TIME、PRIVATE_SGAをもとに算出されたコスト値による制限",
+      "explanation": "正解：D\n\nA：誤り。COMPOSITE_LIMIT はCPU_PER_CALLやLOGICAL_READS_PER_CALLの実行回数を合計する属性ではありません。\nB：誤り。ログイン失敗やロック時間を組み合わせるパスワード管理属性ではありません。\nC：誤り。SESSIONS_PER_USERやIDLE_TIMEだけを合算する値ではありません。\nD：正しい。COMPOSITE_LIMIT は CPU_PER_SESSION、LOGICAL_READS_PER_SESSION、CONNECT_TIME、PRIVATE_SGA をもとに算出されたコスト値で制限し、超過するとセッションが切断されます。単位はコストです。",
+      "topic": "プロファイル：COMPOSITE_LIMIT",
+      "difficulty": "medium"
     }
   ]
 }
