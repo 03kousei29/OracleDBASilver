@@ -124,6 +124,11 @@
       "chapter": 25,
       "title": "模擬試験間違い問題",
       "description": "模擬試験で再確認が必要だった論点と、主要初期化パラメータの役割・動的変更可否を確認する高重要度問題"
+    },
+    {
+      "chapter": 26,
+      "title": "最終確認",
+      "description": "試験直前に再確認したい重要論点を、複数知識の組み合わせと紛らわしい選択肢で確認する最終チェック"
     }
   ],
   "questions": [
@@ -14618,6 +14623,434 @@
       "correctText": "列を未使用化しても列を物理的に削除したわけではないため、1000列ある表で1列を未使用化しただけでは1001列目を追加できない。 / 既存の一意索引を、そのまま非一意索引へ変更することはできない。",
       "explanation": "正解：A・D\n\nA：正しい。未使用化は列削除ではないため、1列を未使用にしても1001列目を追加することはできないとされています。\nB：誤り。未使用化は物理削除ではないため、この説明とは一致しません。\nC：誤り。既存の一意索引を非一意索引へ変更することはできないとされています。\nD：正しい。既存の一意索引から非一意索引への直接変更はできないです。",
       "topic": "未使用列と一意索引",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q001",
+      "chapter": 26,
+      "question": "チェックポイント処理に関する説明として正しいものを2つ選べ。",
+      "choices": {
+        "A": "CKPTはDBWnに対して、データベースバッファキャッシュ内の変更済みブロックをデータファイルへ書き込むよう指示する。",
+        "B": "CKPTは制御ファイルにチェックポイント情報を書き込む。",
+        "C": "CKPT自身がREDOログバッファの内容をREDOログファイルへ書き込む。",
+        "D": "CKPTは異常終了したプロセスが保持していたリソースを解放する。"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "CKPTはDBWnに対して、データベースバッファキャッシュ内の変更済みブロックをデータファイルへ書き込むよう指示する。、CKPTは制御ファイルにチェックポイント情報を書き込む。",
+      "explanation": "正解：A、B\n\nA：正しい。CKPTはDBWnに変更済みブロックの書き込みを指示します。\nB：正しい。併せて制御ファイルへチェックポイント情報を書き込みます。\nC：誤り。ここで確認しているCKPTの役割はDBWnへの書き込み指示とチェックポイント情報の記録です。\nD：誤り。異常終了したプロセスの後処理はCKPTの役割ではありません。",
+      "topic": "CKPT",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q002",
+      "chapter": 26,
+      "question": "セグメント、エクステント、データブロックの関係として正しいものを2つ選べ。",
+      "choices": {
+        "A": "1つのエクステントを構成するデータブロックのサイズは同じである。",
+        "B": "1つのセグメントに含まれるすべてのエクステントは、必ず同一サイズでなければならない。",
+        "C": "1つのセグメントに、サイズの異なるエクステントが含まれることがある。",
+        "D": "1つのエクステントの内部では、データブロックごとに異なるブロックサイズを使用できる。"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "1つのエクステントを構成するデータブロックのサイズは同じである。、1つのセグメントに、サイズの異なるエクステントが含まれることがある。",
+      "explanation": "正解：A、C\n\nA：正しい。同一エクステントを構成するデータブロックのサイズは同じです。\nB：誤り。1つのセグメントに含まれるエクステントのサイズは異なることがあります。\nC：正しい。セグメント内のエクステントサイズが常に同じとは限りません。\nD：誤り。同一エクステントを構成するデータブロックのサイズがばらばらになるわけではありません。",
+      "topic": "セグメントとエクステント",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q003",
+      "chapter": 26,
+      "question": "PFILEでインスタンスを起動している。動的初期化パラメータを現在のインスタンスで変更し、再起動後も同じ値を使いたい。適切な対応はどれか。",
+      "choices": {
+        "A": "ALTER SYSTEM SETでSCOPE=SPFILEを指定すれば、PFILEに自動保存される。",
+        "B": "ALTER SYSTEM SETで変更すれば、PFILEにも必ず自動反映されるため追加作業は不要である。",
+        "C": "PFILE使用時はALTER SYSTEM SETによる動的初期化パラメータ変更そのものができない。",
+        "D": "ALTER SYSTEM SETで現行インスタンスを変更し、再起動後も残すにはPFILEを直接編集する。"
+      },
+      "correctChoice": "D",
+      "correctText": "ALTER SYSTEM SETで現行インスタンスを変更し、再起動後も残すにはPFILEを直接編集する。",
+      "explanation": "正解：D\n\nA：誤り。PFILEへSCOPE=SPFILEで設定値を保存する使い方ではありません。\nB：誤り。現行インスタンスの変更はPFILEへ自動反映されません。\nC：誤り。PFILE使用時でも動的初期化パラメータはALTER SYSTEM SETで変更できます。\nD：正しい。現行インスタンスでの変更とは別に、再起動後も反映したい場合はPFILEを直接編集します。",
+      "topic": "PFILEと初期化パラメータ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q004",
+      "chapter": 26,
+      "question": "SPFILEを使用中に、動的初期化パラメータをALTER SYSTEM SETで変更した。SCOPE句を省略した場合の扱いとして正しいものはどれか。",
+      "choices": {
+        "A": "BOTHとして扱われ、現行インスタンスとSPFILEの両方に反映される。",
+        "B": "MEMORYとして扱われ、現行インスタンスにだけ反映される。",
+        "C": "SPFILEとして扱われ、再起動後にだけ反映される。",
+        "D": "SCOPE句を省略すると構文エラーになる。"
+      },
+      "correctChoice": "A",
+      "correctText": "BOTHとして扱われ、現行インスタンスとSPFILEの両方に反映される。",
+      "explanation": "正解：A\n\nA：正しい。SPFILE使用時に動的初期化パラメータを変更しSCOPEを省略すると、デフォルトはBOTHです。\nB：誤り。MEMORYだけがデフォルトではありません。\nC：誤り。SPFILEだけがデフォルトではありません。\nD：誤り。SCOPEは省略できます。",
+      "topic": "SPFILEとSCOPE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q005",
+      "chapter": 26,
+      "question": "Oracle Net Servicesの構成作業について、EM Expressの位置づけとして正しいものはどれか。",
+      "choices": {
+        "A": "EM Expressはリスナーの起動・停止だけを実行できる。",
+        "B": "EM ExpressではOracle Net Servicesの設定は行えない。",
+        "C": "EM Expressはtnsnames.oraとlistener.oraの両方を直接編集するための専用GUIである。",
+        "D": "EM ExpressはOracle Net Servicesの設定専用ツールであり、データベース管理は行えない。"
+      },
+      "correctChoice": "B",
+      "correctText": "EM ExpressではOracle Net Servicesの設定は行えない。",
+      "explanation": "正解：B\n\nA：誤り。EM ExpressをOracle Net Servicesの設定・制御ツールとして扱うものではありません。\nB：正しい。EM ExpressではOracle Net Servicesの設定は行えません。\nC：誤り。tnsnames.oraやlistener.oraを構成するための専用GUIという位置づけではありません。\nD：誤り。EM Expressはデータベース管理用のツールであり、Oracle Net Services専用ではありません。",
+      "topic": "EM Express",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q006",
+      "chapter": 26,
+      "question": "ユーザーU1に権限を再付与できる権限まで含めて与えたい。正しい組み合わせを2つ選べ。",
+      "choices": {
+        "A": "システム権限にはWITH GRANT OPTIONを使用する。",
+        "B": "システム権限にはWITH ADMIN OPTIONを使用する。",
+        "C": "オブジェクト権限にはWITH ADMIN OPTIONを使用する。",
+        "D": "オブジェクト権限にはWITH GRANT OPTIONを使用する。"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "システム権限にはWITH ADMIN OPTIONを使用する。、オブジェクト権限にはWITH GRANT OPTIONを使用する。",
+      "explanation": "正解：B、D\n\nA：誤り。システム権限を再付与可能にするのはWITH ADMIN OPTIONです。\nB：正しい。システム権限ではWITH ADMIN OPTIONを使用します。\nC：誤り。オブジェクト権限ではWITH GRANT OPTIONを使用します。\nD：正しい。オブジェクト権限を他ユーザーへ付与可能にする指定です。",
+      "topic": "権限付与オプション",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q007",
+      "chapter": 26,
+      "question": "記憶域の利用上限に関する説明として正しいものを2つ選べ。",
+      "choices": {
+        "A": "ALTER USER U1 QUOTA UNLIMITED ON TBS1は、U1がTBS1で使用できるクオータを無制限にする。",
+        "B": "GRANT UNLIMITED TABLESPACE TO U1は、U1のデフォルト表領域だけを無制限にする。",
+        "C": "ALTER USER U1 QUOTA UNLIMITED ON TBS1は、すべての表領域に対するUNLIMITED TABLESPACEシステム権限を付与する。",
+        "D": "GRANT UNLIMITED TABLESPACE TO U1は、U1がすべての表領域で無制限に記憶域を割り当てられるようにするシステム権限の付与である。"
+      },
+      "correctChoice": [
+        "A",
+        "D"
+      ],
+      "correctText": "ALTER USER U1 QUOTA UNLIMITED ON TBS1は、U1がTBS1で使用できるクオータを無制限にする。、GRANT UNLIMITED TABLESPACE TO U1は、U1がすべての表領域で無制限に記憶域を割り当てられるようにするシステム権限の付与である。",
+      "explanation": "正解：A、D\n\nA：正しい。QUOTA UNLIMITED ON TBS1は特定表領域TBS1に対するクオータの設定です。\nB：誤り。UNLIMITED TABLESPACEはデフォルト表領域だけに限定されません。\nC：誤り。これはクオータ設定であり、UNLIMITED TABLESPACEシステム権限の付与ではありません。\nD：正しい。UNLIMITED TABLESPACEはすべての表領域に対する記憶域割り当てを無制限にするシステム権限です。",
+      "topic": "クオータとUNLIMITED TABLESPACE",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q008",
+      "chapter": 26,
+      "question": "プロファイルのリソース制限属性について、CONNECT_TIMEとIDLE_TIMEの違いとして正しいものはどれか。",
+      "choices": {
+        "A": "CONNECT_TIMEはアイドル時間、IDLE_TIMEはCPU時間を分単位で制限する。",
+        "B": "CONNECT_TIMEはCPU時間、IDLE_TIMEはセッション総接続時間を分単位で制限する。",
+        "C": "CONNECT_TIMEはセッションの接続時間、IDLE_TIMEはセッションで許容されるアイドル時間を分単位で制限する。",
+        "D": "CONNECT_TIMEとIDLE_TIMEはどちらも同じ意味で、名前だけが異なる。"
+      },
+      "correctChoice": "C",
+      "correctText": "CONNECT_TIMEはセッションの接続時間、IDLE_TIMEはセッションで許容されるアイドル時間を分単位で制限する。",
+      "explanation": "正解：C\n\nA：誤り。CONNECT_TIMEはアイドル時間ではありません。\nB：誤り。CONNECT_TIMEはCPU時間の制限ではありません。\nC：正しい。CONNECT_TIMEは接続時間、IDLE_TIMEはアイドル時間を分単位で制限します。\nD：誤り。両者は制限対象が異なります。",
+      "topic": "プロファイル：CONNECT_TIMEとIDLE_TIME",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q009",
+      "chapter": 26,
+      "question": "データベースの標準ブロックサイズが8KBである。16KBブロックサイズの表領域を新たに作成したい。事前に必要な対応はどれか。",
+      "choices": {
+        "A": "DB_BLOCK_SIZEを16KBへ変更する。",
+        "B": "表領域作成後に16KB用バッファキャッシュを構成する。",
+        "C": "PCTFREEを16に設定する。",
+        "D": "16KB用のバッファキャッシュとしてDB_16K_CACHE_SIZEを設定しておく。"
+      },
+      "correctChoice": "D",
+      "correctText": "16KB用のバッファキャッシュとしてDB_16K_CACHE_SIZEを設定しておく。",
+      "explanation": "正解：D\n\nA：誤り。非標準ブロックサイズの表領域を作るために標準ブロックサイズ自体を変更するわけではありません。\nB：誤り。必要なバッファキャッシュは表領域作成前に構成します。\nC：誤り。PCTFREEはブロック内の空き領域管理に関する設定です。\nD：正しい。使用する非標準ブロックサイズに対応するDB_nK_CACHE_SIZEを事前に設定します。",
+      "topic": "非標準ブロックサイズ",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q010",
+      "chapter": 26,
+      "question": "Oracle Managed Filesでデータファイルおよび一時ファイルを管理したい。前提として指定が必要な初期化パラメータはどれか。",
+      "choices": {
+        "A": "DB_CREATE_FILE_DEST",
+        "B": "DB_BLOCK_SIZE",
+        "C": "CONTROL_FILES",
+        "D": "UNDO_RETENTION"
+      },
+      "correctChoice": "A",
+      "correctText": "DB_CREATE_FILE_DEST",
+      "explanation": "正解：A\n\nA：正しい。OMFでデータファイルと一時ファイルを管理する際はDB_CREATE_FILE_DESTを指定します。\nB：誤り。DB_BLOCK_SIZEは標準ブロックサイズに関するパラメータです。\nC：誤り。CONTROL_FILESは制御ファイルに関する設定です。\nD：誤り。UNDO_RETENTIONはUNDO保存期間に関する設定です。",
+      "topic": "OMF：DB_CREATE_FILE_DEST",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q011",
+      "chapter": 26,
+      "question": "表領域TBS1には表が格納されている。DROP TABLESPACE TBS1 INCLUDING CONTENTSを実行する場合について、正しい説明を2つ選べ。",
+      "choices": {
+        "A": "INCLUDING CONTENTSを指定しても、表などのオブジェクトは削除されない。",
+        "B": "TBS1がOMF管理であれば、表領域の削除に伴って構成データファイルも削除される。",
+        "C": "TBS1がOMF管理でなければ、INCLUDING CONTENTSだけではOS上のデータファイルは削除されない。",
+        "D": "OMF管理かどうかにかかわらず、INCLUDING CONTENTSを指定すると必ずOS上のデータファイルも削除される。"
+      },
+      "correctChoice": [
+        "B",
+        "C"
+      ],
+      "correctText": "TBS1がOMF管理であれば、表領域の削除に伴って構成データファイルも削除される。、TBS1がOMF管理でなければ、INCLUDING CONTENTSだけではOS上のデータファイルは削除されない。",
+      "explanation": "正解：B、C\n\nA：誤り。INCLUDING CONTENTSは表領域内のオブジェクトも削除する指定です。\nB：正しい。OMF管理の表領域では、表領域削除に伴って管理対象データファイルも削除されます。\nC：正しい。OMFでない場合、INCLUDING CONTENTSだけではデータファイル削除まで意味しません。\nD：誤り。OMFかどうかでデータファイルの扱いが異なります。",
+      "topic": "DROP TABLESPACEとOMF",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q012",
+      "chapter": 26,
+      "question": "Oracleのデータブロックへ新しい行データを格納するときの配置方向として正しいものはどれか。",
+      "choices": {
+        "A": "ブロックヘッダー側から行データを順に格納する。",
+        "B": "データ格納領域の末尾側から行データを格納していく。",
+        "C": "ブロック中央から前後に分散して格納する。",
+        "D": "PCTFREEの値によって先頭側と末尾側が切り替わる。"
+      },
+      "correctChoice": "B",
+      "correctText": "データ格納領域の末尾側から行データを格納していく。",
+      "explanation": "正解：B\n\nA：誤り。管理用ヘッダー側から行データを詰めていく説明ではありません。\nB：正しい。行データはデータ格納領域の末尾側から格納されていきます。\nC：誤り。中央から分散する仕組みではありません。\nD：誤り。PCTFREEは空き領域をどれだけ残すかの設定で、格納方向を切り替えるものではありません。",
+      "topic": "データブロックへの行格納",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q013",
+      "chapter": 26,
+      "question": "行連鎖と行移行について正しいものを2つ選べ。",
+      "choices": {
+        "A": "行連鎖はINSERT時だけ発生し、UPDATEでは発生しない。",
+        "B": "行移行はINSERT時にも発生する。",
+        "C": "行連鎖はINSERT時だけでなく、UPDATEによっても発生する可能性がある。",
+        "D": "行移行は、既存行のサイズが増えるUPDATEによって発生する。"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "行連鎖はINSERT時だけでなく、UPDATEによっても発生する可能性がある。、行移行は、既存行のサイズが増えるUPDATEによって発生する。",
+      "explanation": "正解：C、D\n\nA：誤り。行連鎖はUPDATEでも起こる可能性があります。\nB：誤り。行移行は既存行のサイズが増えるUPDATEに関連する現象です。\nC：正しい。行連鎖はINSERTだけに限定されません。\nD：正しい。UPDATEで行サイズが増え、元ブロックに収まらない場合に行移行が発生します。",
+      "topic": "行連鎖と行移行",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q014",
+      "chapter": 26,
+      "question": "再開可能領域割り当てによってSQL文が一時停止する原因として適切なものを2つ選べ。",
+      "choices": {
+        "A": "セグメントが最大エクステント数に達し、追加割り当てができない。",
+        "B": "表領域の使用率が監視用の任意閾値を超えただけで、領域割り当てには失敗していない。",
+        "C": "ユーザーのクオータを超過し、セグメント拡張に必要な領域を割り当てられない。",
+        "D": "SELECT文の実行時間が長く、CPU使用率が高くなった。"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "セグメントが最大エクステント数に達し、追加割り当てができない。、ユーザーのクオータを超過し、セグメント拡張に必要な領域を割り当てられない。",
+      "explanation": "正解：A、C\n\nA：正しい。最大エクステント数到達など、実際に領域割り当てに失敗する状況は再開可能領域割り当ての対象になります。\nB：誤り。単に使用率が任意の閾値を超えただけではなく、領域割り当てに失敗することが問題です。\nC：正しい。クオータ超過で領域を割り当てられない場合も対象です。\nD：誤り。CPU使用率の高さ自体は、ここでいう領域割り当て失敗ではありません。",
+      "topic": "再開可能領域割り当て",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q015",
+      "chapter": 26,
+      "question": "過去のデータを利用するOracleの機能について正しいものを2つ選べ。",
+      "choices": {
+        "A": "フラッシュバック問い合わせでは、過去のデータを参照するためにUNDOが利用される。",
+        "B": "読み取り一貫性はREDOログファイルだけで実現され、UNDOは使用しない。",
+        "C": "読み取り一貫性では、問い合わせ開始時点の一貫したデータを返すためにUNDOが利用される。",
+        "D": "フラッシュバック問い合わせはREDOだけを使用し、UNDOが失われても影響しない。"
+      },
+      "correctChoice": [
+        "A",
+        "C"
+      ],
+      "correctText": "フラッシュバック問い合わせでは、過去のデータを参照するためにUNDOが利用される。、読み取り一貫性では、問い合わせ開始時点の一貫したデータを返すためにUNDOが利用される。",
+      "explanation": "正解：A、C\n\nA：正しい。フラッシュバック問い合わせでは過去データの参照にUNDOが利用されます。\nB：誤り。読み取り一貫性はUNDOを用いて実現されます。\nC：正しい。問い合わせ開始後に変更されたデータについて、過去イメージをUNDOから取得します。\nD：誤り。ここで確認しているフラッシュバック問い合わせはUNDOを利用します。",
+      "topic": "UNDOと読み取り一貫性",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q016",
+      "chapter": 26,
+      "question": "条件式の記述について正しいものを2つ選べ。",
+      "choices": {
+        "A": "LIKEの否定形はLIKE NOTと記述する。",
+        "B": "NOT IN、NOT LIKE、NOT BETWEENではNOTを演算子の前に置く。",
+        "C": "NULL判定の否定形はNOT IS NULLと記述する。",
+        "D": "NULL判定の否定形はIS NOT NULLと記述する。"
+      },
+      "correctChoice": [
+        "B",
+        "D"
+      ],
+      "correctText": "NOT IN、NOT LIKE、NOT BETWEENではNOTを演算子の前に置く。、NULL判定の否定形はIS NOT NULLと記述する。",
+      "explanation": "正解：B、D\n\nA：誤り。否定形はNOT LIKEです。\nB：正しい。NOT IN、NOT LIKE、NOT BETWEENの形で記述します。\nC：誤り。NULL判定ではNOTをISの前に置く形ではありません。\nD：正しい。NULLの否定判定はIS NOT NULLです。",
+      "topic": "条件演算子の否定形",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q017",
+      "chapter": 26,
+      "question": "WHERE句に複数の条件があり、丸括弧による優先順位指定はない。条件評価の優先順位として最も適切な並びはどれか。",
+      "choices": {
+        "A": "OR → AND → NOT → IS NULL/LIKE/BETWEEN → 比較演算子",
+        "B": "NOT → OR → AND → 比較演算子 → IS NULL/LIKE/BETWEEN",
+        "C": "比較演算子 → IS NULL/LIKE/BETWEEN → NOT → AND → OR",
+        "D": "AND → OR → NOT → 比較演算子 → IS NULL/LIKE/BETWEEN"
+      },
+      "correctChoice": "C",
+      "correctText": "比較演算子 → IS NULL/LIKE/BETWEEN → NOT → AND → OR",
+      "explanation": "正解：C\n\nA：誤り。ORはこの並びでは後の方に評価されます。\nB：誤り。NOTが比較・IS NULL/LIKE/BETWEENより先ではありません。\nC：正しい。比較系、IS NULL/LIKE/BETWEEN、NOT、AND、ORの順で評価されます。\nD：誤り。ANDやORが比較系より先に評価されるわけではありません。",
+      "topic": "条件評価順序",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q018",
+      "chapter": 26,
+      "question": "NUMBER型の整数値123に対してROUND(123, 2)を実行した場合の説明として正しいものはどれか。",
+      "choices": {
+        "A": "第2引数に正の整数を指定しても構文エラーにはならず、小数第2位での丸めとして評価される。",
+        "B": "整数値に小数桁を指定したため必ずデータ型不一致エラーになる。",
+        "C": "整数にはROUNDの第2引数を指定できず、引数個数エラーになる。",
+        "D": "ROUNDはDATE型専用なのでNUMBER型には使用できない。"
+      },
+      "correctChoice": "A",
+      "correctText": "第2引数に正の整数を指定しても構文エラーにはならず、小数第2位での丸めとして評価される。",
+      "explanation": "正解：A\n\nA：正しい。整数値であってもROUNDの第2引数に2を指定すること自体はエラーにはなりません。\nB：誤り。整数をNUMBERとして扱うため、指定自体がデータ型不一致になるわけではありません。\nC：誤り。ROUNDは第2引数を指定できます。\nD：誤り。ROUNDは数値にも使用できます。",
+      "topic": "ROUND",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q019",
+      "chapter": 26,
+      "question": "結合条件が A.amount >= B.min_amount である。この結合の分類として最も適切なものはどれか。",
+      "choices": {
+        "A": "自然結合",
+        "B": "クロス結合",
+        "C": "等価結合",
+        "D": "非等価結合"
+      },
+      "correctChoice": "D",
+      "correctText": "非等価結合",
+      "explanation": "正解：D\n\nA：誤り。列名の一致を利用する自然結合の説明ではありません。\nB：誤り。結合条件を持たない直積ではありません。\nC：誤り。=ではなく>=を使っているため等価結合ではありません。\nD：正しい。>=のような等号以外を使う結合条件は非等価結合です。",
+      "topic": "非等価結合",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q020",
+      "chapter": 26,
+      "question": "ユーザーU1が、U1スキーマの表T1とU2スキーマの表T2を結合するビューをU1スキーマに作成したい。正しい説明を2つ選べ。",
+      "choices": {
+        "A": "ビューの定義問い合わせで複数スキーマの表を結合することはできる。",
+        "B": "U1がT2を参照するために必要な権限を持っていれば、U1.T1とU2.T2を結合するSELECTをビュー定義に使用できる。",
+        "C": "ビュー定義で参照できる表は、ビュー所有者と同一スキーマの表だけに限定される。",
+        "D": "複数スキーマの表を結合したい場合は、ビューではなく必ずデータベースリンクを作成しなければならない。"
+      },
+      "correctChoice": [
+        "A",
+        "B"
+      ],
+      "correctText": "ビューの定義問い合わせで複数スキーマの表を結合することはできる。、U1がT2を参照するために必要な権限を持っていれば、U1.T1とU2.T2を結合するSELECTをビュー定義に使用できる。",
+      "explanation": "正解：A、B\n\nA：正しい。ビューの定義問い合わせで複数スキーマの表を結合できます。\nB：正しい。必要な参照権限があれば、別スキーマの表を含むSELECTをビュー定義に使用できます。\nC：誤り。同一スキーマの表だけに限定されません。\nD：誤り。同一データベース内の別スキーマ表を結合するために、必ずデータベースリンクが必要というわけではありません。",
+      "topic": "ビューと複数スキーマ",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q021",
+      "chapter": 26,
+      "question": "PFILEとSPFILEの扱いについて正しいものはどれか。",
+      "choices": {
+        "A": "PFILE使用時は、動的初期化パラメータであってもインスタンス起動中に変更できない。",
+        "B": "PFILE使用時にALTER SYSTEM SETで行った動的パラメータ変更は現行インスタンスに反映できるが、再起動後も残すにはPFILEを編集する必要がある。",
+        "C": "SPFILE使用時に動的パラメータを変更しSCOPEを省略すると、MEMORYだけが変更される。",
+        "D": "SPFILEはテキストファイルなので、通常はテキストエディタで直接編集する。"
+      },
+      "correctChoice": "B",
+      "correctText": "PFILE使用時にALTER SYSTEM SETで行った動的パラメータ変更は現行インスタンスに反映できるが、再起動後も残すにはPFILEを編集する必要がある。",
+      "explanation": "正解：B\n\nA：誤り。PFILE使用時でも動的初期化パラメータはインスタンス起動中に変更できます。\nB：正しい。現行インスタンスの変更と、再起動後も維持するためのPFILE編集を分けて考えます。\nC：誤り。SPFILE使用時の動的パラメータ変更では、SCOPE省略時はBOTHです。\nD：誤り。SPFILEをテキストエディタで直接編集する扱いではありません。",
+      "topic": "PFILEとSPFILE",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q022",
+      "chapter": 26,
+      "question": "ユーザーU1の記憶域と接続時間を制御したい。正しい設定を2つ選べ。",
+      "choices": {
+        "A": "すべての表領域を無制限にしたい場合、ALTER USER U1 QUOTA UNLIMITED ON TBS1だけでよい。",
+        "B": "特定の表領域TBS1だけを無制限にしたい場合、GRANT UNLIMITED TABLESPACE TO U1を使用する。",
+        "C": "特定の表領域TBS1だけを無制限にしたい場合、ALTER USER U1 QUOTA UNLIMITED ON TBS1を使用する。",
+        "D": "セッションの接続時間を分単位で制限するプロファイル属性としてCONNECT_TIMEを使用する。"
+      },
+      "correctChoice": [
+        "C",
+        "D"
+      ],
+      "correctText": "特定の表領域TBS1だけを無制限にしたい場合、ALTER USER U1 QUOTA UNLIMITED ON TBS1を使用する。、セッションの接続時間を分単位で制限するプロファイル属性としてCONNECT_TIMEを使用する。",
+      "explanation": "正解：C、D\n\nA：誤り。QUOTA UNLIMITED ON TBS1はTBS1だけに対する設定です。\nB：誤り。UNLIMITED TABLESPACEは特定表領域だけに限定する指定ではありません。\nC：正しい。表領域単位のクオータを無制限にする指定です。\nD：正しい。CONNECT_TIMEはセッション接続時間を分単位で制限します。",
+      "topic": "クオータとプロファイル",
+      "difficulty": "hard",
+      "multiple": true
+    },
+    {
+      "id": "ch26q023",
+      "chapter": 26,
+      "question": "オンラインデータファイル移動とOMFを利用する環境で、表領域管理について正しいものはどれか。",
+      "choices": {
+        "A": "非標準ブロックサイズの表領域は、対応するDB_nK_CACHE_SIZEを設定せずに作成してから後でバッファキャッシュを用意する。",
+        "B": "OMFでデータファイルを管理するにはCONTROL_FILESの指定が必須である。",
+        "C": "OMFでデータファイルと一時ファイルを管理するにはDB_CREATE_FILE_DESTを指定する。",
+        "D": "OMFであれば、DROP TABLESPACEにINCLUDING CONTENTSを指定しなくても、格納オブジェクトの有無に関係なく常に削除できる。"
+      },
+      "correctChoice": "C",
+      "correctText": "OMFでデータファイルと一時ファイルを管理するにはDB_CREATE_FILE_DESTを指定する。",
+      "explanation": "正解：C\n\nA：誤り。非標準ブロックサイズの表領域を作成する前に対応するDB_nK_CACHE_SIZEを設定します。\nB：誤り。データファイル・一時ファイルのOMF管理で前提になるのはDB_CREATE_FILE_DESTです。\nC：正しい。OMFでデータファイルと一時ファイルを管理するための配置先指定です。\nD：誤り。オブジェクトが格納されている場合、INCLUDING CONTENTSが必要です。",
+      "topic": "OMFと表領域管理",
+      "difficulty": "hard"
+    },
+    {
+      "id": "ch26q024",
+      "chapter": 26,
+      "question": "最終確認として、UNDOと結合条件の理解について正しい説明はどれか。",
+      "choices": {
+        "A": "読み取り一貫性はREDOだけで実現され、UNDOはフラッシュバック問い合わせにだけ使用される。",
+        "B": ">=を使った結合は等価結合に分類される。",
+        "C": "フラッシュバック問い合わせは、過去データを取得するためにREDOログだけを参照する。",
+        "D": "読み取り一貫性とフラッシュバック問い合わせではUNDOが重要であり、>=を使う結合条件は非等価結合に分類される。"
+      },
+      "correctChoice": "D",
+      "correctText": "読み取り一貫性とフラッシュバック問い合わせではUNDOが重要であり、>=を使う結合条件は非等価結合に分類される。",
+      "explanation": "正解：D\n\nA：誤り。読み取り一貫性にもUNDOが使われます。\nB：誤り。>=を使う結合は非等価結合です。\nC：誤り。ここで扱うフラッシュバック問い合わせはUNDOを利用します。\nD：正しい。UNDOの用途と非等価結合の両方を正しく説明しています。",
+      "topic": "UNDOと非等価結合",
       "difficulty": "hard"
     }
   ]
